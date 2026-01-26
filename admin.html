@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Physics in School</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="./css/styles.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="font-sans antialiased bg-surface-light text-text-primaryLight flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-[280px] bg-surface-dark flex-shrink-0 flex flex-col p-6 gap-10">
+        <div class="text-white text-xl font-semibold px-3">PinS Admin</div>
+        
+        <nav class="flex flex-col gap-2">
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-accent-blue text-white transition-colors">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                <span class="text-sm font-medium">Overview</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-white/5 transition-colors">
+                <i data-lucide="image" class="w-5 h-5"></i>
+                <span class="text-sm font-medium">Media Library</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-white/5 transition-colors">
+                <i data-lucide="file-text" class="w-5 h-5"></i>
+                <span class="text-sm font-medium">Content Manager</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-white/5 transition-colors">
+                <i data-lucide="users" class="w-5 h-5"></i>
+                <span class="text-sm font-medium">Users</span>
+            </a>
+        </nav>
+        
+        <div class="mt-auto">
+            <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-white/5 transition-colors">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span class="text-sm font-medium">Back to Site</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto p-10 bg-surface-light">
+        <header class="flex justify-between items-center mb-10">
+            <h1 class="text-[28px] font-semibold text-text-primaryLight">Dashboard Overview</h1>
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-text-primaryLight font-medium">AD</div>
+            </div>
+        </header>
+
+        <!-- Stats Row -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <!-- Stat 1 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-2">
+                <span class="text-sm font-medium text-text-muted">Total Views</span>
+                <div class="text-[32px] font-bold text-text-primaryLight">24.5k</div>
+                <span class="text-sm font-medium text-green-500">+12% from last month</span>
+            </div>
+            <!-- Stat 2 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-2">
+                <span class="text-sm font-medium text-text-muted">Active Sessions</span>
+                <div class="text-[32px] font-bold text-text-primaryLight">128</div>
+                <span class="text-sm font-medium text-accent-blue">+4 new now</span>
+            </div>
+            <!-- Stat 3 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-2">
+                <span class="text-sm font-medium text-text-muted">AI Queries</span>
+                <div class="text-[32px] font-bold text-text-primaryLight">1,240</div>
+                <span class="text-sm font-medium text-green-500">98% satisfaction</span>
+            </div>
+        </div>
+
+        <!-- Content Manager -->
+        <section class="flex flex-col gap-6">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xl font-semibold text-text-primaryLight">Recent Updates</h2>
+                <button class="bg-accent-blue text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-600 transition-colors">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span class="text-sm font-medium">Add New</span>
+                </button>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <!-- Item 1 -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                            <i data-lucide="video" class="w-6 h-6 text-gray-400"></i>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <h3 class="text-sm font-semibold text-text-primaryLight">Hero Video Loop</h3>
+                            <p class="text-xs text-text-muted">Updated 2h ago by Admin</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-medium text-green-500 bg-green-50 px-2 py-1 rounded-full">Published</span>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                            <i data-lucide="file-text" class="w-6 h-6 text-gray-400"></i>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <h3 class="text-sm font-semibold text-text-primaryLight">Safety Protocols PDF</h3>
+                            <p class="text-xs text-text-muted">Updated 5h ago by Sarah</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-medium text-orange-500 bg-orange-50 px-2 py-1 rounded-full">Draft</span>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                            <i data-lucide="image" class="w-6 h-6 text-gray-400"></i>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <h3 class="text-sm font-semibold text-text-primaryLight">Reactor Schematics</h3>
+                            <p class="text-xs text-text-muted">Updated 1d ago by Mike</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-medium text-green-500 bg-green-50 px-2 py-1 rounded-full">Published</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="./js/admin.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

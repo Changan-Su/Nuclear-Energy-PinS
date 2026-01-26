@@ -1,0 +1,2949 @@
+{
+  "version": "2.6",
+  "children": [
+    {
+      "type": "frame",
+      "id": "Qm8KM",
+      "x": 0,
+      "y": 0,
+      "name": "Nuclear Energy Landing Page",
+      "clip": true,
+      "width": 1440,
+      "fill": "#FFFFFF",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "sIvyY",
+          "name": "Navigation",
+          "width": "fill_container",
+          "height": 52,
+          "fill": "#000000",
+          "padding": [
+            0,
+            48
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "fVkXO",
+              "name": "logo",
+              "fill": "#FFFFFF",
+              "content": "Nuclear Energy",
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "bBbDf",
+              "name": "navLinks",
+              "gap": 32,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "K4rY8",
+                  "name": "link1",
+                  "fill": "#FFFFFF",
+                  "content": "Overview",
+                  "fontFamily": "Inter",
+                  "fontSize": 14
+                },
+                {
+                  "type": "text",
+                  "id": "wLu3k",
+                  "name": "link2",
+                  "fill": "#FFFFFFB3",
+                  "content": "Science",
+                  "fontFamily": "Inter",
+                  "fontSize": 14
+                },
+                {
+                  "type": "text",
+                  "id": "mdX62",
+                  "name": "link3",
+                  "fill": "#FFFFFFB3",
+                  "content": "Benefits",
+                  "fontFamily": "Inter",
+                  "fontSize": 14
+                },
+                {
+                  "type": "text",
+                  "id": "GFYqq",
+                  "name": "link4",
+                  "fill": "#FFFFFFB3",
+                  "content": "Future",
+                  "fontFamily": "Inter",
+                  "fontSize": 14
+                },
+                {
+                  "type": "frame",
+                  "id": "eRir5",
+                  "name": "chatBtn",
+                  "fill": "#0071E3",
+                  "cornerRadius": 20,
+                  "padding": [
+                    8,
+                    16
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Ptz5L",
+                      "name": "chatText",
+                      "fill": "#FFFFFF",
+                      "content": "Ask AI",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "a9UJI",
+          "name": "Hero Section",
+          "width": "fill_container",
+          "height": 800,
+          "fill": {
+            "type": "gradient",
+            "gradientType": "linear",
+            "enabled": true,
+            "rotation": 135,
+            "size": {
+              "height": 1
+            },
+            "colors": [
+              {
+                "color": "#0A1628",
+                "position": 0
+              },
+              {
+                "color": "#1E3A5F",
+                "position": 0.5
+              },
+              {
+                "color": "#0D2137",
+                "position": 1
+              }
+            ]
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "frame",
+              "id": "RMEUp",
+              "x": 0,
+              "y": 0,
+              "name": "Video Placeholder",
+              "width": 1440,
+              "height": 800,
+              "layout": "vertical",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "x1LYE",
+                  "name": "playIcon",
+                  "width": 80,
+                  "height": 80,
+                  "fill": "#FFFFFF1A",
+                  "cornerRadius": 40,
+                  "layout": "vertical",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "06wUu",
+                      "name": "playTriangle",
+                      "fill": "#FFFFFF",
+                      "content": "▶",
+                      "fontFamily": "Inter",
+                      "fontSize": 32,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "ggDvM",
+                  "name": "videoLabel",
+                  "fill": "#FFFFFF80",
+                  "content": "Video Cover - Click to Play",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "R3nCH",
+              "x": 0,
+              "y": 0,
+              "name": "Gradient Overlay",
+              "width": 1440,
+              "height": 800,
+              "fill": {
+                "type": "gradient",
+                "gradientType": "linear",
+                "enabled": true,
+                "rotation": 180,
+                "size": {
+                  "height": 1
+                },
+                "colors": [
+                  {
+                    "color": "#00000000",
+                    "position": 0
+                  },
+                  {
+                    "color": "#00000099",
+                    "position": 1
+                  }
+                ]
+              }
+            },
+            {
+              "type": "frame",
+              "id": "OU9o1",
+              "x": 0,
+              "y": 0,
+              "name": "Hero Content",
+              "width": 1440,
+              "height": 800,
+              "layout": "vertical",
+              "gap": 24,
+              "padding": [
+                0,
+                120,
+                160,
+                120
+              ],
+              "justifyContent": "end",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "LH1mO",
+                  "name": "badge",
+                  "fill": "#FFFFFF1A",
+                  "cornerRadius": 20,
+                  "gap": 8,
+                  "padding": [
+                    8,
+                    20
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "BNQN2",
+                      "name": "badgeText",
+                      "fill": "#FFFFFF",
+                      "content": "Physics in School Digital Project",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "OmX3V",
+                  "name": "heroTitle",
+                  "fill": "#FFFFFF",
+                  "content": "The Power of\nNuclear Energy",
+                  "lineHeight": 1.05,
+                  "fontFamily": "Inter",
+                  "fontSize": 72,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "Oj860",
+                  "name": "heroSubtitle",
+                  "fill": "#FFFFFFCC",
+                  "content": "Discover the science behind clean, reliable power\nthat could shape our sustainable future.",
+                  "lineHeight": 1.4,
+                  "fontFamily": "Inter",
+                  "fontSize": 24
+                },
+                {
+                  "type": "frame",
+                  "id": "YJ9E8",
+                  "name": "CTA Row",
+                  "gap": 16,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Kyn7J",
+                      "name": "ctaPrimary",
+                      "fill": "#0071E3",
+                      "cornerRadius": 30,
+                      "padding": [
+                        14,
+                        28
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "pCeMW",
+                          "name": "ctaPrimaryText",
+                          "fill": "#FFFFFF",
+                          "content": "Explore Now",
+                          "fontFamily": "Inter",
+                          "fontSize": 17,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "POdyH",
+                      "name": "ctaSecondary",
+                      "cornerRadius": 30,
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": "#FFFFFF80"
+                      },
+                      "padding": [
+                        14,
+                        28
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "vKzMb",
+                          "name": "ctaSecondaryText",
+                          "fill": "#FFFFFF",
+                          "content": "Learn More",
+                          "fontFamily": "Inter",
+                          "fontSize": 17,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "zUgXM",
+              "x": 0,
+              "y": 740,
+              "name": "Scroll Indicator",
+              "width": 1440,
+              "layout": "vertical",
+              "gap": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "tpQIC",
+                  "name": "scrollText",
+                  "fill": "#FFFFFF80",
+                  "content": "Scroll to explore",
+                  "fontFamily": "Inter",
+                  "fontSize": 12
+                },
+                {
+                  "type": "text",
+                  "id": "7snYC",
+                  "name": "scrollArrow",
+                  "fill": "#FFFFFF80",
+                  "content": "↓",
+                  "fontFamily": "Inter",
+                  "fontSize": 20,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "QlGld",
+          "name": "Highlights Section",
+          "width": "fill_container",
+          "fill": "#F5F5F7",
+          "layout": "vertical",
+          "gap": 48,
+          "padding": [
+            80,
+            0
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "OmNq4",
+              "name": "highlightsHeader",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 16,
+              "padding": [
+                0,
+                120
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "QXJVk",
+                  "name": "highlightsTitle",
+                  "fill": "#1D1D1F",
+                  "content": "Get the highlights.",
+                  "fontFamily": "Inter",
+                  "fontSize": 56,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "1K2OJ",
+              "name": "Cards Container",
+              "clip": true,
+              "width": "fill_container",
+              "height": 400,
+              "gap": 20,
+              "padding": [
+                0,
+                60
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "oBrHp",
+                  "name": "Card 1",
+                  "width": 400,
+                  "height": "fill_container",
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 24,
+                  "layout": "vertical",
+                  "gap": 24,
+                  "padding": 32,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "wPkaF",
+                      "name": "card1Content",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 16,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "CXvSY",
+                          "name": "card1Title",
+                          "fill": "#1D1D1F",
+                          "content": "Zero Carbon Emissions",
+                          "lineHeight": 1.1,
+                          "fontFamily": "Inter",
+                          "fontSize": 28,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "0meRe",
+                          "name": "card1Desc",
+                          "fill": "#6E6E73",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Nuclear power generates electricity without producing greenhouse gases during operation.",
+                          "lineHeight": 1.4,
+                          "fontFamily": "Inter",
+                          "fontSize": 17
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "adnLc",
+                      "name": "Visual",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "radial",
+                        "enabled": true,
+                        "rotation": 0,
+                        "size": {
+                          "width": 1,
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#34C759",
+                            "position": 0
+                          },
+                          {
+                            "color": "#30B350",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "cornerRadius": 16,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "opSsI",
+                          "name": "card1Icon",
+                          "content": "⚡",
+                          "fontFamily": "Inter",
+                          "fontSize": 64,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "FS0Fh",
+                  "name": "Card 2",
+                  "width": 400,
+                  "height": "fill_container",
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 24,
+                  "layout": "vertical",
+                  "gap": 24,
+                  "padding": 32,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "KN4ls",
+                      "name": "card2Content",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 16,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "fJSda",
+                          "name": "card2Title",
+                          "fill": "#1D1D1F",
+                          "content": "24/7 Reliable Power",
+                          "lineHeight": 1.1,
+                          "fontFamily": "Inter",
+                          "fontSize": 28,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "rA7QI",
+                          "name": "card2Desc",
+                          "fill": "#6E6E73",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Unlike solar or wind, nuclear provides consistent baseload electricity around the clock.",
+                          "lineHeight": 1.4,
+                          "fontFamily": "Inter",
+                          "fontSize": 17
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "GOJUz",
+                      "name": "Visual",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#007AFF",
+                            "position": 0
+                          },
+                          {
+                            "color": "#5856D6",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "cornerRadius": 16,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Q5Woz",
+                          "name": "card2Icon",
+                          "fill": "#FFFFFF",
+                          "content": "24h",
+                          "fontFamily": "Inter",
+                          "fontSize": 48,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Pp1cX",
+                  "name": "Card 3",
+                  "width": 400,
+                  "height": "fill_container",
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 24,
+                  "layout": "vertical",
+                  "gap": 24,
+                  "padding": 32,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "0dZWM",
+                      "name": "card3Content",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 16,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "QFzvJ",
+                          "name": "card3Title",
+                          "fill": "#1D1D1F",
+                          "content": "Small Footprint",
+                          "lineHeight": 1.1,
+                          "fontFamily": "Inter",
+                          "fontSize": 28,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Cr2cB",
+                          "name": "card3Desc",
+                          "fill": "#6E6E73",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "A single nuclear plant can power millions of homes while using minimal land compared to other energy sources.",
+                          "lineHeight": 1.4,
+                          "fontFamily": "Inter",
+                          "fontSize": 17
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "HTLXS",
+                      "name": "Visual",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#FF9500",
+                            "position": 0
+                          },
+                          {
+                            "color": "#FF6B00",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "cornerRadius": 16,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "qL5gh",
+                          "name": "card3Icon",
+                          "fill": "#FFFFFF",
+                          "content": "1GW+",
+                          "fontFamily": "Inter",
+                          "fontSize": 42,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "LWGEF",
+          "name": "Closer Look Section",
+          "width": "fill_container",
+          "fill": "#FFFFFF",
+          "layout": "vertical",
+          "gap": 64,
+          "padding": [
+            100,
+            120
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "ij9Sv",
+              "name": "closerTitle",
+              "fill": "#1D1D1F",
+              "content": "Take a closer look.",
+              "fontFamily": "Inter",
+              "fontSize": 56,
+              "fontWeight": "700"
+            },
+            {
+              "type": "frame",
+              "id": "yaKPX",
+              "name": "Content Row",
+              "width": "fill_container",
+              "gap": 80,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "wvYsl",
+                  "name": "Feature List",
+                  "width": 320,
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "mYPe4",
+                      "name": "feature1",
+                      "width": "fill_container",
+                      "stroke": {
+                        "thickness": {
+                          "bottom": 1
+                        },
+                        "fill": "#E5E5EA"
+                      },
+                      "gap": 16,
+                      "padding": [
+                        20,
+                        0
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "YYHuu",
+                          "name": "feature1Icon",
+                          "width": 32,
+                          "height": 32,
+                          "fill": "#007AFF",
+                          "cornerRadius": 16,
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "lmZZi",
+                              "name": "feature1IconText",
+                              "content": "☢️",
+                              "fontFamily": "Inter",
+                              "fontSize": 16,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "JbF9e",
+                          "name": "feature1Text",
+                          "fill": "#1D1D1F",
+                          "content": "Fission Process",
+                          "fontFamily": "Inter",
+                          "fontSize": 17,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "mTsZ0",
+                      "name": "feature2",
+                      "width": "fill_container",
+                      "stroke": {
+                        "thickness": {
+                          "bottom": 1
+                        },
+                        "fill": "#E5E5EA"
+                      },
+                      "gap": 16,
+                      "padding": [
+                        20,
+                        0
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "dAOI8",
+                          "name": "feature2Icon",
+                          "width": 32,
+                          "height": 32,
+                          "fill": "#F5F5F7",
+                          "cornerRadius": 16,
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": "#E5E5EA"
+                          },
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "KJLiu",
+                              "name": "feature2IconText",
+                              "fill": "#8E8E93",
+                              "content": "+",
+                              "fontFamily": "Inter",
+                              "fontSize": 16,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "XYLbf",
+                          "name": "feature2Text",
+                          "fill": "#1D1D1F",
+                          "content": "Safety Systems",
+                          "fontFamily": "Inter",
+                          "fontSize": 17
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "uzqMn",
+                      "name": "feature3",
+                      "width": "fill_container",
+                      "stroke": {
+                        "thickness": {
+                          "bottom": 1
+                        },
+                        "fill": "#E5E5EA"
+                      },
+                      "gap": 16,
+                      "padding": [
+                        20,
+                        0
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "L3jXW",
+                          "name": "feature3Icon",
+                          "width": 32,
+                          "height": 32,
+                          "fill": "#F5F5F7",
+                          "cornerRadius": 16,
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": "#E5E5EA"
+                          },
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "jaMUc",
+                              "name": "feature3IconText",
+                              "fill": "#8E8E93",
+                              "content": "+",
+                              "fontFamily": "Inter",
+                              "fontSize": 16,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "evPRb",
+                          "name": "feature3Text",
+                          "fill": "#1D1D1F",
+                          "content": "Cooling Systems",
+                          "fontFamily": "Inter",
+                          "fontSize": 17
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "FfUcT",
+                      "name": "feature4",
+                      "width": "fill_container",
+                      "stroke": {
+                        "thickness": {
+                          "bottom": 1
+                        },
+                        "fill": "#E5E5EA"
+                      },
+                      "gap": 16,
+                      "padding": [
+                        20,
+                        0
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "LQcZU",
+                          "name": "feature4Icon",
+                          "width": 32,
+                          "height": 32,
+                          "fill": "#F5F5F7",
+                          "cornerRadius": 16,
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": "#E5E5EA"
+                          },
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "fCqyX",
+                              "name": "feature4IconText",
+                              "fill": "#8E8E93",
+                              "content": "+",
+                              "fontFamily": "Inter",
+                              "fontSize": 16,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "byox9",
+                          "name": "feature4Text",
+                          "fill": "#1D1D1F",
+                          "content": "Waste Management",
+                          "fontFamily": "Inter",
+                          "fontSize": 17
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "zA9mJ",
+                      "name": "feature5",
+                      "width": "fill_container",
+                      "gap": 16,
+                      "padding": [
+                        20,
+                        0
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "UANqA",
+                          "name": "feature5Icon",
+                          "width": 32,
+                          "height": 32,
+                          "fill": "#F5F5F7",
+                          "cornerRadius": 16,
+                          "stroke": {
+                            "thickness": 1,
+                            "fill": "#E5E5EA"
+                          },
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "bbf89",
+                              "name": "feature5IconText",
+                              "fill": "#8E8E93",
+                              "content": "+",
+                              "fontFamily": "Inter",
+                              "fontSize": 16,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "szpdH",
+                          "name": "feature5Text",
+                          "fill": "#1D1D1F",
+                          "content": "Future Technologies",
+                          "fontFamily": "Inter",
+                          "fontSize": 17
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "51yX4",
+                  "name": "Reactor Visual",
+                  "width": "fill_container",
+                  "height": 500,
+                  "fill": {
+                    "type": "gradient",
+                    "gradientType": "radial",
+                    "enabled": true,
+                    "rotation": 0,
+                    "size": {
+                      "width": 1,
+                      "height": 1
+                    },
+                    "colors": [
+                      {
+                        "color": "#F5F5F7",
+                        "position": 0
+                      },
+                      {
+                        "color": "#E5E5EA",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  "cornerRadius": 32,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "qOS7g",
+                      "name": "reactorPlaceholder",
+                      "width": 200,
+                      "height": 200,
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "radial",
+                        "enabled": true,
+                        "rotation": 0,
+                        "size": {
+                          "width": 1,
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#007AFF40",
+                            "position": 0
+                          },
+                          {
+                            "color": "#007AFF10",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "cornerRadius": 100,
+                      "stroke": {
+                        "thickness": 2,
+                        "fill": "#007AFF60"
+                      },
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "bTVxj",
+                          "name": "reactorIcon",
+                          "content": "⚛️",
+                          "fontFamily": "Inter",
+                          "fontSize": 64,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "EmQJs",
+                      "name": "visualLabel",
+                      "fill": "#8E8E93",
+                      "content": "Interactive Reactor Diagram",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "text",
+                      "id": "qKIVw",
+                      "name": "visualSubLabel",
+                      "fill": "#AEAEB2",
+                      "content": "Click features to explore",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "FOBc1",
+          "name": "Science Section",
+          "width": "fill_container",
+          "height": 700,
+          "fill": "#000000",
+          "children": [
+            {
+              "type": "frame",
+              "id": "An8JL",
+              "name": "Image Area",
+              "width": 720,
+              "height": "fill_container",
+              "fill": {
+                "type": "gradient",
+                "gradientType": "linear",
+                "enabled": true,
+                "rotation": 135,
+                "size": {
+                  "height": 1
+                },
+                "colors": [
+                  {
+                    "color": "#1A1A2E",
+                    "position": 0
+                  },
+                  {
+                    "color": "#16213E",
+                    "position": 0.5
+                  },
+                  {
+                    "color": "#0F3460",
+                    "position": 1
+                  }
+                ]
+              },
+              "layout": "vertical",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "iRAJB",
+                  "name": "scienceImagePlaceholder",
+                  "width": 300,
+                  "height": 300,
+                  "fill": {
+                    "type": "gradient",
+                    "gradientType": "radial",
+                    "enabled": true,
+                    "rotation": 0,
+                    "size": {
+                      "width": 1,
+                      "height": 1
+                    },
+                    "colors": [
+                      {
+                        "color": "#00FF8840",
+                        "position": 0
+                      },
+                      {
+                        "color": "#00FF8800",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  "cornerRadius": 150,
+                  "stroke": {
+                    "thickness": 2,
+                    "fill": "#00FF8860"
+                  },
+                  "layout": "vertical",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "SNDjh",
+                      "name": "scienceIcon",
+                      "fill": "#00FF88",
+                      "content": "☢",
+                      "fontFamily": "Inter",
+                      "fontSize": 80,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "0WxbH",
+                  "name": "scienceImageLabel",
+                  "fill": "#FFFFFF60",
+                  "content": "Uranium Atom Visualization",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "YKK1D",
+              "name": "Content Area",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 24,
+              "padding": [
+                100,
+                80
+              ],
+              "justifyContent": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "NAyVQ",
+                  "name": "scienceLabel",
+                  "fill": "#00FF88",
+                  "content": "Science",
+                  "fontFamily": "Inter",
+                  "fontSize": 17,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "RqkmK",
+                  "name": "scienceTitle",
+                  "fill": "#FFFFFF",
+                  "content": "The physics\nbehind the power.",
+                  "lineHeight": 1.05,
+                  "fontFamily": "Inter",
+                  "fontSize": 64,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "m63T3",
+                  "name": "scienceDesc",
+                  "fill": "#FFFFFFB3",
+                  "content": "Nuclear fission splits uranium atoms, releasing massive\namounts of energy. This process is carefully controlled\nto generate heat, which produces steam to drive turbines.",
+                  "lineHeight": 1.5,
+                  "fontFamily": "Inter",
+                  "fontSize": 21
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "hG0J5",
+          "name": "Benefits Section",
+          "width": "fill_container",
+          "fill": "#F5F5F7",
+          "layout": "vertical",
+          "gap": 64,
+          "padding": [
+            100,
+            120
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "rXPW3",
+              "name": "benefitsHeader",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "hHqa0",
+                  "name": "benefitsLabel",
+                  "fill": "#0071E3",
+                  "content": "Benefits",
+                  "fontFamily": "Inter",
+                  "fontSize": 17,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "EKcn6",
+                  "name": "benefitsTitle",
+                  "fill": "#1D1D1F",
+                  "content": "Better by every\nmeasure.",
+                  "lineHeight": 1.05,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 56,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "zJCyK",
+                  "name": "benefitsDesc",
+                  "fill": "#6E6E73",
+                  "content": "Nuclear energy offers unique advantages that make it\na compelling choice for our clean energy future.",
+                  "lineHeight": 1.4,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 21
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "5s7SD",
+              "name": "Benefits Grid",
+              "width": "fill_container",
+              "gap": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "tffmx",
+                  "name": "Benefit 1",
+                  "width": "fill_container",
+                  "height": 280,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 24,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 32,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "98XOu",
+                      "name": "benefit1Icon",
+                      "width": 56,
+                      "height": 56,
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#34C759",
+                            "position": 0
+                          },
+                          {
+                            "color": "#30B350",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "cornerRadius": 16,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "eNsfI",
+                          "name": "benefit1IconText",
+                          "width": 28,
+                          "height": 28,
+                          "iconFontName": "leaf",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "0Dadl",
+                      "name": "benefit1Title",
+                      "fill": "#1D1D1F",
+                      "content": "Environmentally Friendly",
+                      "fontFamily": "Inter",
+                      "fontSize": 22,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "SPJsx",
+                      "name": "benefit1Desc",
+                      "fill": "#6E6E73",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Zero carbon emissions during operation. A key player in fighting climate change.",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Inter",
+                      "fontSize": 17
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "4lGl7",
+                  "name": "Benefit 2",
+                  "width": "fill_container",
+                  "height": 280,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 24,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 32,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "R2uXF",
+                      "name": "benefit2Icon",
+                      "width": 56,
+                      "height": 56,
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#007AFF",
+                            "position": 0
+                          },
+                          {
+                            "color": "#5856D6",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "cornerRadius": 16,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "9R4Dr",
+                          "name": "benefit2IconText",
+                          "width": 28,
+                          "height": 28,
+                          "iconFontName": "zap",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "bZyUD",
+                      "name": "benefit2Title",
+                      "fill": "#1D1D1F",
+                      "content": "High Energy Density",
+                      "fontFamily": "Inter",
+                      "fontSize": 22,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "woYt6",
+                      "name": "benefit2Desc",
+                      "fill": "#6E6E73",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "One uranium fuel pellet produces as much energy as 17,000 cubic feet of natural gas.",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Inter",
+                      "fontSize": 17
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "B0iuK",
+                  "name": "Benefit 3",
+                  "width": "fill_container",
+                  "height": 280,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 24,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 32,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "1zcSQ",
+                      "name": "benefit3Icon",
+                      "width": 56,
+                      "height": 56,
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#FF9500",
+                            "position": 0
+                          },
+                          {
+                            "color": "#FF6B00",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "cornerRadius": 16,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "BFEtU",
+                          "name": "benefit3IconText",
+                          "width": 28,
+                          "height": 28,
+                          "iconFontName": "shield-check",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "RbxNi",
+                      "name": "benefit3Title",
+                      "fill": "#1D1D1F",
+                      "content": "Reliable & Stable",
+                      "fontFamily": "Inter",
+                      "fontSize": 22,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "6mCh4",
+                      "name": "benefit3Desc",
+                      "fill": "#6E6E73",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Consistent baseload power 24/7, regardless of weather conditions or time of day.",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Inter",
+                      "fontSize": 17
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "oTyJH",
+          "name": "AI Chat Section",
+          "width": "fill_container",
+          "fill": "#FFFFFF",
+          "layout": "vertical",
+          "gap": 48,
+          "padding": [
+            100,
+            120
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "hP18g",
+              "name": "aiChatHeader",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "cgDQU",
+                  "name": "aiChatLabel",
+                  "fill": "#5856D6",
+                  "content": "Learn More",
+                  "fontFamily": "Inter",
+                  "fontSize": 17,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "zDgjR",
+                  "name": "aiChatTitle",
+                  "fill": "#1D1D1F",
+                  "content": "Have questions?\nAsk our AI.",
+                  "lineHeight": 1.05,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 56,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "c4R2R",
+                  "name": "aiChatDesc",
+                  "fill": "#6E6E73",
+                  "content": "Our AI assistant is trained on nuclear energy science and can\nanswer your questions about physics, safety, and sustainability.",
+                  "lineHeight": 1.4,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 21
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "zxY0w",
+              "name": "Chat Container",
+              "width": 800,
+              "height": 500,
+              "fill": "#F5F5F7",
+              "cornerRadius": 24,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#E5E5EA"
+              },
+              "layout": "vertical",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "UfFoO",
+                  "name": "Messages Area",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "AAFLO",
+                      "name": "welcomeMsg",
+                      "width": "fill_container",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "SNfjN",
+                          "name": "aiAvatar",
+                          "width": 40,
+                          "height": 40,
+                          "fill": {
+                            "type": "gradient",
+                            "gradientType": "linear",
+                            "enabled": true,
+                            "rotation": 135,
+                            "size": {
+                              "height": 1
+                            },
+                            "colors": [
+                              {
+                                "color": "#5856D6",
+                                "position": 0
+                              },
+                              {
+                                "color": "#007AFF",
+                                "position": 1
+                              }
+                            ]
+                          },
+                          "cornerRadius": 20,
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "i8HAP",
+                              "name": "aiAvatarIcon",
+                              "width": 24,
+                              "height": 24,
+                              "iconFontName": "bot",
+                              "iconFontFamily": "lucide",
+                              "fill": "#FFFFFF"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "vI72U",
+                          "name": "msgContent",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 4,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "oV7xn",
+                              "name": "msgSender",
+                              "fill": "#1D1D1F",
+                              "content": "Nuclear AI Assistant",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "nTp07",
+                              "name": "msgText",
+                              "fill": "#1D1D1F",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Hello! I'm here to help you learn about nuclear energy. You can ask me about:\n\n• How nuclear fission works\n• Safety measures in nuclear plants\n• Environmental benefits\n• The future of nuclear technology\n\nWhat would you like to know?",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 16
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "fy2ne",
+                  "name": "Chat Input",
+                  "width": "fill_container",
+                  "stroke": {
+                    "thickness": {
+                      "top": 1
+                    },
+                    "fill": "#E5E5EA"
+                  },
+                  "gap": 12,
+                  "padding": 16,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Sn1dw",
+                      "name": "inputField",
+                      "width": "fill_container",
+                      "height": 48,
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 24,
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": "#E5E5EA"
+                      },
+                      "padding": [
+                        0,
+                        20
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "greyc",
+                          "name": "inputPlaceholder",
+                          "fill": "#8E8E93",
+                          "content": "Ask anything about nuclear energy...",
+                          "fontFamily": "Inter",
+                          "fontSize": 16
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "rUa28",
+                      "name": "sendButton",
+                      "width": 48,
+                      "height": 48,
+                      "fill": "#007AFF",
+                      "cornerRadius": 24,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "ot549",
+                          "name": "sendIcon",
+                          "width": 20,
+                          "height": 20,
+                          "iconFontName": "send",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "CXzpI",
+          "name": "Footer",
+          "width": "fill_container",
+          "fill": "#1D1D1F",
+          "layout": "vertical",
+          "gap": 40,
+          "padding": [
+            60,
+            120
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "mRyAL",
+              "name": "footerContent",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "DhLCh",
+                  "name": "footerBrand",
+                  "width": 300,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "g97Hl",
+                      "name": "footerLogo",
+                      "fill": "#FFFFFF",
+                      "content": "Nuclear Energy",
+                      "fontFamily": "Inter",
+                      "fontSize": 24,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Sxlcd",
+                      "name": "footerTagline",
+                      "fill": "#FFFFFF80",
+                      "content": "Physics in School Digital Project\nExploring the power of the atom.",
+                      "lineHeight": 1.5,
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "sZmDP",
+                  "name": "footerLinks",
+                  "gap": 80,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "bLewy",
+                      "name": "linkCol1",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "IqEXO",
+                          "name": "linkCol1Title",
+                          "fill": "#FFFFFF",
+                          "content": "Explore",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "2azOx",
+                          "name": "linkCol1Item1",
+                          "fill": "#FFFFFF80",
+                          "content": "Overview",
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        },
+                        {
+                          "type": "text",
+                          "id": "jIvcs",
+                          "name": "linkCol1Item2",
+                          "fill": "#FFFFFF80",
+                          "content": "Science",
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        },
+                        {
+                          "type": "text",
+                          "id": "yFvzT",
+                          "name": "linkCol1Item3",
+                          "fill": "#FFFFFF80",
+                          "content": "Benefits",
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "AciQB",
+                      "name": "linkCol2",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "dfGKI",
+                          "name": "linkCol2Title",
+                          "fill": "#FFFFFF",
+                          "content": "Resources",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Ny2ES",
+                          "name": "linkCol2Item1",
+                          "fill": "#FFFFFF80",
+                          "content": "Ask AI",
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        },
+                        {
+                          "type": "text",
+                          "id": "IO3dq",
+                          "name": "linkCol2Item2",
+                          "fill": "#FFFFFF80",
+                          "content": "References",
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        },
+                        {
+                          "type": "text",
+                          "id": "9gJSD",
+                          "name": "linkCol2Item3",
+                          "fill": "#FFFFFF80",
+                          "content": "Contact",
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "BDOCn",
+              "name": "footerBottom",
+              "width": "fill_container",
+              "stroke": {
+                "thickness": {
+                  "top": 1
+                },
+                "fill": "#FFFFFF20"
+              },
+              "padding": [
+                20,
+                0,
+                0,
+                0
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "0uYcl",
+                  "name": "copyright",
+                  "fill": "#FFFFFF60",
+                  "content": "2026 Physics in School Digital Project. All rights reserved.",
+                  "fontFamily": "Inter",
+                  "fontSize": 12
+                },
+                {
+                  "type": "text",
+                  "id": "YJJ7j",
+                  "name": "footerCredits",
+                  "fill": "#FFFFFF60",
+                  "content": "Made with passion for science education",
+                  "fontFamily": "Inter",
+                  "fontSize": 12
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "WuM2F",
+      "x": 1540,
+      "y": 0,
+      "name": "Admin Panel",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "#F5F5F7",
+      "children": [
+        {
+          "type": "frame",
+          "id": "dyMDs",
+          "name": "Sidebar",
+          "width": 280,
+          "height": "fill_container",
+          "fill": "#1D1D1F",
+          "layout": "vertical",
+          "gap": 32,
+          "padding": [
+            24,
+            20
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "N6eMQ",
+              "name": "sidebarHeader",
+              "width": "fill_container",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "i6RJr",
+                  "name": "sidebarLogo",
+                  "width": 40,
+                  "height": 40,
+                  "fill": {
+                    "type": "gradient",
+                    "gradientType": "linear",
+                    "enabled": true,
+                    "rotation": 135,
+                    "size": {
+                      "height": 1
+                    },
+                    "colors": [
+                      {
+                        "color": "#007AFF",
+                        "position": 0
+                      },
+                      {
+                        "color": "#5856D6",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  "cornerRadius": 12,
+                  "layout": "vertical",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "IL0FM",
+                      "name": "sidebarLogoIcon",
+                      "width": 24,
+                      "height": 24,
+                      "iconFontName": "atom",
+                      "iconFontFamily": "lucide",
+                      "fill": "#FFFFFF"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "GRYTD",
+                  "name": "sidebarTitle",
+                  "fill": "#FFFFFF",
+                  "content": "Admin Panel",
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "jco5E",
+              "name": "Navigation",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 4,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "f9wQj",
+                  "name": "navItem1",
+                  "width": "fill_container",
+                  "fill": "#FFFFFF15",
+                  "cornerRadius": 12,
+                  "gap": 12,
+                  "padding": [
+                    12,
+                    16
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "ZJHd3",
+                      "name": "navItem1Icon",
+                      "width": 20,
+                      "height": 20,
+                      "iconFontName": "layout-dashboard",
+                      "iconFontFamily": "lucide",
+                      "fill": "#FFFFFF"
+                    },
+                    {
+                      "type": "text",
+                      "id": "3RzCj",
+                      "name": "navItem1Text",
+                      "fill": "#FFFFFF",
+                      "content": "Dashboard",
+                      "fontFamily": "Inter",
+                      "fontSize": 15,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "4lVjn",
+                  "name": "navItem2",
+                  "width": "fill_container",
+                  "cornerRadius": 12,
+                  "gap": 12,
+                  "padding": [
+                    12,
+                    16
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "3EKuw",
+                      "name": "navItem2Icon",
+                      "width": 20,
+                      "height": 20,
+                      "iconFontName": "image",
+                      "iconFontFamily": "lucide",
+                      "fill": "#FFFFFF80"
+                    },
+                    {
+                      "type": "text",
+                      "id": "3yOOr",
+                      "name": "navItem2Text",
+                      "fill": "#FFFFFF80",
+                      "content": "Media Library",
+                      "fontFamily": "Inter",
+                      "fontSize": 15
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "1oNp0",
+                  "name": "navItem3",
+                  "width": "fill_container",
+                  "cornerRadius": 12,
+                  "gap": 12,
+                  "padding": [
+                    12,
+                    16
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "rsg9z",
+                      "name": "navItem3Icon",
+                      "width": 20,
+                      "height": 20,
+                      "iconFontName": "file-text",
+                      "iconFontFamily": "lucide",
+                      "fill": "#FFFFFF80"
+                    },
+                    {
+                      "type": "text",
+                      "id": "o1PQ3",
+                      "name": "navItem3Text",
+                      "fill": "#FFFFFF80",
+                      "content": "Content",
+                      "fontFamily": "Inter",
+                      "fontSize": 15
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "6XYsA",
+                  "name": "navItem4",
+                  "width": "fill_container",
+                  "cornerRadius": 12,
+                  "gap": 12,
+                  "padding": [
+                    12,
+                    16
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "OJryV",
+                      "name": "navItem4Icon",
+                      "width": 20,
+                      "height": 20,
+                      "iconFontName": "message-circle",
+                      "iconFontFamily": "lucide",
+                      "fill": "#FFFFFF80"
+                    },
+                    {
+                      "type": "text",
+                      "id": "noHIB",
+                      "name": "navItem4Text",
+                      "fill": "#FFFFFF80",
+                      "content": "AI Chat Settings",
+                      "fontFamily": "Inter",
+                      "fontSize": 15
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "RcbHi",
+                  "name": "navItem5",
+                  "width": "fill_container",
+                  "cornerRadius": 12,
+                  "gap": 12,
+                  "padding": [
+                    12,
+                    16
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "TMW8x",
+                      "name": "navItem5Icon",
+                      "width": 20,
+                      "height": 20,
+                      "iconFontName": "settings",
+                      "iconFontFamily": "lucide",
+                      "fill": "#FFFFFF80"
+                    },
+                    {
+                      "type": "text",
+                      "id": "RUmLs",
+                      "name": "navItem5Text",
+                      "fill": "#FFFFFF80",
+                      "content": "Settings",
+                      "fontFamily": "Inter",
+                      "fontSize": 15
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "yRFcO",
+          "name": "Main Content",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 32,
+          "padding": 32,
+          "children": [
+            {
+              "type": "frame",
+              "id": "vlF9f",
+              "name": "contentHeader",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "GRiGN",
+                  "name": "contentTitle",
+                  "fill": "#1D1D1F",
+                  "content": "Dashboard",
+                  "fontFamily": "Inter",
+                  "fontSize": 32,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "frame",
+                  "id": "lSJ1W",
+                  "name": "contentActions",
+                  "gap": 12,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ejLY2",
+                      "name": "previewBtn",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": "#E5E5EA"
+                      },
+                      "gap": 8,
+                      "padding": [
+                        12,
+                        20
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "TXen8",
+                          "name": "previewIcon",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "eye",
+                          "iconFontFamily": "lucide",
+                          "fill": "#1D1D1F"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Ziw7i",
+                          "name": "previewText",
+                          "fill": "#1D1D1F",
+                          "content": "Preview Site",
+                          "fontFamily": "Inter",
+                          "fontSize": 15,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "KblGO",
+                      "name": "publishBtn",
+                      "fill": "#007AFF",
+                      "cornerRadius": 12,
+                      "gap": 8,
+                      "padding": [
+                        12,
+                        20
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "2Ve67",
+                          "name": "publishIcon",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "upload",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF"
+                        },
+                        {
+                          "type": "text",
+                          "id": "9zKD7",
+                          "name": "publishText",
+                          "fill": "#FFFFFF",
+                          "content": "Publish",
+                          "fontFamily": "Inter",
+                          "fontSize": 15,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "3aqTe",
+              "name": "Cards Grid",
+              "width": "fill_container",
+              "gap": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "hpyVr",
+                  "name": "Hero Section Card",
+                  "width": "fill_container",
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 16,
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "#E5E5EA"
+                  },
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "XEifw",
+                      "name": "editCard1Header",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "6QJd9",
+                          "name": "editCard1Title",
+                          "fill": "#1D1D1F",
+                          "content": "Hero Section",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "wOSuh",
+                          "name": "editCard1Btn",
+                          "fill": "#F5F5F7",
+                          "cornerRadius": 8,
+                          "gap": 6,
+                          "padding": [
+                            8,
+                            16
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "yLNhF",
+                              "name": "editCard1BtnIcon",
+                              "width": 14,
+                              "height": 14,
+                              "iconFontName": "pencil",
+                              "iconFontFamily": "lucide",
+                              "fill": "#1D1D1F"
+                            },
+                            {
+                              "type": "text",
+                              "id": "eWN0L",
+                              "name": "editCard1BtnText",
+                              "fill": "#1D1D1F",
+                              "content": "Edit",
+                              "fontFamily": "Inter",
+                              "fontSize": 13,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "v1FBu",
+                      "name": "editCard1Preview",
+                      "width": "fill_container",
+                      "height": 120,
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#0A1628",
+                            "position": 0
+                          },
+                          {
+                            "color": "#1E3A5F",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "AgEWS",
+                          "name": "editCard1PreviewText",
+                          "fill": "#FFFFFF80",
+                          "content": "Video + Title Preview",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "R9drJ",
+                  "name": "Content Card",
+                  "width": "fill_container",
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 16,
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "#E5E5EA"
+                  },
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "RfSc9",
+                      "name": "editCard2Header",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "yDcit",
+                          "name": "editCard2Title",
+                          "fill": "#1D1D1F",
+                          "content": "Content Sections",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "GwEQJ",
+                          "name": "editCard2Btn",
+                          "fill": "#F5F5F7",
+                          "cornerRadius": 8,
+                          "gap": 6,
+                          "padding": [
+                            8,
+                            16
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "NxoHw",
+                              "name": "editCard2BtnIcon",
+                              "width": 14,
+                              "height": 14,
+                              "iconFontName": "pencil",
+                              "iconFontFamily": "lucide",
+                              "fill": "#1D1D1F"
+                            },
+                            {
+                              "type": "text",
+                              "id": "5PymB",
+                              "name": "editCard2BtnText",
+                              "fill": "#1D1D1F",
+                              "content": "Edit",
+                              "fontFamily": "Inter",
+                              "fontSize": 13,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "I0vhR",
+                      "name": "editCard2List",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "0hme1",
+                          "name": "listItem1",
+                          "width": "fill_container",
+                          "fill": "#F5F5F7",
+                          "cornerRadius": 8,
+                          "padding": [
+                            12,
+                            16
+                          ],
+                          "justifyContent": "space_between",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "NqaPz",
+                              "name": "listItem1Text",
+                              "fill": "#1D1D1F",
+                              "content": "Highlights Section",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "500"
+                            },
+                            {
+                              "type": "icon_font",
+                              "id": "6ipZK",
+                              "name": "listItem1Arrow",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "chevron-right",
+                              "iconFontFamily": "lucide",
+                              "fill": "#8E8E93"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "8tPUu",
+                          "name": "listItem2",
+                          "width": "fill_container",
+                          "fill": "#F5F5F7",
+                          "cornerRadius": 8,
+                          "padding": [
+                            12,
+                            16
+                          ],
+                          "justifyContent": "space_between",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "beZVi",
+                              "name": "listItem2Text",
+                              "fill": "#1D1D1F",
+                              "content": "Science Section",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "500"
+                            },
+                            {
+                              "type": "icon_font",
+                              "id": "sN0f2",
+                              "name": "listItem2Arrow",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "chevron-right",
+                              "iconFontFamily": "lucide",
+                              "fill": "#8E8E93"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "HIqFX",
+                          "name": "listItem3",
+                          "width": "fill_container",
+                          "fill": "#F5F5F7",
+                          "cornerRadius": 8,
+                          "padding": [
+                            12,
+                            16
+                          ],
+                          "justifyContent": "space_between",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "IyYi9",
+                              "name": "listItem3Text",
+                              "fill": "#1D1D1F",
+                              "content": "Benefits Section",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "500"
+                            },
+                            {
+                              "type": "icon_font",
+                              "id": "8JceB",
+                              "name": "listItem3Arrow",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "chevron-right",
+                              "iconFontFamily": "lucide",
+                              "fill": "#8E8E93"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "4HPyq",
+              "name": "Media Section",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 16,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#E5E5EA"
+              },
+              "layout": "vertical",
+              "gap": 20,
+              "padding": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "jrTIZ",
+                  "name": "mediaHeader",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "n65eP",
+                      "name": "mediaTitle",
+                      "fill": "#1D1D1F",
+                      "content": "Media Library",
+                      "fontFamily": "Inter",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "QHmA1",
+                      "name": "uploadBtn",
+                      "fill": "#007AFF",
+                      "cornerRadius": 8,
+                      "gap": 6,
+                      "padding": [
+                        8,
+                        16
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "f10hW",
+                          "name": "uploadIcon",
+                          "width": 14,
+                          "height": 14,
+                          "iconFontName": "plus",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF"
+                        },
+                        {
+                          "type": "text",
+                          "id": "bUUYX",
+                          "name": "uploadText",
+                          "fill": "#FFFFFF",
+                          "content": "Upload",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Efj62",
+                  "name": "mediaGrid",
+                  "width": "fill_container",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ZdcTs",
+                      "name": "media1",
+                      "width": 140,
+                      "height": 100,
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#007AFF",
+                            "position": 0
+                          },
+                          {
+                            "color": "#5856D6",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "0Fqig",
+                          "name": "media1Icon",
+                          "width": 32,
+                          "height": 32,
+                          "iconFontName": "image",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF80"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "TypDv",
+                      "name": "media2",
+                      "width": 140,
+                      "height": 100,
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#34C759",
+                            "position": 0
+                          },
+                          {
+                            "color": "#30B350",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "2hD1P",
+                          "name": "media2Icon",
+                          "width": 32,
+                          "height": 32,
+                          "iconFontName": "video",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF80"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "MHxzJ",
+                      "name": "media3",
+                      "width": 140,
+                      "height": 100,
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#FF9500",
+                            "position": 0
+                          },
+                          {
+                            "color": "#FF6B00",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "JcDAW",
+                          "name": "media3Icon",
+                          "width": 32,
+                          "height": 32,
+                          "iconFontName": "image",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF80"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Eyxop",
+                      "name": "media4",
+                      "width": 140,
+                      "height": 100,
+                      "fill": "#F5F5F7",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "thickness": 2,
+                        "fill": "#C7C7CC"
+                      },
+                      "layout": "vertical",
+                      "gap": 8,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "cODB0",
+                          "name": "media4Icon",
+                          "width": 24,
+                          "height": 24,
+                          "iconFontName": "plus",
+                          "iconFontFamily": "lucide",
+                          "fill": "#8E8E93"
+                        },
+                        {
+                          "type": "text",
+                          "id": "CcG64",
+                          "name": "media4Text",
+                          "fill": "#8E8E93",
+                          "content": "Add Media",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

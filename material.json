@@ -1,0 +1,147 @@
+{
+  "index": {
+    "meta": {
+      "title": "The Power of Nuclear Energy | Physics in School"
+    },
+    "nav": {
+      "logo": "Nuclear Energy",
+      "links": ["Overview", "Science", "Benefits", "Future"],
+      "cta": "Ask AI"
+    },
+    "hero": {
+      "badge": "Physics in School Digital Project",
+      "title": "The Power of\nNuclear Energy",
+      "subtitle": "Discover the science behind clean, reliable power that could shape our sustainable future.",
+      "ctaPrimary": "Explore the Science",
+      "ctaSecondary": "Watch the Film",
+      "videoLabel": "Video Background Placeholder",
+      "scrollHint": "Scroll to explore",
+      "images": {
+        "videoCover": ""
+      }
+    },
+    "highlights": {
+      "label": "Highlights",
+      "headline": "The ultimate power source.",
+      "tabs": ["Efficiency", "Zero Carbon", "Safety", "Reliability"],
+      "efficiency": {
+        "title": "Unmatched Efficiency",
+        "description": "One uranium fuel pellet creates as much energy as one ton of coal, 149 gallons of oil, or 17,000 cubic feet of natural gas.",
+        "cta": "Learn more",
+        "images": { "main": "" }
+      },
+      "zeroCarbon": {
+        "title": "Zero Emissions",
+        "description": "Nuclear energy produces zero carbon emissions during operation, keeping our air clean and fighting climate change.",
+        "cta": "Learn more",
+        "images": { "main": "" }
+      },
+      "safety": {
+        "title": "Safety",
+        "description": "Modern reactors use passive safety systems that shut down without human intervention.",
+        "cta": "Learn more",
+        "images": { "main": "" }
+      },
+      "reliability": {
+        "title": "Reliability",
+        "description": "Nuclear plants run at full power more than 93% of the time.",
+        "cta": "Learn more",
+        "images": { "main": "" }
+      }
+    },
+    "features": {
+      "headline": "Better by every measure.",
+      "subheadline": "Nuclear energy provides reliable, carbon-free power day and night.",
+      "cards": [
+        {
+          "title": "High Energy Density",
+          "description": "A single pellet the size of a fingertip contains the energy equivalent of one ton of coal.",
+          "image": ""
+        },
+        {
+          "title": "Zero Emissions",
+          "description": "Nuclear power plants produce no greenhouse gas emissions during operation.",
+          "image": ""
+        },
+        {
+          "title": "24/7 Reliability",
+          "description": "Nuclear energy operates at full power more than 93% of the time, making it the most reliable energy source.",
+          "image": ""
+        }
+      ]
+    },
+    "safety": {
+      "title": "Uncompromising Safety.",
+      "description": "Advanced passive safety systems use natural laws of physics to shut down automatically without human intervention.",
+      "imageLabel": "Safety Visualization",
+      "images": { "main": "" }
+    },
+    "sustainability": {
+      "title": "Green. Clean. Future.",
+      "description": "Nuclear energy has one of the smallest carbon footprints of any energy source, protecting our air quality and climate.",
+      "imageLabel": "Ecosystem Visualization",
+      "images": { "main": "" }
+    },
+    "innovation": {
+      "title": "Limitless Potential.",
+      "description": "Small Modular Reactors (SMRs) bring flexible, scalable power to remote communities and industrial hubs.",
+      "imageLabel": "SMR Visualization",
+      "images": { "main": "" }
+    },
+    "closerLook": {
+      "headline": "Take a closer look.",
+      "features": [
+        { "title": "Reactor Core", "description": "The heart of the system where fission occurs, generating intense heat safely contained within robust barriers." },
+        { "title": "Cooling System", "description": "Circulates water to transfer heat from the core to the steam generators." },
+        { "title": "Control Rods", "description": "Regulate the rate of fission by absorbing neutrons." },
+        { "title": "Containment", "description": "Reinforced structure that prevents release of radioactive material." },
+        { "title": "Steam Generator", "description": "Transfers heat from primary loop to produce steam for turbines." }
+      ],
+      "reactorLabel": "Interactive Reactor Diagram",
+      "reactorHint": "Click features to explore",
+      "images": { "reactor": "" }
+    },
+    "aiChat": {
+      "title": "Nuclear Physics Expert",
+      "placeholder": "Ask a question...",
+      "welcomeMessage": "Hello! I'm your nuclear energy assistant. Ask me anything about reactor safety, fuel cycles, or the physics of fission."
+    },
+    "footer": {
+      "brandName": "Physics in School",
+      "brandTagline": "Empowering the next generation of scientists with digital interactive learning.",
+      "columns": {
+        "explore": { "title": "Explore", "links": ["Nuclear Energy", "Sustainability", "Innovation", "Safety"] },
+        "resources": { "title": "Resources", "links": ["Visual Library", "Documentation", "Research Papers"] },
+        "project": { "title": "Project", "links": ["About Us", "Team", "Contact"] }
+      },
+      "copyright": "Copyright © 2026 Physics in School Digital Project. All rights reserved.",
+      "credits": "Designed by PinS Team"
+    }
+  },
+  "admin": {
+    "meta": {
+      "title": "Admin Dashboard | Physics in School"
+    },
+    "sidebar": {
+      "brand": "PinS Admin",
+      "nav": ["Overview", "Media Library", "Content Manager", "Users"],
+      "backToSite": "Back to Site"
+    },
+    "main": {
+      "headerTitle": "Dashboard Overview",
+      "recentTitle": "Recent Updates",
+      "addNew": "Add New"
+    },
+    "stats": [
+      { "label": "Total Views", "value": "24.5k", "hint": "+12% from last month" },
+      { "label": "Active Sessions", "value": "128", "hint": "+4 new now" },
+      { "label": "AI Queries", "value": "1,240", "hint": "98% satisfaction" }
+    ],
+    "contentList": [
+      { "title": "Hero Video Loop", "meta": "Updated 2h ago by Admin", "status": "Published", "image": "" },
+      { "title": "Safety Protocols PDF", "meta": "Updated 5h ago by Sarah", "status": "Draft", "image": "" },
+      { "title": "Reactor Schematics", "meta": "Updated 1d ago by Mike", "status": "Published", "image": "" }
+    ]
+  },
+  "imagesBasePath": "assets/images/"
+}
