@@ -1,3 +1,3 @@
-# Function Index
+# 功能索引
 
-- [Design Implementation v0.1](./Design_v0.1.md)
+- [设计实现 v0.1](./Design_v0.1.md)

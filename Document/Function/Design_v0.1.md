@@ -1,33 +1,33 @@
-# Function Review: Design Implementation v0.1
+# 功能评审：设计实现 v0.1
 
-**Date:** 2026-01-26
-**Feature:** Landing Page & Admin UI Design
+**日期：** 2026-01-26  
+**功能：** 落地页 & 管理后台 UI 设计
 
-## Function Description
-Implementation of the main visual elements for the Nuclear Energy Physics Digital Project, following Apple's design aesthetic.
+## 功能描述
+为核能物理数字化项目实现主要视觉元素，遵循 Apple 设计美学。
 
-## Implementation Details
-The design was created programmatically in `PS2.pen` using the Pencil tool.
+## 实现细节
+设计在 `PS2.pen` 中通过 Pencil 工具程序化创建。
 
-### 1. Hero Section
-- **Layout:** Full-screen vertical flexbox.
-- **Visuals:** Dark gradient background (simulating Cherenkov radiation aesthetic).
-- **Typography:** Large, bold "SF Pro Display" style headers.
+### 1. Hero 区块
+- **布局：** 全屏垂直 flexbox。
+- **视觉：** 深色渐变背景（模拟切伦科夫辐射风格）。
+- **排版：** 大号粗体 "SF Pro Display" 风格标题。
 
-### 2. Features Section
-- **Layout:** 3-column grid of cards.
-- **Components:** Cards with image placeholders and descriptive text.
-- **Style:** Dark glassmorphism effect with rounded corners.
+### 2. 特性区块
+- **布局：** 3 列卡片网格。
+- **组件：** 带图片占位与描述文字的卡片。
+- **样式：** 深色玻璃拟态效果，圆角。
 
-### 3. AI Chat Section
-- **Purpose:** Interactive learning tool for users.
-- **UI:** Chat container with distinct user/AI message bubbles and a clean input field.
+### 3. AI 对话区块
+- **用途：** 面向用户的交互式学习工具。
+- **UI：** 聊天容器，区分用户/AI 消息气泡，简洁输入框。
 
-### 4. Admin Dashboard
-- **Layout:** Sidebar navigation + Main content area.
-- **Components:** Statistics widgets and a data table for content management.
-- **Style:** Professional, dark-mode dashboard interface.
+### 4. 管理后台
+- **布局：** 侧边栏导航 + 主内容区。
+- **组件：** 统计小部件与内容管理数据表。
+- **样式：** 专业深色模式仪表盘界面。
 
-## Notes
-- AI Image generation was replaced with CSS-style gradients due to API constraints.
-- Reusable components were emulated using basic shapes for flexibility.
+## 备注
+- 受 API 限制，AI 图像生成改用 CSS 渐变替代。
+- 可复用组件通过基础形状模拟，以保持灵活。
