@@ -83,10 +83,10 @@
       "imageLabel": "Ecosystem Visualization",
       "images": { "main": "" }
     },
-    "innovation": {
-      "title": "Limitless Potential.",
-      "description": "Small Modular Reactors (SMRs) bring flexible, scalable power to remote communities and industrial hubs.",
-      "imageLabel": "SMR Visualization",
+    "Alternative Designs": {
+      "title": "Alternative Design: Molten Salt Reactors",
+      "description": "More fuel types possible - Fuel carried by molten salt undergoes standard fission - Thermal properties of the carrier salt allows it to act as a coolant for the core and as a passive safety feature, slowing reactions as heat increases",
+      "imageLabel": "MSR Diagram",
       "images": { "main": "" }
     },
     "closerLook": {
