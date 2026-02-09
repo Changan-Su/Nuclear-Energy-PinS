@@ -118,11 +118,17 @@
     applyPage(pageKey);
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  // Don't auto-initialize - let ModeManager handle it
+  // if (document.readyState === 'loading') {
+  //   document.addEventListener('DOMContentLoaded', init);
+  // } else {
+  //   init();
+  // }
 
-  window.__MATERIAL__ = { get: () => material, applyPage, getByPath: (path) => getByPath(material, path) };
+  window.__MATERIAL__ = { 
+    get: () => material, 
+    applyPage, 
+    getByPath: (path) => getByPath(material, path),
+    init // Export init for manual initialization if needed
+  };
 })();

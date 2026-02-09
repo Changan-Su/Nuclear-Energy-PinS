@@ -47,3 +47,239 @@
 .reveal-text.visible {
   clip-path: inset(0 0 0 0);
 }
+
+/* Reference Citation System Styles */
+
+/* Edit mode visibility control */
+.edit-mode-only {
+  display: none;
+}
+
+body.edit-mode .edit-mode-only {
+  display: flex;
+}
+
+/* Citation superscript styling */
+.ref-cite {
+  @apply text-accent-blue cursor-pointer;
+  font-size: 0.75em;
+  vertical-align: super;
+  line-height: 0;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.ref-cite:hover {
+  @apply text-blue-400;
+  text-decoration: underline;
+}
+
+/* Reference item styling */
+.ref-item {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  padding: 0.5rem;
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+  border-radius: 0.5rem;
+  border: 2px solid transparent;
+}
+
+/* Reference highlight animation */
+.ref-highlight {
+  animation: highlight-pulse 2s ease-out;
+}
+
+@keyframes highlight-pulse {
+  0% {
+    background-color: rgba(34, 211, 238, 0.3);
+    border-color: rgba(34, 211, 238, 0.8);
+  }
+  50% {
+    background-color: rgba(34, 211, 238, 0.2);
+    border-color: rgba(34, 211, 238, 0.6);
+  }
+  100% {
+    background-color: transparent;
+    border-color: transparent;
+  }
+}
+
+/* Reference mention dropdown */
+.ref-dropdown {
+  position: absolute;
+  z-index: 1000;
+  min-width: 300px;
+  max-width: 400px;
+  max-height: 300px;
+  overflow-y: auto;
+  background: rgba(17, 17, 17, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  padding: 0.5rem;
+}
+
+.ref-dropdown-item {
+  padding: 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.ref-dropdown-item:hover,
+.ref-dropdown-item.selected {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.ref-dropdown-item-number {
+  @apply text-accent-blue font-medium;
+  margin-right: 0.5rem;
+}
+
+.ref-dropdown-item-text {
+  display: inline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Delete button styling */
+.ref-delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: opacity 0.2s, background-color 0.2s;
+}
+
+.ref-delete-btn:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Editor Sidebar Styles */
+.editor-sidebar {
+  position: fixed;
+  left: 0;
+  top: 108px; /* 52px navbar + 56px toolbar */
+  width: 220px;
+  height: calc(100vh - 108px);
+  background: rgba(17, 17, 17, 0.95);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 0.5rem;
+  overflow-y: auto;
+  z-index: 35;
+  display: none;
+}
+
+body.edit-mode .editor-sidebar {
+  display: block;
+}
+
+body.edit-mode #app {
+  margin-left: 220px;
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar-section-card {
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebar-section-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(34, 211, 238, 0.3);
+}
+
+.sidebar-section-card.active {
+  background: rgba(34, 211, 238, 0.15);
+  border-color: rgba(34, 211, 238, 0.6);
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.2);
+}
+
+.sidebar-section-card.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.sidebar-section-card.disabled:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-section-order {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(34, 211, 238, 0.2);
+  color: rgba(34, 211, 238, 1);
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-section-card.disabled .sidebar-section-order {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.sidebar-section-name {
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  word-break: break-word;
+  line-height: 1.3;
+}
+
+.sidebar-section-card.disabled .sidebar-section-name {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.sidebar-section-name[contenteditable="true"] {
+  outline: 1px dashed rgba(34, 211, 238, 0.5);
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.sidebar-section-template {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.7rem;
+  text-transform: capitalize;
+}
+
+.sidebar-section-card.disabled .sidebar-section-template {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive: Hide sidebar on small screens */
+@media (max-width: 768px) {
+  .editor-sidebar {
+    display: none !important;
+  }
+  
+  body.edit-mode #app {
+    margin-left: 0;
+  }
+}
+
+/* Active nav link styling */
+.nav-link.active {
+  color: white;
+  font-weight: 600;
+}
+

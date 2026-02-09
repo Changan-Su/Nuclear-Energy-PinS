@@ -1,5 +1,17 @@
 {
   "_comment": "Edit this file to change all site text and image paths. Images: use filename (e.g. hero.jpg) or path relative to imagesBasePath; leave empty for placeholder.",
+  "config": {
+    "sections": [
+      { "id": "hero", "template": "hero", "enabled": true, "order": 0, "name": "Overview" },
+      { "id": "highlights", "template": "tabbed-content", "enabled": true, "order": 1, "name": "Science" },
+      { "id": "features", "template": "card-grid", "enabled": true, "order": 2, "name": "Benefits" },
+      { "id": "safety", "template": "text-image-left", "enabled": true, "order": 3, "name": "Safety" },
+      { "id": "sustainability", "template": "text-image-right", "enabled": true, "order": 4, "name": "Sustainability" },
+      { "id": "innovation", "template": "text-image-left", "enabled": true, "order": 5, "name": "Innovation" },
+      { "id": "closerLook", "template": "accordion", "enabled": true, "order": 6, "name": "Closer Look" },
+      { "id": "aiChat", "template": "ai-chat", "enabled": true, "order": 7, "name": "Ask AI" }
+    ]
+  },
   "index": {
     "meta": {
       "title": "The Power of Nuclear Energy | Physics in School"
@@ -83,10 +95,10 @@
       "imageLabel": "Ecosystem Visualization",
       "images": { "main": "" }
     },
-    "Alternative Designs": {
-      "title": "Alternative Design: Molten Salt Reactors",
-      "description": "More fuel types possible - Fuel carried by molten salt undergoes standard fission - Thermal properties of the carrier salt allows it to act as a coolant for the core and as a passive safety feature, slowing reactions as heat increases",
-      "imageLabel": "MSR Diagram",
+    "innovation": {
+      "title": "Limitless Potential.",
+      "description": "Small Modular Reactors (SMRs) bring flexible, scalable power to remote communities and industrial hubs.",
+      "imageLabel": "SMR Visualization",
       "images": { "main": "" }
     },
     "closerLook": {
@@ -112,7 +124,9 @@
       "brandTagline": "I don't know what I can fill here...",
       "reference": {
         "title": "Reference",
-        "body": "[1] Add IEEE or other academic references here."
+        "items": [
+          { "id": 1, "text": "Add IEEE or other academic references here." }
+        ]
       },
       "githubLinkText": "View on GitHub",
       "credits": "Designed by "
