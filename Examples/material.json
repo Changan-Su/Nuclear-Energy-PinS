@@ -1,0 +1,401 @@
+{
+  "_comment": "Edit this file to change all site text and image paths. Images: use filename (e.g. hero.jpg) or path relative to imagesBasePath; leave empty for placeholder.",
+  "config": {
+    "sections": [
+      {
+        "id": "hero",
+        "template": "hero",
+        "enabled": true,
+        "order": 0,
+        "name": "Overview"
+      },
+      {
+        "id": "highlights",
+        "template": "tabbed-content",
+        "enabled": true,
+        "order": 1,
+        "name": "Science"
+      },
+      {
+        "id": "features",
+        "template": "card-grid",
+        "enabled": true,
+        "order": 2,
+        "name": "Benefits"
+      },
+      {
+        "id": "safety",
+        "template": "text-image-left",
+        "enabled": true,
+        "order": 3,
+        "name": "Safety"
+      },
+      {
+        "id": "sustainability",
+        "template": "text-image-right",
+        "enabled": true,
+        "order": 4,
+        "name": "Sustainability"
+      },
+      {
+        "id": "innovation",
+        "template": "text-image-left",
+        "enabled": true,
+        "order": 5,
+        "name": "Innovation"
+      },
+      {
+        "id": "closerLook",
+        "template": "accordion",
+        "enabled": true,
+        "order": 6,
+        "name": "Closer Look"
+      },
+      {
+        "id": "aiChat",
+        "template": "ai-chat",
+        "enabled": true,
+        "order": 7,
+        "name": "Ask AI"
+      }
+    ]
+  },
+  "index": {
+    "meta": {
+      "title": "The Power of Nuclear Energy | Physics in School"
+    },
+    "nav": {
+      "logo": "Nuclear Energy of Durham PinS",
+      "links": [
+        "Overview",
+        "Science",
+        "Benefits",
+        "Future"
+      ],
+      "cta": "Ask AI"
+    },
+    "hero": {
+      "badge": "Physics in School Digital Project",
+      "title": "The Power of\nNuclear Energy",
+      "subtitle": "Z. Zhu, D. Huish, M. Muir, J. Bradlay, L. Desmulliez",
+      "ctaPrimary": "Explore the Nuclear Energy",
+      "ctaSecondary": "Watch the Film",
+      "videoLabel": "Video Background Placeholder",
+      "scrollHint": "Scroll to explore",
+      "images": {
+        "videoCover": "uploads/media-alt16x-0.mp4"
+      }
+    },
+    "highlights": {
+      "label": "",
+      "headline": "Fission Section Introduction",
+      "tabs": [
+        "Physics of Fission",
+        "Chain Reaction",
+        "Reactor Control",
+        "History & Safety",
+        "Future Fission"
+      ],
+      "efficiency": {
+        "title": "What is Nuclear Fission?123",
+        "description": "One uranium fuel pellet creates as much energy as one ton of coal, 149 gallons of oil, or 17,000 cubic feet of natural gas.",
+        "cta": "Learn more",
+        "images": {
+          "main": "uploads/media-dvtsg1-1.png",
+          "position": {
+            "scale": 113
+          }
+        }
+      },
+      "zeroCarbon": {
+        "title": "Where does the energy in a Fission reaction come from?",
+        "description": "Nuclear energy produces zero carbon emissions during operation, keeping our air clean and fighting climate change.",
+        "cta": "Learn more",
+        "images": {
+          "main": ""
+        }
+      },
+      "safety": {
+        "title": "Safety",
+        "description": "",
+        "cta": "Learn more",
+        "images": {
+          "main": ""
+        }
+      },
+      "reliability": {
+        "title": "Reliability",
+        "description": "Nuclear plants run at full power more than 93% of the time.",
+        "cta": "Learn more",
+        "images": {
+          "main": ""
+        }
+      },
+      "items": [
+        {
+          "tab": "Physics of Fission",
+          "title": "The Physics of Nuclear Fission",
+          "description": "Nuclear fission releases energy when a heavy atomic nucleus absorbs a neutron and splits into smaller, more stable fragments.",
+          "cta": "Learn more",
+          "detail": "Nuclear fission is the neutron-induced splitting of a heavy atomic nucleus into smaller nuclei. In reactor technology, uranium-235 is the isotope most commonly used.<sup class=\"ref-cite\" data-ref-id=\"1\">[1]</sup> A uranium-235 nucleus absorbs an incoming neutron, becomes unstable, and can split into two smaller nuclei (fission products), while releasing additional neutrons and a large amount of energy.<sup class=\"ref-cite\" data-ref-id=\"2\">[2]</sup> The exact products are probabilistic, but at least one neutron and energy are always released. One representative fission equation is:\n\n$${}^{235}_{92}\\mathrm{U}+{}^{1}_{0}\\mathrm{n}\\rightarrow{}^{141}_{56}\\mathrm{Ba}+{}^{92}_{36}\\mathrm{Kr}+3\\,{}^{1}_{0}\\mathrm{n}+Q$$\n\nThe energy first appears as kinetic energy of fragments and neutrons, then rapidly converts to heat in fuel, which is used to generate steam and electricity.<sup class=\"ref-cite\" data-ref-id=\"2\">[2]</sup> The source of released energy is nuclear binding-energy difference (mass defect), not a loss of nucleon count. Heavy nuclei become more stable after splitting, and the missing mass converts to energy via:\n\n$$E=mc^2$$\n\nAlthough each reaction has a tiny mass change, the large value of $c^2$ makes the energy release substantial.<sup class=\"ref-cite\" data-ref-id=\"3\">[3]</sup>\n\nNuclear waste is produced as a by-product of sustained fission and contains neutron-rich unstable nuclei that continue radioactive decay after fuel removal. Activity decreases over time as short-lived isotopes decay, while longer-lived isotopes dominate later hazards. Because waste emits both radiation and heat, shielding, cooling, and containment are essential.<sup class=\"ref-cite\" data-ref-id=\"4\">[4]</sup>",
+          "flipEnabled": true,
+          "flipDirection": "y",
+          "images": {
+            "main": "uploads/media-vw6yfd-2.png",
+            "position": {
+              "scale": 101
+            }
+          }
+        },
+        {
+          "tab": "Chain Reaction",
+          "title": "The Chain Reaction",
+          "description": "A nuclear chain reaction occurs when neutrons released in one fission event trigger further fissions, allowing the reaction to sustain itself.",
+          "cta": "Learn more",
+          "detail": "To use fission for power generation, reactions must be considered collectively in reactor fuel. Neutrons released by one fission can induce fission in nearby nuclei, creating a chain reaction.<sup class=\"ref-cite\" data-ref-id=\"5\">[5]</sup>\n\nThe behavior is described by the neutron multiplication factor $k$, often represented conceptually as:\n\n$$k=\\frac{N_{\\mathrm{f,next}}}{N_{\\mathrm{f,current}}}$$\n\nThree regimes define reactor-state behavior:\n- Subcritical ($k<1$): reaction dies out.\n- Critical ($k=1$): steady, sustained reaction.\n- Supercritical ($k>1$): reaction rate increases rapidly.\n\nSustained electricity generation requires keeping the reactor at a controlled critical state.<sup class=\"ref-cite\" data-ref-id=\"6\">[6]</sup>",
+          "flipEnabled": true,
+          "flipDirection": "y",
+          "images": {
+            "main": "uploads/media-ca3p5y-3.png",
+            "position": {
+              "scale": 101
+            }
+          }
+        },
+        {
+          "tab": "Reactor Control",
+          "title": "How a Nuclear Reactor Controls Fission",
+          "description": "A nuclear reactor controls the chain reaction by carefully regulating neutron behavior, heat removal, and fuel composition to maintain a steady critical state.",
+          "cta": "Learn more",
+          "detail": "The primary goal of a power reactor is to maintain a sustained, controlled critical chain reaction and avoid supercritical behavior. This is a key distinction between reactors and nuclear weapons.<sup class=\"ref-cite\" data-ref-id=\"7\">[7]</sup>\n\nMost conventional moderated reactors use enriched uranium fuel (typically around 4-5% uranium-235, compared with about 0.7% in natural uranium). As fission proceeds, fuel accumulates fission products and by-products; spent fuel is then removed and managed as nuclear waste.<sup class=\"ref-cite\" data-ref-id=\"1\">[1]</sup>\n\nCore control components include:\n- Moderator (often water or graphite): slows fast neutrons so they are more likely to induce fission in uranium-235.\n- Control rods: absorb neutrons; insertion depth adjusts reactivity and keeps the reactor near $k=1$.\n- Coolant (often water): removes fission heat and transfers energy to turbines for electricity generation.\n\nReactor systems also include shielding and reinforced containment to prevent radioactive release and protect operators and environment.<sup class=\"ref-cite\" data-ref-id=\"4\">[4]</sup>",
+          "flipEnabled": true,
+          "flipDirection": "y",
+          "images": {
+            "main": "uploads/media-g7puwv-4.png",
+            "position": {
+              "scale": 105
+            }
+          }
+        },
+        {
+          "tab": "History & Safety",
+          "title": "Nuclear Fission in History and Safety",
+          "description": "The development of nuclear fission moved from early experimental reactors to large-scale power generation, with major accidents shaping modern safety design.",
+          "cta": "Learn more",
+          "detail": "Nuclear fission was discovered in the late 1930s. In 1942, the first self-sustaining chain reaction was achieved at the University of Chicago, proving that fission could be controlled and sustained.<sup class=\"ref-cite\" data-ref-id=\"8\">[8]</sup> This launched post-war reactor development and commercial nuclear power deployment.\n\nPublic attitudes were strongly influenced by major accidents, especially Chernobyl.<sup class=\"ref-cite\" data-ref-id=\"9\">[9]</sup> The Chernobyl event highlighted how reactor design details and operating decisions can interact dangerously. During a shutdown attempt, control-rod characteristics and operating conditions contributed to a rapid rise in reactivity and loss of effective chain-reaction control.\n\nLessons from such failures directly informed later reactor generations: removal of vulnerable design features, stronger negative feedback mechanisms, and enhanced engineered safety systems.<sup class=\"ref-cite\" data-ref-id=\"7\">[7]</sup>",
+          "flipEnabled": true,
+          "flipDirection": "y",
+          "images": {
+            "main": "uploads/media-m7cngz-5.png"
+          }
+        },
+        {
+          "tab": "Future Fission",
+          "title": "Future Fission Technologies",
+          "description": "Modern reactor designs introduce engineering innovations, but all remain grounded in the same fundamental physics of controlled nuclear fission.",
+          "cta": "Learn more",
+          "detail": "Emerging technologies such as molten salt reactors and small modular reactors (SMRs) are all based on the same physical foundation: controlled fission and neutron management in the reactor core.<sup class=\"ref-cite\" data-ref-id=\"10\">[10]</sup>\n\nDifferences between designs are mainly engineering choices - safety architecture, scale, deployment model, thermal systems, and economics - rather than different nuclear physics.\n\nAcross all designs, safe operation still depends on maintaining a controlled, steady chain reaction.",
+          "flipEnabled": true,
+          "flipDirection": "y",
+          "images": {
+            "main": "uploads/media-npw9zi-6.png",
+            "position": {
+              "scale": 112,
+              "y": 50,
+              "x": 50
+            }
+          }
+        }
+      ]
+    },
+    "features": {
+      "headline": "Better by every measure.",
+      "subheadline": "Nuclear energy provides reliable, carbon-free power day and night.",
+      "cards": [
+        {
+          "title": "High Energy Density",
+          "description": "A single pellet the size of a fingertip contains the energy equivalent of one ton of coal.",
+          "image": ""
+        },
+        {
+          "title": "Zero Emissions",
+          "description": "Nuclear power plants produce no greenhouse gas emissions during operation.",
+          "image": ""
+        },
+        {
+          "title": "24/7 Reliability",
+          "description": "Nuclear energy operates at full power more than 93% of the time, making it the most reliable energy source.",
+          "image": ""
+        }
+      ]
+    },
+    "safety": {
+      "title": "Uncompromising Safety.",
+      "description": "Advanced passive safety systems use natural laws of physics to shut down automatically without human intervention.",
+      "imageLabel": "Safety Visualization",
+      "images": {
+        "main": ""
+      }
+    },
+    "sustainability": {
+      "title": "Green. Clean. Future.",
+      "description": "Nuclear energy has one of the smallest carbon footprints of any energy source, protecting our air quality and climate.",
+      "imageLabel": "Ecosystem Visualization",
+      "images": {
+        "main": ""
+      }
+    },
+    "innovation": {
+      "title": "Limitless Potential.",
+      "description": "Small Modular Reactors (SMRs) bring flexible, scalable power to remote communities and industrial hubs.",
+      "imageLabel": "SMR Visualization",
+      "images": {
+        "main": ""
+      }
+    },
+    "closerLook": {
+      "headline": "Take a closer look.",
+      "features": [
+        {
+          "title": "Reactor Core",
+          "description": "The heart of the system where fission occurs, generating intense heat safely contained within robust barriers."
+        },
+        {
+          "title": "Cooling System",
+          "description": "Circulates water to transfer heat from the core to the steam generators."
+        },
+        {
+          "title": "Control Rods",
+          "description": "Regulate the rate of fission by absorbing neutrons."
+        },
+        {
+          "title": "Containment",
+          "description": "Reinforced structure that prevents release of radioactive material."
+        },
+        {
+          "title": "Steam Generator",
+          "description": "Transfers heat from primary loop to produce steam for turbines."
+        }
+      ],
+      "reactorLabel": "Interactive Reactor Diagram",
+      "reactorHint": "Click features to explore",
+      "images": {
+        "reactor": ""
+      }
+    },
+    "aiChat": {
+      "title": "Nuclear Energy GPT",
+      "placeholder": "Ask a question...",
+      "welcomeMessage": "Hello! I'm your nuclear energy assistant. Ask me anything about reactor safety, fuel cycles, or the physics of fission."
+    },
+    "footer": {
+      "brandName": "Digital Project of Physics in Society",
+      "brandTagline": "I don't know what I can fill here...",
+      "reference": {
+        "title": "Reference",
+        "items": [
+          {
+            "id": 1,
+            "text": "Makhijani, A., Chalmers, L. and Smith, B. (2004). Uranium Enrichment. Institute for Energy and Environmental Research."
+          },
+          {
+            "id": 2,
+            "text": "International Atomic Energy Agency (IAEA) (n.d.). What is Nuclear Energy? The Science of Nuclear Power. Available at: https://www.iaea.org/newscenter/news/what-is-nuclear-energy-the-science-of-nuclear-power (Accessed: 12 February 2026)."
+          },
+          {
+            "id": 3,
+            "text": "Krane, K.S. (1988). Introductory Nuclear Physics. Wiley."
+          },
+          {
+            "id": 4,
+            "text": "EUROfusion (n.d.). Fusion vs Fission. Available at: https://euro-fusion.org/fusion/fusion-vs-fission/ (Accessed: 12 February 2026)."
+          },
+          {
+            "id": 5,
+            "text": "Viswanathan, B. (2017). Nuclear Fission. In: Energy Sources. Elsevier, pp. 113-126. Available at: https://doi.org/10.1016/B978-0-444-56353-8.00005-8 (Accessed: 12 February 2026)."
+          },
+          {
+            "id": 6,
+            "text": "International Atomic Energy Agency (IAEA). Nuclear Reactor Basics."
+          },
+          {
+            "id": 7,
+            "text": "World Nuclear Association (n.d.). Nuclear Power Reactors. Available at: https://world-nuclear.org/information-library/nuclear-power-reactors/overview/nuclear-power-reactors (Accessed: 12 February 2026)."
+          },
+          {
+            "id": 8,
+            "text": "U.S. Department of Energy (DOE) (n.d.). The First Self-Sustaining Nuclear Chain Reaction. Available at: https://www.energy.gov/articles/first-self-sustaining-nuclear-chain-reaction (Accessed: 12 February 2026)."
+          },
+          {
+            "id": 9,
+            "text": "International Atomic Energy Agency (IAEA) (1992). The Chernobyl Accident: Updating of INSAG-1. Available at: https://www-pub.iaea.org/MTCD/Publications/PDF/Pub913e_web.pdf (Accessed: 12 February 2026)."
+          },
+          {
+            "id": 10,
+            "text": "International Atomic Energy Agency (IAEA) (n.d.). What are Small Modular Reactors (SMRs)? Available at: https://www.iaea.org/newscenter/news/what-are-small-modular-reactors-smrs (Accessed: 12 February 2026)."
+          }
+        ]
+      },
+      "githubLinkText": "View on GitHub",
+      "credits": "Designed by "
+    }
+  },
+  "admin": {
+    "meta": {
+      "title": "Admin Dashboard | Physics in School"
+    },
+    "sidebar": {
+      "brand": "PinS Admin",
+      "nav": [
+        "Overview",
+        "Media Library",
+        "Content Manager",
+        "Users"
+      ],
+      "backToSite": "Back to Site"
+    },
+    "main": {
+      "headerTitle": "Dashboard Overview",
+      "recentTitle": "Recent Updates",
+      "addNew": "Add New"
+    },
+    "stats": [
+      {
+        "label": "Total Views",
+        "value": "24.5k",
+        "hint": "+12% from last month"
+      },
+      {
+        "label": "Active Sessions",
+        "value": "128",
+        "hint": "+4 new now"
+      },
+      {
+        "label": "AI Queries",
+        "value": "1,240",
+        "hint": "98% satisfaction"
+      }
+    ],
+    "contentList": [
+      {
+        "title": "Hero Video Loop",
+        "meta": "Updated 2h ago by Admin",
+        "status": "Published",
+        "image": ""
+      },
+      {
+        "title": "Safety Protocols PDF",
+        "meta": "Updated 5h ago by Sarah",
+        "status": "Draft",
+        "image": ""
+      },
+      {
+        "title": "Reactor Schematics",
+        "meta": "Updated 1d ago by Mike",
+        "status": "Published",
+        "image": ""
+      }
+    ]
+  },
+  "imagesBasePath": "assets/images/"
+}

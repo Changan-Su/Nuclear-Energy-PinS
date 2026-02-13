@@ -10,6 +10,7 @@ window.EditorSystem = (function() {
   let editToolbar = null;
   let editorSidebar = null;
   let sectionObserver = null;
+  let jsZipLoaderPromise = null;
 
   function enable() {
     if (enabled) return;
@@ -25,6 +26,7 @@ window.EditorSystem = (function() {
     enableSectionToolbars();
     enableImageEditing();
     enableFlipToggles();
+    enableCollectionEditors();
     enableReferenceEditing();
     setupAtMentionSystem();
   }
@@ -43,6 +45,7 @@ window.EditorSystem = (function() {
     disableSectionToolbars();
     disableImageEditing();
     disableFlipToggles();
+    disableCollectionEditors();
     disableReferenceEditing();
     cleanupAtMentionSystem();
   }
@@ -79,6 +82,14 @@ window.EditorSystem = (function() {
         </div>
         
         <div class="flex items-center gap-4">
+          <div id="folder-status" class="px-3 py-1.5 rounded-lg bg-white/5 text-xs text-white/60 hidden items-center gap-2">
+            <i data-lucide="folder" class="w-3.5 h-3.5"></i>
+            <span id="folder-name">No folder selected</span>
+          </div>
+          <button id="select-folder-btn" class="px-4 py-2 rounded-lg border border-white/20 text-white text-sm font-medium hover:bg-white/10 transition-colors flex items-center gap-2">
+            <i data-lucide="folder-open" class="w-4 h-4"></i>
+            Select Folder
+          </button>
           <button id="export-btn" class="px-4 py-2 rounded-lg border border-white/20 text-white text-sm font-medium hover:bg-white/10 transition-colors flex items-center gap-2">
             <i data-lucide="download" class="w-4 h-4"></i>
             Export
@@ -101,11 +112,15 @@ window.EditorSystem = (function() {
     document.getElementById('undo-all-btn')?.addEventListener('click', () => window.ModeManager.undo());
     document.getElementById('redo-all-btn')?.addEventListener('click', () => window.ModeManager.redo());
     document.getElementById('discard-btn')?.addEventListener('click', discardChanges);
+    document.getElementById('select-folder-btn')?.addEventListener('click', handleSelectFolder);
     document.getElementById('export-btn')?.addEventListener('click', exportMaterial);
     document.getElementById('import-btn')?.addEventListener('click', () => {
       document.getElementById('import-input')?.click();
     });
     document.getElementById('import-input')?.addEventListener('change', handleImport);
+    
+    // Update folder status display
+    updateFolderStatusDisplay();
     
     // Reinitialize icons
     if (window.lucide) {
@@ -161,6 +176,7 @@ window.EditorSystem = (function() {
         <div class="sidebar-section-card ${disabledClass}" data-sidebar-section-id="${section.id}">
           <div class="sidebar-section-order">${section.order + 1}</div>
           <div class="sidebar-section-name" data-sidebar-name-id="${section.id}">${displayName}</div>
+          <div class="sidebar-section-id text-white/55 text-xs" data-sidebar-id-value="${section.id}">ID: ${section.id}</div>
           <div class="sidebar-section-template">${templateName}</div>
         </div>
       `;
@@ -225,6 +241,56 @@ window.EditorSystem = (function() {
           nameEl.blur();
         }
       });
+
+      // Double-click ID to edit
+      const idEl = card.querySelector('.sidebar-section-id');
+      idEl.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
+        if (card.classList.contains('disabled')) return;
+
+        const currentId = card.getAttribute('data-sidebar-section-id');
+        idEl.textContent = currentId;
+        idEl.contentEditable = 'true';
+        idEl.focus();
+
+        const range = document.createRange();
+        range.selectNodeContents(idEl);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      });
+
+      // Save section ID on blur
+      idEl.addEventListener('blur', () => {
+        if (idEl.getAttribute('contenteditable') !== 'true') return;
+        idEl.contentEditable = 'false';
+
+        const previousId = card.getAttribute('data-sidebar-section-id');
+        const newId = idEl.textContent.trim();
+
+        if (!newId) {
+          idEl.textContent = `ID: ${previousId}`;
+          return;
+        }
+
+        if (newId === previousId) {
+          idEl.textContent = `ID: ${previousId}`;
+          return;
+        }
+
+        const renamed = updateSectionId(previousId, newId);
+        if (!renamed) {
+          idEl.textContent = `ID: ${previousId}`;
+        }
+      });
+
+      // Save section ID on Enter key
+      idEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          idEl.blur();
+        }
+      });
     });
   }
 
@@ -249,6 +315,49 @@ window.EditorSystem = (function() {
         }, 100);
       }
     }
+  }
+
+  function isValidSectionId(id) {
+    return /^[A-Za-z][A-Za-z0-9_-]*$/.test(String(id || ''));
+  }
+
+  function updateSectionId(oldId, newId) {
+    const trimmedNewId = String(newId || '').trim();
+    if (trimmedNewId === oldId) return true;
+
+    if (!isValidSectionId(trimmedNewId)) {
+      alert('Invalid Section ID. Use letters, numbers, "_" or "-", and start with a letter.');
+      return false;
+    }
+
+    const material = window.ModeManager.getMaterial();
+    if (!material || !material.config || !Array.isArray(material.config.sections)) {
+      return false;
+    }
+
+    const sections = material.config.sections;
+    const section = sections.find(s => s.id === oldId);
+    if (!section) return false;
+
+    if (sections.some(s => s.id === trimmedNewId)) {
+      alert('Section with this ID already exists');
+      return false;
+    }
+
+    if (window.ModeManager.captureSnapshot) {
+      window.ModeManager.captureSnapshot();
+    }
+
+    if (material.index && Object.prototype.hasOwnProperty.call(material.index, oldId)) {
+      material.index[trimmedNewId] = material.index[oldId];
+      delete material.index[oldId];
+    }
+
+    section.id = trimmedNewId;
+    window.ModeManager.updateMaterialInMemory(material);
+    window.SectionRenderer.render();
+    refresh();
+    return true;
   }
 
   function formatSectionId(id) {
@@ -351,7 +460,7 @@ window.EditorSystem = (function() {
   function enableInlineEditing() {
     const elements = document.querySelectorAll('[data-material]');
     elements.forEach(el => {
-      if (el.tagName !== 'INPUT' && el.tagName !== 'TEXTAREA' && el.tagName !== 'BUTTON') {
+      if (el.tagName !== 'INPUT' && el.tagName !== 'TEXTAREA') {
         el.contentEditable = 'true';
         el.classList.add('editable-field');
         el.style.outline = '1px dashed rgba(34, 211, 238, 0.3)';
@@ -509,6 +618,203 @@ window.EditorSystem = (function() {
     document.querySelectorAll('.flip-config-controls').forEach(el => el.remove());
   }
 
+  const collectionEditorConfig = {
+    'tabbed-content': {
+      collectionType: 'tabbed-content',
+      path: 'highlights.items',
+      addLabel: 'Add Tab',
+      minItems: 1
+    },
+    'card-grid': {
+      collectionType: 'card-grid',
+      path: 'features.cards',
+      addLabel: 'Add Card',
+      minItems: 1
+    },
+    'accordion': {
+      collectionType: 'accordion',
+      path: 'closerLook.features',
+      addLabel: 'Add Item',
+      minItems: 1
+    }
+  };
+
+  function enableCollectionEditors() {
+    const sectionWrappers = document.querySelectorAll('[data-section-id][data-template]');
+    sectionWrappers.forEach(section => {
+      const template = section.getAttribute('data-template');
+      const config = collectionEditorConfig[template];
+      if (!config) return;
+
+      const container = section.querySelector(`[data-collection-container="true"][data-collection-type="${config.collectionType}"]`);
+      if (container && !container.querySelector('.collection-add-btn')) {
+        const addBtn = document.createElement('button');
+        addBtn.className = 'collection-add-btn edit-mode-only px-3 py-1.5 rounded-full border border-white/20 text-white/85 text-xs font-medium hover:bg-white/10 transition-colors flex items-center gap-1.5';
+        addBtn.innerHTML = `<i data-lucide="plus" class="w-3.5 h-3.5"></i>${config.addLabel}`;
+        addBtn.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          handleAddCollectionItem(template, config.path);
+        });
+        container.appendChild(addBtn);
+      }
+
+      const items = section.querySelectorAll(`[data-collection-item="true"][data-collection-type="${config.collectionType}"]`);
+      items.forEach(item => {
+        if (item.querySelector('.collection-delete-btn')) return;
+
+        const computedPos = window.getComputedStyle(item).position;
+        if (computedPos === 'static') {
+          item.style.position = 'relative';
+        }
+
+        const index = item.getAttribute('data-item-index');
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'collection-delete-btn edit-mode-only absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-black/65 text-white hover:bg-red-500/80 transition-colors flex items-center justify-center z-30';
+        deleteBtn.setAttribute('title', 'Delete item');
+        deleteBtn.setAttribute('data-delete-index', index || '0');
+        deleteBtn.innerHTML = '<i data-lucide="trash-2" class="w-3.5 h-3.5"></i>';
+        deleteBtn.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          const itemIndex = parseInt(deleteBtn.getAttribute('data-delete-index'), 10);
+          handleDeleteCollectionItem(template, config.path, itemIndex, config.minItems);
+        });
+        item.appendChild(deleteBtn);
+      });
+    });
+
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  }
+
+  function disableCollectionEditors() {
+    document.querySelectorAll('.collection-add-btn, .collection-delete-btn').forEach(el => el.remove());
+  }
+
+  function getValueByPath(obj, path) {
+    if (!obj || !path) return undefined;
+    return path.split('.').reduce((current, key) => (current == null ? undefined : current[key]), obj);
+  }
+
+  function ensureHighlightsItemsArray(material) {
+    const existing = getValueByPath(material, 'index.highlights.items');
+    if (Array.isArray(existing)) return existing;
+
+    const highlights = material?.index?.highlights || {};
+    const legacyKeys = ['efficiency', 'zeroCarbon', 'safety', 'reliability'];
+    const tabs = Array.isArray(highlights.tabs) ? highlights.tabs : [];
+
+    const migrated = legacyKeys
+      .map((legacyKey, idx) => {
+        const source = highlights[legacyKey];
+        if (!source) return null;
+        return {
+          tab: tabs[idx] || source.title || `Tab ${idx + 1}`,
+          title: source.title || '',
+          description: source.description || '',
+          cta: source.cta || 'Learn more',
+          detail: source.detail || '',
+          flipEnabled: source.flipEnabled !== false,
+          flipDirection: source.flipDirection || 'y',
+          images: source.images || {}
+        };
+      })
+      .filter(Boolean);
+
+    updateMaterialByPath(material, 'index.highlights.items', migrated);
+    return migrated;
+  }
+
+  function ensureCollectionArray(material, template, path) {
+    const fullPath = `index.${path}`;
+    let list = getValueByPath(material, fullPath);
+    if (template === 'tabbed-content' && !Array.isArray(list)) {
+      list = ensureHighlightsItemsArray(material);
+    }
+    if (!Array.isArray(list)) {
+      list = [];
+      updateMaterialByPath(material, fullPath, list);
+    }
+    return list;
+  }
+
+  function createDefaultCollectionItem(template, currentCount) {
+    const nextIndex = currentCount + 1;
+    if (template === 'tabbed-content') {
+      return {
+        tab: `New Tab ${nextIndex}`,
+        title: `New Topic ${nextIndex}`,
+        description: 'Edit this tab description.',
+        cta: 'Learn more',
+        detail: 'Add detail content here.',
+        flipEnabled: true,
+        flipDirection: 'y',
+        images: { main: '' }
+      };
+    }
+
+    if (template === 'card-grid') {
+      return {
+        title: `New Card ${nextIndex}`,
+        description: 'Edit this card description.',
+        detail: 'Add card detail content here.',
+        cta: 'Learn more',
+        flipEnabled: false,
+        flipDirection: 'y',
+        image: ''
+      };
+    }
+
+    return {
+      title: `New Item ${nextIndex}`,
+      description: 'Edit this accordion item description.',
+      detail: 'Add accordion detail content here.',
+      cta: 'Learn more',
+      flipEnabled: false,
+      flipDirection: 'y'
+    };
+  }
+
+  function rerenderAfterCollectionChange(material) {
+    window.ModeManager.updateMaterialInMemory(material);
+    if (window.SectionRenderer && window.SectionRenderer.render) {
+      window.SectionRenderer.render();
+    }
+    refresh();
+  }
+
+  function handleAddCollectionItem(template, path) {
+    if (window.ModeManager.captureSnapshot) {
+      window.ModeManager.captureSnapshot();
+    }
+
+    const material = window.ModeManager.getMaterial();
+    const list = ensureCollectionArray(material, template, path);
+    list.push(createDefaultCollectionItem(template, list.length));
+    rerenderAfterCollectionChange(material);
+  }
+
+  function handleDeleteCollectionItem(template, path, index, minItems) {
+    if (Number.isNaN(index)) return;
+
+    const material = window.ModeManager.getMaterial();
+    const list = ensureCollectionArray(material, template, path);
+
+    if (list.length <= minItems) {
+      alert(`At least ${minItems} item must remain.`);
+      return;
+    }
+    if (index < 0 || index >= list.length) return;
+
+    if (window.ModeManager.captureSnapshot) {
+      window.ModeManager.captureSnapshot();
+    }
+    list.splice(index, 1);
+    rerenderAfterCollectionChange(material);
+  }
+
   function setFlipConfigValue(relativePath, value) {
     const material = window.ModeManager.getMaterial();
     updateMaterialByPath(material, `index.${relativePath}`, value);
@@ -527,9 +833,24 @@ window.EditorSystem = (function() {
     return /\.(mp4|webm|ogg|mov|m4v)$/.test(cleanUrl);
   }
 
+  function syncHeroMediaPlaceholder(element, hasMedia) {
+    const path = element.getAttribute('data-material-img');
+    if (path !== 'hero.images.videoCover') return;
+
+    // Prefer explicit marker in template; fallback keeps older rendered DOM compatible.
+    const placeholder =
+      element.querySelector('[data-hero-media-placeholder="true"]') ||
+      element.querySelector(':scope > .text-center');
+
+    if (placeholder) {
+      placeholder.classList.toggle('hidden', hasMedia);
+    }
+  }
+
   function applyMediaPreview(element, url) {
     const existingVideo = element.querySelector(':scope > video[data-material-video="true"]');
     const shouldRenderVideo = isVideoUrl(url);
+    const hasMedia = Boolean(url);
 
     if (shouldRenderVideo) {
       element.style.backgroundImage = '';
@@ -549,15 +870,23 @@ window.EditorSystem = (function() {
         element.prepend(videoEl);
       }
       videoEl.src = url;
+      syncHeroMediaPlaceholder(element, hasMedia);
       return;
     }
 
     if (existingVideo) {
       existingVideo.remove();
     }
-    element.style.backgroundImage = `url(${url})`;
-    element.style.backgroundSize = 'cover';
-    element.style.backgroundPosition = 'center';
+    if (hasMedia) {
+      element.style.backgroundImage = `url(${url})`;
+      element.style.backgroundSize = 'cover';
+      element.style.backgroundPosition = 'center';
+    } else {
+      element.style.backgroundImage = '';
+      element.style.backgroundSize = '';
+      element.style.backgroundPosition = '';
+    }
+    syncHeroMediaPlaceholder(element, hasMedia);
   }
 
   async function handleImageClick(imgElement) {
@@ -1115,15 +1444,42 @@ window.EditorSystem = (function() {
     
     // Initialize section data
     if (!material.index[id]) {
-      material.index[id] = {
-        title: 'New Section',
-        description: 'Edit this content'
-      };
+      material.index[id] = createDefaultSectionData(template);
     }
     
     window.ModeManager.updateMaterialInMemory(material);
     window.SectionRenderer.render();
     refresh();
+  }
+
+  function createDefaultSectionData(template) {
+    if (template === 'tabbed-content') {
+      return {
+        label: 'Highlights',
+        headline: 'New Highlights Section',
+        items: [createDefaultCollectionItem('tabbed-content', 0)]
+      };
+    }
+    if (template === 'card-grid') {
+      return {
+        headline: 'New Feature Section',
+        subheadline: 'Edit this section subheadline.',
+        cards: [createDefaultCollectionItem('card-grid', 0)]
+      };
+    }
+    if (template === 'accordion') {
+      return {
+        headline: 'Take a closer look.',
+        features: [createDefaultCollectionItem('accordion', 0)],
+        reactorLabel: 'Interactive Diagram',
+        reactorHint: 'Click features to explore',
+        images: { reactor: '' }
+      };
+    }
+    return {
+      title: 'New Section',
+      description: 'Edit this content'
+    };
   }
 
   async function saveAll() {
@@ -1138,14 +1494,67 @@ window.EditorSystem = (function() {
         alert('Failed to save');
       }
     } else {
-      // Offline mode: persist to browser localStorage draft
-      const ok = window.ModeManager.saveOfflineDraft
-        ? window.ModeManager.saveOfflineDraft(material)
-        : false;
-      if (ok) {
-        alert('Saved to offline draft successfully. Refresh will keep your changes. Use Export to download a JSON file.');
-      } else {
-        alert('Failed to save offline draft. Please use Export to avoid losing changes.');
+      // Offline mode: save to local folder using File System Access API
+      if (!window.FolderPermissionManager || !window.FolderPermissionManager.isSupported()) {
+        alert('File System Access API not supported. Please use Chrome 86+ or Edge 86+.\n\nYou can use Export button to download a ZIP instead.');
+        return;
+      }
+
+      try {
+        // Get or request folder permission
+        let dirHandle = await window.FolderPermissionManager.getVerifiedFolderHandle('readwrite');
+        
+        if (!dirHandle) {
+          // Need to request folder selection
+          const confirm = window.confirm('Select a folder to save the complete viewer site.\n\nThis will create/update:\n- index.html (viewer)\n- material.json\n- Media files in uploads/\n- CSS and JS files\n\nContinue?');
+          
+          if (!confirm) return;
+          
+          dirHandle = await window.FolderPermissionManager.requestFolderPermission();
+          if (!dirHandle) {
+            // User cancelled
+            return;
+          }
+        }
+
+        // Show progress in status message
+        const statusEl = document.createElement('div');
+        statusEl.style.cssText = 'position: fixed; top: 80px; right: 20px; z-index: 200; background: rgba(0,0,0,0.9); color: white; padding: 16px 24px; rounded: 12px; border: 1px solid rgba(255,255,255,0.1); min-width: 300px; border-radius: 12px;';
+        statusEl.innerHTML = '<div style="font-weight: 600; margin-bottom: 8px;">Saving to folder...</div><div id="save-progress" style="font-size: 12px; color: rgba(255,255,255,0.7);"></div>';
+        document.body.appendChild(statusEl);
+
+        const progressEl = statusEl.querySelector('#save-progress');
+        const updateProgress = (message, progress) => {
+          if (progressEl) {
+            progressEl.textContent = `${message} (${progress}%)`;
+          }
+        };
+
+        // Save complete site
+        const result = await window.OfflineSiteSaver.saveCompleteOfflineSite(
+          material,
+          dirHandle,
+          updateProgress
+        );
+
+        statusEl.remove();
+
+        if (result.success) {
+          const folderName = window.FolderPermissionManager.getFolderName(dirHandle);
+          alert(`Saved successfully to folder: ${folderName}\n\n` +
+                `Files written: ${result.fileCount}\n` +
+                `Media files: ${result.mediaCount}\n\n` +
+                `You can now open the index.html in that folder to view the site.`);
+          
+          // Update folder status display
+          updateFolderStatusDisplay();
+        } else {
+          alert(`Failed to save: ${result.error || 'Unknown error'}`);
+        }
+
+      } catch (error) {
+        console.error('Save to folder error:', error);
+        alert(`Failed to save to folder: ${error.message}`);
       }
     }
   }
@@ -1169,9 +1578,25 @@ window.EditorSystem = (function() {
 
   async function exportMaterial() {
     const state = window.ModeManager.getState();
+    const date = new Date().toISOString().split('T')[0];
 
-    if (state.dataMode !== 'online') {
-      alert('Package export requires Online mode (to include server media files).');
+    if (state.dataMode === 'offline') {
+      const material = window.ModeManager.getMaterial();
+      if (!material) {
+        alert('Material is not loaded yet');
+        return;
+      }
+      const blob = await buildOfflineSitePackage(material);
+      if (!blob) {
+        alert('Failed to export offline site package');
+        return;
+      }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `site-package-${date}.zip`;
+      a.click();
+      URL.revokeObjectURL(url);
       return;
     }
 
@@ -1184,7 +1609,7 @@ window.EditorSystem = (function() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `site-package-${new Date().toISOString().split('T')[0]}.zip`;
+    a.download = `site-package-${date}.zip`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -1198,8 +1623,24 @@ window.EditorSystem = (function() {
       const isZip = file.name.toLowerCase().endsWith('.zip');
 
       if (isZip) {
-        if (state.dataMode !== 'online') {
-          alert('Package import requires Online mode.');
+        if (state.dataMode === 'offline') {
+          if (!confirm('Import this site package ZIP in Offline mode? Media files in uploads/ will be embedded as data URLs.')) {
+            return;
+          }
+          const offlineResult = await importSitePackageOffline(file);
+          if (!offlineResult || !offlineResult.material) {
+            alert('Failed to import package');
+            return;
+          }
+
+          if (window.ModeManager.captureSnapshot) {
+            window.ModeManager.captureSnapshot();
+          }
+
+          window.ModeManager.updateMaterialInMemory(offlineResult.material);
+          window.SectionRenderer.updateMaterial(offlineResult.material);
+          refresh();
+          alert(`Package imported successfully in Offline mode! Media embedded: ${offlineResult.importedMediaCount}`);
           return;
         }
 
@@ -1247,10 +1688,389 @@ window.EditorSystem = (function() {
     } catch (error) {
       console.error('Import error:', error);
       alert('Failed to import file');
+    } finally {
+      // Always reset input, including early-return branches.
+      event.target.value = '';
     }
-    
-    // Reset input
-    event.target.value = '';
+  }
+
+  async function ensureJSZip() {
+    if (window.JSZip) return window.JSZip;
+    if (jsZipLoaderPromise) return jsZipLoaderPromise;
+
+    jsZipLoaderPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js';
+      script.async = true;
+      script.onload = () => {
+        if (window.JSZip) {
+          resolve(window.JSZip);
+        } else {
+          reject(new Error('JSZip loaded but window.JSZip missing'));
+        }
+      };
+      script.onerror = () => reject(new Error('Failed to load JSZip'));
+      document.head.appendChild(script);
+    }).finally(() => {
+      jsZipLoaderPromise = null;
+    });
+
+    return jsZipLoaderPromise;
+  }
+
+  function walkStrings(node, onString) {
+    if (typeof node === 'string') return onString(node);
+    if (Array.isArray(node)) return node.map((item) => walkStrings(item, onString));
+    if (node && typeof node === 'object') {
+      const output = {};
+      Object.keys(node).forEach((key) => {
+        output[key] = walkStrings(node[key], onString);
+      });
+      return output;
+    }
+    return node;
+  }
+
+  function normalizeMaterialForPackage(material) {
+    return walkStrings(material, (value) => {
+      const absoluteUploadMatch = value.match(/^https?:\/\/[^/]+\/uploads\/(.+)$/i);
+      if (absoluteUploadMatch) {
+        return `uploads/${absoluteUploadMatch[1]}`;
+      }
+      if (value.startsWith('/uploads/')) {
+        return value.slice(1);
+      }
+      return value;
+    });
+  }
+
+  function applyUploadDataUrls(material, uploadMap) {
+    return walkStrings(material, (value) => {
+      if (uploadMap[value]) return uploadMap[value];
+
+      const absoluteUploadMatch = value.match(/^https?:\/\/[^/]+\/uploads\/(.+)$/i);
+      if (absoluteUploadMatch) {
+        const rel = `uploads/${absoluteUploadMatch[1]}`;
+        if (uploadMap[rel]) return uploadMap[rel];
+        if (uploadMap[`/${rel}`]) return uploadMap[`/${rel}`];
+      }
+
+      if (value.startsWith('/uploads/')) {
+        const rel = value.slice(1);
+        if (uploadMap[rel]) return uploadMap[rel];
+      }
+
+      return value;
+    });
+  }
+
+  function detectMimeType(filename) {
+    const lower = String(filename || '').toLowerCase();
+    if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) return 'image/jpeg';
+    if (lower.endsWith('.png')) return 'image/png';
+    if (lower.endsWith('.gif')) return 'image/gif';
+    if (lower.endsWith('.webp')) return 'image/webp';
+    if (lower.endsWith('.svg')) return 'image/svg+xml';
+    if (lower.endsWith('.mp4')) return 'video/mp4';
+    if (lower.endsWith('.webm')) return 'video/webm';
+    if (lower.endsWith('.ogg')) return 'video/ogg';
+    if (lower.endsWith('.mov')) return 'video/quicktime';
+    if (lower.endsWith('.m4v')) return 'video/x-m4v';
+    return 'application/octet-stream';
+  }
+
+  function getStaticPackageFiles() {
+    return [
+      'css/styles.css',
+      'js/templates.js',
+      'js/section-renderer.js',
+      'js/quiz.js',
+      'js/latex-renderer.js',
+      'js/mode-manager.js',
+      'js/editor.js',
+      'js/material.js',
+      'js/main.js',
+      'js/scroll-animations.js',
+      'js/ai-chat.js'
+    ];
+  }
+
+  function collectReferencedAssetPaths(material) {
+    const paths = new Set();
+    const imagesBasePath = typeof material?.imagesBasePath === 'string'
+      ? material.imagesBasePath
+      : 'assets/images/';
+
+    walkStrings(material, (value) => {
+      if (!value) return value;
+      if (value.startsWith('data:') || value.startsWith('blob:')) return value;
+      if (/^https?:\/\//i.test(value)) return value;
+
+      const clean = value.replace(/^\.\//, '').replace(/^\/+/, '');
+      if (clean.startsWith('assets/') || clean.startsWith('uploads/')) {
+        paths.add(clean);
+        return value;
+      }
+
+      // Backward compatibility: plain filenames resolved by imagesBasePath.
+      if (/^[^/]+\.[a-z0-9]{2,6}(\?.*)?$/i.test(clean)) {
+        const base = imagesBasePath.replace(/^\/+/, '');
+        paths.add(`${base}${clean}`);
+      }
+      return value;
+    });
+
+    return Array.from(paths);
+  }
+
+  async function addFileToZipFromUrl(zip, urlPath, zipEntryName) {
+    try {
+      const relPath = `./${String(urlPath || '').replace(/^\/+/, '').replace(/^\.\//, '')}`;
+
+      try {
+        const response = await fetch(relPath, { cache: 'no-store' });
+        if (response.ok) {
+          const buffer = await response.arrayBuffer();
+          zip.file(zipEntryName, buffer);
+          return true;
+        }
+      } catch (fetchErr) {
+        // Continue to XHR fallback.
+      }
+
+      const arrayBuffer = await new Promise((resolve) => {
+        try {
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', relPath, true);
+          xhr.responseType = 'arraybuffer';
+          xhr.onload = function() {
+            // file:// commonly returns status 0
+            if (xhr.status === 200 || xhr.status === 0) {
+              resolve(xhr.response || null);
+            } else {
+              resolve(null);
+            }
+          };
+          xhr.onerror = function() {
+            resolve(null);
+          };
+          xhr.send();
+        } catch (e) {
+          resolve(null);
+        }
+      });
+
+      if (!arrayBuffer) return false;
+      zip.file(zipEntryName, arrayBuffer);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function escapeHtml(text) {
+    if (typeof text !== 'string') return '';
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function generateOfflineViewerHtml(material) {
+    const materialJson = JSON.stringify(material, null, 2)
+      .replace(/</g, '\\u003c')
+      .replace(/>/g, '\\u003e')
+      .replace(/&/g, '\\u0026');
+
+    const title = material?.index?.meta?.title || 'Nuclear Energy of Durham PinS';
+    const navLogo = material?.index?.nav?.logo || 'Nuclear Energy of Durham PinS';
+    const navLinks = material?.index?.nav?.links || ['Overview', 'Science', 'Benefits', 'Future'];
+    const navCta = material?.index?.nav?.cta || 'Ask AI';
+
+    return `<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${escapeHtml(title)}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="./css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script>
+      (function() {
+        window.__KATEX_READY__ = false;
+        var katexScript = document.createElement('script');
+        katexScript.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js';
+        katexScript.onload = function() {
+          var autoRenderScript = document.createElement('script');
+          autoRenderScript.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js';
+          autoRenderScript.onload = function() {
+            window.__KATEX_READY__ = true;
+            document.dispatchEvent(new CustomEvent('katex-ready'));
+          };
+          document.head.appendChild(autoRenderScript);
+        };
+        document.head.appendChild(katexScript);
+      })();
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="font-sans antialiased bg-primary-dark text-text-primaryDark overflow-x-hidden">
+    <nav class="fixed top-0 w-full z-50 transition-all duration-300 bg-black/80 backdrop-blur-md border-b border-white/10" id="navbar">
+        <div class="max-w-[1440px] mx-auto px-6 h-[52px] flex items-center justify-between">
+            <a href="#" class="text-xl font-semibold tracking-tight text-white hover:opacity-80 transition-opacity">${escapeHtml(navLogo)}</a>
+            <div class="hidden md:flex items-center gap-8">
+                ${navLinks.map((link) => `<a href="#${String(link).toLowerCase()}" class="nav-link text-xs text-[#E5E5E5] hover:text-white transition-colors">${escapeHtml(String(link))}</a>`).join('\n                ')}
+                <button id="nav-chat-btn" class="bg-accent-blue text-white text-xs font-medium px-4 py-1.5 rounded-full hover:bg-blue-600 transition-colors">${escapeHtml(navCta)}</button>
+            </div>
+        </div>
+    </nav>
+    <main id="app"></main>
+    <script>window.__PRELOADED_MATERIAL__ = ${materialJson};</script>
+    <script src="./js/templates.js"></script>
+    <script src="./js/section-renderer.js"></script>
+    <script src="./js/quiz.js"></script>
+    <script src="./js/latex-renderer.js"></script>
+    <script src="./js/material.js"></script>
+    <script src="./js/main.js"></script>
+    <script src="./js/scroll-animations.js"></script>
+    <script src="./js/ai-chat.js"></script>
+    <script>
+      async function loadViewerMaterial() {
+        // Prefer external material.json so future edits are reflected directly.
+        try {
+          const res = await fetch('./material.json', { cache: 'no-store' });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return await res.json();
+        } catch (fetchErr) {
+          // Fallback for some file:// environments where fetch is blocked.
+          try {
+            const text = await new Promise(function(resolve, reject) {
+              const xhr = new XMLHttpRequest();
+              xhr.open('GET', './material.json', true);
+              xhr.onreadystatechange = function() {
+                if (xhr.readyState !== 4) return;
+                if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0) {
+                  resolve(xhr.responseText);
+                } else {
+                  reject(new Error('XHR ' + xhr.status));
+                }
+              };
+              xhr.onerror = function() {
+                reject(new Error('XHR network error'));
+              };
+              xhr.send();
+            });
+            return JSON.parse(text);
+          } catch (xhrErr) {
+            console.warn('Failed to load external material.json, using embedded fallback.', fetchErr, xhrErr);
+            return window.__PRELOADED_MATERIAL__ || null;
+          }
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', async function() {
+        const material = await loadViewerMaterial();
+        if (window.SectionRenderer && material) {
+          window.SectionRenderer.init(material, 'index');
+        }
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      });
+    </script>
+</body>
+</html>`;
+  }
+
+  async function buildOfflineSitePackage(material) {
+    try {
+      const JSZip = await ensureJSZip();
+      const zip = new JSZip();
+      const packageMaterial = normalizeMaterialForPackage(material);
+
+      zip.file('material.json', JSON.stringify(packageMaterial, null, 2));
+      zip.file('index.html', generateOfflineViewerHtml(packageMaterial));
+
+      const addedPaths = new Set();
+      const candidates = [
+        ...getStaticPackageFiles(),
+        ...collectReferencedAssetPaths(packageMaterial)
+      ];
+
+      for (const path of candidates) {
+        const cleanPath = String(path || '').replace(/^\/+/, '').replace(/^\.\//, '');
+        if (!cleanPath || addedPaths.has(cleanPath)) continue;
+        const ok = await addFileToZipFromUrl(zip, cleanPath, cleanPath);
+        if (ok) {
+          addedPaths.add(cleanPath);
+        }
+      }
+
+      zip.file(
+        'README_PACKAGE.txt',
+        [
+          'PinS Static Site Export Package (Offline)',
+          '',
+          'How to run:',
+          '1) Extract this ZIP to a folder.',
+          '2) Open index.html in a modern browser.',
+          '3) If browser blocks local file access for media, run a static server: npx serve .',
+          '',
+          'Notes:',
+          '- material.json and rendering scripts are included.',
+          '- Referenced assets/uploads are bundled when readable from current runtime.',
+          '- CMS backend is not required for viewing.'
+        ].join('\n')
+      );
+
+      return await zip.generateAsync({ type: 'blob' });
+    } catch (error) {
+      console.error('Offline package export error:', error);
+      return null;
+    }
+  }
+
+  async function importSitePackageOffline(file) {
+    try {
+      const JSZip = await ensureJSZip();
+      const zip = await JSZip.loadAsync(file);
+      const materialEntry = zip.file('material.json');
+      if (!materialEntry) {
+        return null;
+      }
+
+      const raw = await materialEntry.async('string');
+      const parsedMaterial = JSON.parse(raw);
+      if (!parsedMaterial || !parsedMaterial.index || !parsedMaterial.config) {
+        return null;
+      }
+
+      const uploadMap = {};
+      let importedMediaCount = 0;
+      const entries = Object.values(zip.files);
+      for (const entry of entries) {
+        if (entry.dir) continue;
+        if (!entry.name.startsWith('uploads/')) continue;
+
+        const base64 = await entry.async('base64');
+        const mime = detectMimeType(entry.name);
+        const dataUrl = `data:${mime};base64,${base64}`;
+        uploadMap[entry.name] = dataUrl;
+        uploadMap[`/${entry.name}`] = dataUrl;
+        importedMediaCount += 1;
+      }
+
+      const material = applyUploadDataUrls(parsedMaterial, uploadMap);
+      return { material, importedMediaCount };
+    } catch (error) {
+      console.error('Offline package import error:', error);
+      return null;
+    }
   }
 
   function updateMaterialByPath(obj, path, value) {
@@ -1759,6 +2579,92 @@ window.EditorSystem = (function() {
     setTimeout(() => {
       refElement.classList.remove('ref-highlight');
     }, 2000);
+  }
+
+  // ========== Folder Management UI ==========
+  
+  /**
+   * Handle folder selection button click
+   */
+  async function handleSelectFolder() {
+    if (!window.FolderPermissionManager || !window.FolderPermissionManager.isSupported()) {
+      alert('File System Access API not supported.\n\nPlease use Chrome 86+ or Edge 86+.');
+      return;
+    }
+
+    try {
+      const dirHandle = await window.FolderPermissionManager.requestFolderPermission();
+      if (dirHandle) {
+        // Try loading material.json immediately from selected folder.
+        let loaded = false;
+        if (window.OfflineSiteSaver && window.OfflineSiteSaver.loadMaterialFromFolder) {
+          const folderMaterial = await window.OfflineSiteSaver.loadMaterialFromFolder(dirHandle);
+          if (folderMaterial && window.ModeManager && window.ModeManager.setMaterialFromSource) {
+            loaded = window.ModeManager.setMaterialFromSource(folderMaterial) === true;
+            if (loaded && enabled) {
+              refresh();
+            }
+          }
+        }
+
+        updateFolderStatusDisplay();
+        if (loaded) {
+          alert(`Folder selected: ${window.FolderPermissionManager.getFolderName(dirHandle)}\n\nLoaded material.json from this folder.`);
+        } else {
+          alert(`Folder selected: ${window.FolderPermissionManager.getFolderName(dirHandle)}\n\nNo valid material.json found in this folder yet. Click "Save All" to initialize it.`);
+        }
+      }
+    } catch (error) {
+      console.error('Folder selection error:', error);
+      alert(`Failed to select folder: ${error.message}`);
+    }
+  }
+
+  /**
+   * Update folder status display in toolbar
+   */
+  async function updateFolderStatusDisplay() {
+    const statusEl = document.getElementById('folder-status');
+    const nameEl = document.getElementById('folder-name');
+    const selectBtn = document.getElementById('select-folder-btn');
+    
+    if (!statusEl || !nameEl || !selectBtn) return;
+    if (!window.FolderPermissionManager) return;
+
+    try {
+      const dirHandle = await window.FolderPermissionManager.getFolderHandle();
+      
+      if (dirHandle) {
+        const folderName = window.FolderPermissionManager.getFolderName(dirHandle);
+        nameEl.textContent = folderName || 'Selected';
+        statusEl.classList.remove('hidden');
+        statusEl.classList.add('flex');
+        
+        // Update button text
+        const icon = selectBtn.querySelector('i');
+        const text = selectBtn.childNodes[selectBtn.childNodes.length - 1];
+        if (text && text.nodeType === Node.TEXT_NODE) {
+          text.textContent = 'Change Folder';
+        }
+      } else {
+        statusEl.classList.add('hidden');
+        statusEl.classList.remove('flex');
+        
+        // Reset button text
+        const icon = selectBtn.querySelector('i');
+        const text = selectBtn.childNodes[selectBtn.childNodes.length - 1];
+        if (text && text.nodeType === Node.TEXT_NODE) {
+          text.textContent = 'Select Folder';
+        }
+      }
+
+      // Reinitialize icons
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    } catch (error) {
+      console.warn('Failed to update folder status:', error);
+    }
   }
 
   function refresh() {

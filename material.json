@@ -37,6 +37,48 @@
       "label": "Highlights",
       "headline": "The ultimate power source.",
       "tabs": ["Efficiency", "Zero Carbon", "Safety", "Reliability"],
+      "items": [
+        {
+          "tab": "Efficiency",
+          "title": "Unmatched Efficiency",
+          "description": "One uranium fuel pellet creates as much energy as one ton of coal, 149 gallons of oil, or 17,000 cubic feet of natural gas.",
+          "cta": "Learn more",
+          "detail": "Nuclear fuel has an incredibly high energy density. A single uranium-235 fuel pellet, weighing about 6 grams, can release energy equivalent to burning 1 ton of coal. The energy released per fission event is approximately $200\\,\\text{MeV}$, which is millions of times greater than the energy from chemical reactions in fossil fuels. This makes nuclear power one of the most efficient energy sources available today.",
+          "flipEnabled": true,
+          "flipDirection": "y",
+          "images": { "main": "" }
+        },
+        {
+          "tab": "Zero Carbon",
+          "title": "Zero Emissions",
+          "description": "Nuclear energy produces zero carbon emissions during operation, keeping our air clean and fighting climate change.",
+          "cta": "Learn more",
+          "detail": "During electricity generation, nuclear power plants produce virtually zero greenhouse gas emissions. Life-cycle analysis shows nuclear energy emits about $12\\,\\text{g CO}_2/\\text{kWh}$, comparable to wind power and far less than coal ($820\\,\\text{g CO}_2/\\text{kWh}$) or natural gas ($490\\,\\text{g CO}_2/\\text{kWh}$). Nuclear energy is a critical tool in combating climate change.",
+          "flipEnabled": true,
+          "flipDirection": "y",
+          "images": { "main": "" }
+        },
+        {
+          "tab": "Safety",
+          "title": "Safety",
+          "description": "Modern reactors use passive safety systems that shut down without human intervention.",
+          "cta": "Learn more",
+          "detail": "Generation III+ and Generation IV reactor designs incorporate passive safety systems that rely on natural physical phenomena such as gravity, natural circulation, and convection. These systems can cool the reactor core without external power or operator action. The probability of a core damage event in modern designs is less than $1 \\times 10^{-7}$ per reactor-year.",
+          "flipEnabled": true,
+          "flipDirection": "y",
+          "images": { "main": "" }
+        },
+        {
+          "tab": "Reliability",
+          "title": "Reliability",
+          "description": "Nuclear plants run at full power more than 93% of the time.",
+          "cta": "Learn more",
+          "detail": "Nuclear power plants have the highest capacity factor of any energy source, operating at full power more than 93% of the time. This is significantly higher than coal (40%), natural gas (57%), wind (35%), and solar (25%). A single nuclear reactor can power approximately 750,000 homes continuously, providing baseload power regardless of weather conditions.",
+          "flipEnabled": true,
+          "flipDirection": "y",
+          "images": { "main": "" }
+        }
+      ],
       "efficiency": {
         "title": "Unmatched Efficiency",
         "description": "One uranium fuel pellet creates as much energy as one ton of coal, 149 gallons of oil, or 17,000 cubic feet of natural gas.",

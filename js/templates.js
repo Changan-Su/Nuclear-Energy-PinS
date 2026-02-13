@@ -13,6 +13,8 @@ window.TemplateRegistry = (function() {
     if (
       imagePath.startsWith('http') ||
       imagePath.startsWith('/') ||
+      imagePath.startsWith('data:') ||
+      imagePath.startsWith('blob:') ||
       imagePath.startsWith('uploads/') ||
       imagePath.startsWith('./uploads/')
     ) {
@@ -95,7 +97,7 @@ window.TemplateRegistry = (function() {
                   </button>
                 </div>
                 <div class="w-16 h-[2px] bg-accent-blue"></div>
-                <div class="text-lg text-text-muted/90 font-normal leading-relaxed latex-content" data-material="${detailPath}">
+                <div class="text-lg text-text-muted/90 font-normal leading-relaxed latex-content flex-1 overflow-y-auto pr-2" style="max-height:100%;" data-material="${detailPath}">
                   ${detail || 'Detail content goes here. Click to edit in edit mode.'}
                 </div>
               </div>
@@ -106,9 +108,56 @@ window.TemplateRegistry = (function() {
     `;
   }
 
+  function slugifyTabKey(value, fallbackIndex) {
+    const raw = String(value || '')
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    return raw || `tab-${fallbackIndex + 1}`;
+  }
+
+  function buildHighlightsItemsCompat(data) {
+    if (Array.isArray(data?.items) && data.items.length) {
+      return data.items.map((item, idx) => ({
+        tab: item?.tab || `Tab ${idx + 1}`,
+        title: item?.title || '',
+        description: item?.description || '',
+        cta: item?.cta || 'Learn more',
+        detail: item?.detail || '',
+        flipEnabled: item?.flipEnabled !== false,
+        flipDirection: item?.flipDirection || 'y',
+        images: item?.images || {}
+      }));
+    }
+
+    const legacyKeys = ['efficiency', 'zeroCarbon', 'safety', 'reliability'];
+    const tabs = Array.isArray(data?.tabs) ? data.tabs : [];
+    const legacyItems = legacyKeys
+      .map((legacyKey, idx) => {
+        const legacy = data?.[legacyKey];
+        if (!legacy) return null;
+        return {
+          tab: tabs[idx] || legacy.title || `Tab ${idx + 1}`,
+          title: legacy.title || '',
+          description: legacy.description || '',
+          cta: legacy.cta || 'Learn more',
+          detail: legacy.detail || '',
+          flipEnabled: legacy.flipEnabled !== false,
+          flipDirection: legacy.flipDirection || 'y',
+          images: legacy.images || {}
+        };
+      })
+      .filter(Boolean);
+
+    if (legacyItems.length) return legacyItems;
+    return [];
+  }
+
   // Hero Template
   function heroTemplate(sectionId, data, material) {
     const videoCover = getImageUrl(data.images?.videoCover, material);
+    const hasHeroMedia = Boolean(videoCover);
     const imgPos = data.images?.position || {};
     const bgPosX = imgPos.x ?? 50;
     const bgPosY = imgPos.y ?? 50;
@@ -122,7 +171,7 @@ window.TemplateRegistry = (function() {
           <div class="w-full h-full bg-primary-darkBlue flex items-center justify-center relative bg-cover bg-center" style="${bgStyle}" data-material-img="hero.images.videoCover">
             ${videoLayer}
             <div class="absolute inset-0 bg-gradient-to-t from-primary-dark/90 via-transparent to-transparent z-10"></div>
-            <div class="text-center z-0 opacity-30">
+            <div class="text-center z-0 opacity-30 ${hasHeroMedia ? 'hidden' : ''}" data-hero-media-placeholder="true">
               <div class="w-20 h-20 rounded-full border border-white/40 flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
                 <i data-lucide="play" class="w-8 h-8 text-white fill-current"></i>
               </div>
@@ -165,43 +214,44 @@ window.TemplateRegistry = (function() {
 
   // Tabbed Content Template (like Highlights)
   function tabbedContentTemplate(sectionId, data, material) {
-    const tabs = data.tabs || [];
-    const tabKeys = ['efficiency', 'zeroCarbon', 'safety', 'reliability'];
-    
-    let tabButtons = tabs.map((tab, i) => {
-      const key = tabKeys[i] || `tab${i}`;
+    const items = buildHighlightsItemsCompat(data);
+    const tabButtons = items.map((item, i) => {
+      const key = `${slugifyTabKey(item.tab, i)}-${i}`;
       const isActive = i === 0;
-      return `<button class="tab-btn ${isActive ? 'active' : ''} px-6 py-3 rounded-full ${isActive ? 'bg-white text-black' : 'bg-surface-dark text-white'} font-medium hover:bg-surface-darker transition-all" data-tab="${key}" data-material="highlights.tabs.${i}">${tab}</button>`;
+      return `
+        <div class="relative group" data-collection-item="true" data-collection-type="tabbed-content" data-collection-path="highlights.items" data-item-index="${i}">
+          <button class="tab-btn ${isActive ? 'active' : ''} px-6 py-3 rounded-full ${isActive ? 'bg-white text-black' : 'bg-surface-dark text-white'} font-medium hover:bg-surface-darker transition-all" data-tab="${key}" data-material="highlights.items.${i}.tab">${item.tab || ''}</button>
+        </div>
+      `;
     }).join('\n');
 
-    let tabContents = tabKeys.map((key, i) => {
-      const tabData = data[key];
-      if (!tabData) return '';
-      const imgUrl = getImageUrl(tabData.images?.main, material);
-      const imgPos = tabData.images?.position || {};
+    const tabContents = items.map((item, i) => {
+      const key = `${slugifyTabKey(item.tab, i)}-${i}`;
+      const imgUrl = getImageUrl(item.images?.main, material);
+      const imgPos = item.images?.position || {};
       const bgPosX = imgPos.x ?? 50;
       const bgPosY = imgPos.y ?? 50;
       const bgScale = imgPos.scale ?? 100;
       const bgStyle = imgUrl && !isVideoUrl(imgUrl) ? `background-image: url(${imgUrl}); background-size: ${bgScale}%; background-position: ${bgPosX}% ${bgPosY}%;` : '';
       const videoLayer = renderVideoLayer(imgUrl);
       const isActive = i === 0;
-      const flipPath = `highlights.${key}`;
-      const flipKey = `highlights-${key}`;
-      const flipEnabled = tabData.flipEnabled !== false;
+      const flipPath = `highlights.items.${i}`;
+      const flipKey = `highlights-item-${i}`;
+      const flipEnabled = item.flipEnabled !== false;
       const frontHtml = `
         <div class="flex w-full h-full">
-          <div class="w-1/2 h-full bg-surface-darker relative flex items-center justify-center bg-cover bg-center" style="${bgStyle}" data-material-img="highlights.${key}.images.main">
+          <div class="w-1/2 h-full bg-surface-darker relative flex items-center justify-center bg-cover bg-center" style="${bgStyle}" data-material-img="highlights.items.${i}.images.main">
             ${videoLayer}
             <div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20"></div>
           </div>
           <div class="w-1/2 h-full p-[60px] flex flex-col justify-center gap-6">
-            <h4 class="text-[40px] font-semibold text-white leading-tight" data-material="highlights.${key}.title">${tabData.title || ''}</h4>
-            <p class="text-xl text-text-muted font-normal leading-relaxed" data-material="highlights.${key}.description">
-              ${tabData.description || ''}
+            <h4 class="text-[40px] font-semibold text-white leading-tight" data-material="highlights.items.${i}.title">${item.title || ''}</h4>
+            <p class="text-xl text-text-muted font-normal leading-relaxed" data-material="highlights.items.${i}.description">
+              ${item.description || ''}
             </p>
             ${flipEnabled ? `
-              <button class="flip-trigger w-fit px-6 py-3 rounded-full bg-white text-black font-medium hover:bg-gray-200 transition-colors mt-4 flex items-center gap-2" data-flip-target="${flipKey}" data-material="highlights.${key}.cta">
-                ${tabData.cta || 'Learn more'}
+              <button class="flip-trigger w-fit px-6 py-3 rounded-full bg-white text-black font-medium hover:bg-gray-200 transition-colors mt-4 flex items-center gap-2" data-flip-target="${flipKey}" data-material="highlights.items.${i}.cta">
+                ${item.cta || 'Learn more'}
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               </button>
             ` : ''}
@@ -210,17 +260,17 @@ window.TemplateRegistry = (function() {
       `;
 
       return `
-        <div class="tab-content absolute inset-0 w-full h-full transition-opacity duration-500 ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'}" id="content-${key}">
+        <div class="tab-content absolute inset-0 w-full h-full transition-opacity duration-500 ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'}" id="content-${key}" data-tab-panel="true">
           ${renderFlipWrapper({
             flipKey,
             flipPath,
             flipEnabled,
-            flipDirection: tabData.flipDirection,
+            flipDirection: item.flipDirection,
             frontHtml,
-            title: tabData.title || '',
-            titlePath: `highlights.${key}.title`,
-            detail: tabData.detail || '',
-            detailPath: `highlights.${key}.detail`,
+            title: item.title || '',
+            titlePath: `highlights.items.${i}.title`,
+            detail: item.detail || '',
+            detailPath: `highlights.items.${i}.detail`,
             frontShellClass: 'h-full rounded-[32px] overflow-hidden bg-surface-dark',
             backShellClass: 'h-full rounded-[32px] overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800'
           })}
@@ -236,7 +286,7 @@ window.TemplateRegistry = (function() {
         </div>
 
         <div class="w-full max-w-[1440px] px-[120px] overflow-x-auto no-scrollbar">
-          <div class="flex items-center gap-4 min-w-max pb-4" id="highlight-tabs">
+          <div class="flex items-center gap-4 min-w-max pb-4" id="highlight-tabs-${sectionId}" data-tab-container="true" data-collection-container="true" data-collection-type="tabbed-content" data-collection-path="highlights.items">
             ${tabButtons}
           </div>
         </div>
@@ -288,7 +338,7 @@ window.TemplateRegistry = (function() {
       `;
 
       return `
-        <div class="fade-in-up h-[560px]" style="transition-delay: ${delay}s;">
+        <div class="fade-in-up h-[560px]" style="transition-delay: ${delay}s;" data-collection-item="true" data-collection-type="card-grid" data-collection-path="features.cards" data-item-index="${i}">
           ${renderFlipWrapper({
             flipKey,
             flipPath,
@@ -317,7 +367,7 @@ window.TemplateRegistry = (function() {
           </p>
         </div>
 
-        <div class="w-full max-w-[1440px] px-[120px] grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="w-full max-w-[1440px] px-[120px] grid grid-cols-1 md:grid-cols-3 gap-8" data-collection-container="true" data-collection-type="card-grid" data-collection-path="features.cards">
           ${cardHtml}
         </div>
       </section>
@@ -471,7 +521,7 @@ window.TemplateRegistry = (function() {
         `;
 
         return `
-          <div class="py-4 border-b border-black/10">
+          <div class="py-4 border-b border-black/10" data-collection-item="true" data-collection-type="accordion" data-collection-path="closerLook.features" data-item-index="${i}">
             ${renderFlipWrapper({
               flipKey,
               flipPath,
@@ -492,7 +542,7 @@ window.TemplateRegistry = (function() {
       }
 
       return `
-        <div class="feature-item group cursor-pointer border-b border-black/10 py-6 ${isFirst ? 'active' : ''}" data-feature="feature-${i}">
+        <div class="feature-item group cursor-pointer border-b border-black/10 py-6 ${isFirst ? 'active' : ''}" data-feature="feature-${i}" data-collection-item="true" data-collection-type="accordion" data-collection-path="closerLook.features" data-item-index="${i}">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-2xl font-semibold ${isFirst ? 'text-text-primaryLight' : 'text-text-muted'} group-hover:text-text-primaryLight transition-colors" data-material="closerLook.features.${i}.title">${feature.title || ''}</h3>
             <i data-lucide="${isFirst ? 'chevron-down' : 'plus'}" class="w-6 h-6 ${isFirst ? '' : 'text-text-muted'} transition-transform duration-300"></i>
@@ -510,7 +560,7 @@ window.TemplateRegistry = (function() {
           <h2 class="text-[64px] font-semibold text-text-primaryLight leading-tight fade-in-up" data-material="closerLook.headline">${data.headline || ''}</h2>
           
           <div class="flex gap-[80px]">
-            <div class="w-[400px] flex flex-col fade-in-up" id="closer-features-list">
+            <div class="w-[400px] flex flex-col fade-in-up" id="closer-features-list" data-collection-container="true" data-collection-type="accordion" data-collection-path="closerLook.features">
               ${featuresHtml}
             </div>
 

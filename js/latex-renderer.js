@@ -51,9 +51,36 @@ window.LatexRenderer = (function() {
         trust: true,
         strict: false
       });
+      recoverKatexErrors(app);
     } catch (e) {
       console.warn('KaTeX render failed:', e);
     }
+  }
+
+  function recoverKatexErrors(root) {
+    if (!root || typeof katex === 'undefined') return;
+    const errors = root.querySelectorAll('.katex-error');
+    errors.forEach((node) => {
+      const raw = (node.textContent || '').trim();
+      if (!raw) return;
+      // Common normalization for exported/JSON-escaped formulas.
+      const candidate = raw
+        .replace(/\\\\/g, '\\')
+        .replace(/\\text\{energy\}/g, 'Q');
+      try {
+        const html = katex.renderToString(candidate, {
+          displayMode: false,
+          throwOnError: true,
+          trust: true,
+          strict: false
+        });
+        const wrapper = document.createElement('span');
+        wrapper.innerHTML = html;
+        node.replaceWith(wrapper.firstChild);
+      } catch (e) {
+        // Keep original katex-error node if still invalid.
+      }
+    });
   }
 
   /**

@@ -9,6 +9,9 @@ window.ModeManager = (function() {
 
   const API_BASE = 'http://localhost:3009/api';
   const OFFLINE_DRAFT_KEY = 'pins_offline_material_draft';
+  const OFFLINE_DRAFT_DB = 'pins_offline_storage';
+  const OFFLINE_DRAFT_STORE = 'drafts';
+  const OFFLINE_DRAFT_ID = 'material_draft';
   const MAX_HISTORY = 50;
   
   let state = {
@@ -32,6 +35,7 @@ window.ModeManager = (function() {
 
   let undoStack = [];
   let redoStack = [];
+  let offlineSaveWarned = false;
 
   function init() {
     // Check for saved token
@@ -331,26 +335,52 @@ window.ModeManager = (function() {
 
   /**
    * Load material data with robust fallbacks.
-   * On file://, prefer embedded JSON to avoid browser CORS/security restrictions.
+   * Priority: Local folder > Offline draft > material.json > Embedded JSON
    */
   async function loadMaterial() {
     let materialData = null;
     const isFileProtocol = window.location.protocol === 'file:';
 
-    // Method 1 (http/https): prefer material.json for canonical data.
-    // Method 1 (file://): prefer embedded JSON to avoid CORS/security restrictions.
-    if (isFileProtocol) {
-      materialData = readEmbeddedMaterial();
-    } else {
+    // Method 1: Try loading from authorized local folder (File System Access API)
+    if (window.FolderPermissionManager && window.OfflineSiteSaver) {
       try {
-        const response = await fetch('./material.json');
-        materialData = await response.json();
+        const dirHandle = await window.FolderPermissionManager.getVerifiedFolderHandle('read', { requestIfNeeded: false });
+        if (dirHandle) {
+          materialData = await window.OfflineSiteSaver.loadMaterialFromFolder(dirHandle);
+          if (materialData) {
+            console.info('Loaded material from local folder:', window.FolderPermissionManager.getFolderName(dirHandle));
+          }
+        }
       } catch (e) {
-        console.warn('fetch() failed, trying XHR fallback...', e.message);
+        console.warn('Failed to load from local folder:', e);
       }
     }
 
-    // Method 2: Fallback to XMLHttpRequest (may work in some environments)
+    // Method 2: Try loading offline draft from IndexedDB/localStorage (legacy support)
+    if (!materialData) {
+      const offlineDraft = await getOfflineDraft();
+      if (offlineDraft) {
+        materialData = offlineDraft;
+        console.info('Loaded offline draft from local storage');
+      }
+    }
+
+    // Method 3 (http/https): prefer material.json for canonical data.
+    // Method 3 (file://): prefer embedded JSON to avoid CORS/security restrictions.
+    if (!materialData) {
+      if (isFileProtocol) {
+        materialData = readEmbeddedMaterial();
+      } else {
+        try {
+          const response = await fetch('./material.json');
+          materialData = await response.json();
+        } catch (e) {
+          console.warn('fetch() failed, trying XHR fallback...', e.message);
+        }
+      }
+    }
+
+    // Method 4: Fallback to XMLHttpRequest (may work in some environments)
     if (!materialData && !isFileProtocol) {
       try {
         materialData = await new Promise((resolve, reject) => {
@@ -378,7 +408,7 @@ window.ModeManager = (function() {
       }
     }
 
-    // Method 3: Final fallback to embedded JSON for any environment.
+    // Method 5: Final fallback to embedded JSON for any environment.
     if (!materialData) {
       materialData = readEmbeddedMaterial();
     }
@@ -386,13 +416,6 @@ window.ModeManager = (function() {
     if (!materialData) {
       console.error('Could not load material data. If using file://, ensure embedded material JSON exists in index.html.');
       return;
-    }
-
-    // If user has an offline draft, prefer it over material.json
-    const offlineDraft = getOfflineDraft();
-    if (offlineDraft) {
-      materialData = offlineDraft;
-      console.info('Loaded offline draft from localStorage');
     }
 
     state.material = materialData;
@@ -579,7 +602,7 @@ window.ModeManager = (function() {
       return ok;
     }
 
-    const ok = saveOfflineDraft(state.material);
+    const ok = await saveOfflineDraft(state.material, { notifyOnFailure: true });
     alert(ok ? 'Saved to local draft successfully' : 'Failed to save local draft');
     return ok;
   }
@@ -589,7 +612,7 @@ window.ModeManager = (function() {
     state.hasUnsavedChanges = true;
 
     if (state.dataMode === 'offline') {
-      saveOfflineDraft(snapshot);
+      saveOfflineDraft(snapshot, { notifyOnFailure: true });
     }
 
     if (window.SectionRenderer) {
@@ -755,17 +778,105 @@ window.ModeManager = (function() {
     state.material = newMaterial;
     state.hasUnsavedChanges = true;
 
-    // Persist offline edits automatically as draft
-    if (state.dataMode === 'offline') {
-      saveOfflineDraft(newMaterial);
+    // No longer auto-save to IndexedDB/localStorage
+    // User must explicitly save to local folder via Save button
+  }
+
+  function setMaterialFromSource(newMaterial) {
+    if (!newMaterial) return false;
+    state.material = newMaterial;
+    state.hasUnsavedChanges = false;
+
+    if (window.SectionRenderer) {
+      window.SectionRenderer.updateMaterial(newMaterial);
     }
+    updateUI();
+    return true;
   }
 
   function getState() {
     return { ...state };
   }
 
-  function getOfflineDraft() {
+  function openOfflineDraftDb() {
+    return new Promise((resolve, reject) => {
+      if (!window.indexedDB) {
+        reject(new Error('IndexedDB is not available'));
+        return;
+      }
+
+      const request = indexedDB.open(OFFLINE_DRAFT_DB, 1);
+      request.onupgradeneeded = () => {
+        const db = request.result;
+        if (!db.objectStoreNames.contains(OFFLINE_DRAFT_STORE)) {
+          db.createObjectStore(OFFLINE_DRAFT_STORE);
+        }
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error || new Error('Failed to open IndexedDB'));
+    });
+  }
+
+  async function readOfflineDraftFromIndexedDB() {
+    const db = await openOfflineDraftDb();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(OFFLINE_DRAFT_STORE, 'readonly');
+      const store = tx.objectStore(OFFLINE_DRAFT_STORE);
+      const req = store.get(OFFLINE_DRAFT_ID);
+
+      req.onsuccess = () => {
+        resolve(req.result || null);
+      };
+      req.onerror = () => {
+        reject(req.error || new Error('Failed to read offline draft'));
+      };
+      tx.oncomplete = () => db.close();
+      tx.onabort = () => db.close();
+      tx.onerror = () => db.close();
+    });
+  }
+
+  async function writeOfflineDraftToIndexedDB(material) {
+    const db = await openOfflineDraftDb();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(OFFLINE_DRAFT_STORE, 'readwrite');
+      const store = tx.objectStore(OFFLINE_DRAFT_STORE);
+      const req = store.put(material, OFFLINE_DRAFT_ID);
+
+      req.onsuccess = () => resolve(true);
+      req.onerror = () => reject(req.error || new Error('Failed to write offline draft'));
+      tx.oncomplete = () => db.close();
+      tx.onabort = () => db.close();
+      tx.onerror = () => db.close();
+    });
+  }
+
+  async function clearOfflineDraftInIndexedDB() {
+    const db = await openOfflineDraftDb();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(OFFLINE_DRAFT_STORE, 'readwrite');
+      const store = tx.objectStore(OFFLINE_DRAFT_STORE);
+      const req = store.delete(OFFLINE_DRAFT_ID);
+
+      req.onsuccess = () => resolve(true);
+      req.onerror = () => reject(req.error || new Error('Failed to clear offline draft'));
+      tx.oncomplete = () => db.close();
+      tx.onabort = () => db.close();
+      tx.onerror = () => db.close();
+    });
+  }
+
+  function showOfflineSaveFailureNotice(error) {
+    if (offlineSaveWarned) return;
+    offlineSaveWarned = true;
+    console.warn('Failed to persist offline draft:', error);
+    alert(
+      'Offline draft save failed. Large media (base64) may exceed browser storage quota.\n\n' +
+      'Please export a ZIP backup now, or switch to Online mode for media uploads.'
+    );
+  }
+
+  function getOfflineDraftFromLocalStorage() {
     try {
       const raw = localStorage.getItem(OFFLINE_DRAFT_KEY);
       if (!raw) return null;
@@ -776,13 +887,45 @@ window.ModeManager = (function() {
     }
   }
 
-  function saveOfflineDraft(material) {
+  async function getOfflineDraft() {
     try {
-      localStorage.setItem(OFFLINE_DRAFT_KEY, JSON.stringify(material));
+      const indexedDraft = await readOfflineDraftFromIndexedDB();
+      if (indexedDraft) return indexedDraft;
+    } catch (e) {
+      console.warn('IndexedDB draft load failed, trying localStorage fallback:', e);
+    }
+
+    const localDraft = getOfflineDraftFromLocalStorage();
+    if (!localDraft) return null;
+
+    // One-time migration path: localStorage -> IndexedDB
+    try {
+      await writeOfflineDraftToIndexedDB(localDraft);
+      localStorage.removeItem(OFFLINE_DRAFT_KEY);
+    } catch (e) {
+      console.warn('Offline draft migration to IndexedDB failed:', e);
+    }
+    return localDraft;
+  }
+
+  async function saveOfflineDraft(material, options = {}) {
+    const { notifyOnFailure = false } = options;
+    try {
+      await writeOfflineDraftToIndexedDB(material);
       return true;
     } catch (e) {
-      console.warn('Failed to save offline draft:', e);
-      return false;
+      console.warn('IndexedDB save failed, trying localStorage fallback:', e);
+      try {
+        localStorage.setItem(OFFLINE_DRAFT_KEY, JSON.stringify(material));
+        return true;
+      } catch (fallbackError) {
+        if (notifyOnFailure) {
+          showOfflineSaveFailureNotice(fallbackError);
+        } else {
+          console.warn('Failed to save offline draft:', fallbackError);
+        }
+        return false;
+      }
     }
   }
 
@@ -792,12 +935,16 @@ window.ModeManager = (function() {
     } catch (e) {
       console.warn('Failed to clear offline draft:', e);
     }
+    clearOfflineDraftInIndexedDB().catch((e) => {
+      console.warn('Failed to clear IndexedDB offline draft:', e);
+    });
   }
 
   return {
     init,
     getMaterial,
     updateMaterialInMemory,
+    setMaterialFromSource,
     saveMaterial,
     exportSitePackage,
     importSitePackage,

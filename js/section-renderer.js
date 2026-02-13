@@ -164,10 +164,14 @@ window.SectionRenderer = (function() {
   }
 
   function initializeTabSwitchers() {
-    const tabContainers = document.querySelectorAll('#highlight-tabs');
+    const tabContainers = document.querySelectorAll('[data-tab-container="true"]');
     
     tabContainers.forEach(tabContainer => {
       const buttons = tabContainer.querySelectorAll('.tab-btn');
+      const sectionWrapper = tabContainer.closest('[data-section-id]');
+      const contents = sectionWrapper
+        ? sectionWrapper.querySelectorAll('.tab-content')
+        : document.querySelectorAll('.tab-content');
       
       buttons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -185,7 +189,6 @@ window.SectionRenderer = (function() {
           });
           
           // Show corresponding content
-          const contents = document.querySelectorAll('.tab-content');
           contents.forEach(content => {
             if (content.id === `content-${targetTab}`) {
               content.classList.remove('opacity-0', 'z-0');

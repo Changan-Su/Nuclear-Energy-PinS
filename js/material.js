@@ -32,7 +32,12 @@
   function setImage(el, url) {
     if (url == null || url === '') return;
     const base = material?.imagesBasePath || 'assets/images/';
-    const src = url.startsWith('http') || url.startsWith('/') ? url : (base + url);
+    const src = (
+      url.startsWith('http') ||
+      url.startsWith('/') ||
+      url.startsWith('data:') ||
+      url.startsWith('blob:')
+    ) ? url : (base + url);
     if (el.tagName === 'IMG') {
       el.src = src;
       el.removeAttribute('data-material-img');
