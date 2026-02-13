@@ -283,3 +283,195 @@ body.edit-mode #app {
   font-weight: 600;
 }
 
+/* ========== Card Flip Animation ========== */
+.flip-card {
+  perspective: 1200px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card[data-flip-dir="y"] .flip-card-back {
+  transform: rotateY(180deg);
+}
+
+.flip-card[data-flip-dir="x"].flipped .flip-card-inner {
+  transform: rotateX(180deg);
+}
+
+.flip-card[data-flip-dir="x"] .flip-card-back {
+  transform: rotateX(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.flip-card-face-shell {
+  width: 100%;
+  height: 100%;
+}
+
+.flip-card.flip-disabled .flip-card-back {
+  pointer-events: none;
+}
+
+.flip-card-back .latex-content {
+  font-size: 1.125rem;
+  line-height: 1.8;
+}
+
+.flip-config-controls {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 32;
+  display: none;
+  gap: 6px;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  padding: 6px;
+  backdrop-filter: blur(10px);
+}
+
+body.edit-mode .flip-config-controls {
+  display: inline-flex;
+}
+
+.flip-config-btn {
+  border: none;
+  border-radius: 7px;
+  min-width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.flip-config-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+}
+
+.flip-config-btn.active {
+  background: rgba(34, 211, 238, 0.24);
+  color: #67e8f9;
+}
+
+.katex {
+  color: inherit;
+}
+
+.katex-display {
+  margin: 1em 0;
+}
+
+/* ========== Image Position Controls ========== */
+.img-position-controls {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 8px 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.edit-mode .img-position-controls {
+  display: flex;
+}
+
+.img-position-controls label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.img-position-controls input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 72px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  outline: none;
+  cursor: pointer;
+}
+
+.img-position-controls input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #22d3ee;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(34, 211, 238, 0.5);
+}
+
+.img-position-controls input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #22d3ee;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 6px rgba(34, 211, 238, 0.5);
+}
+
+.img-position-controls .divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.img-position-controls .reset-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 6px;
+  padding: 4px 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.65rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.img-position-controls .reset-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+

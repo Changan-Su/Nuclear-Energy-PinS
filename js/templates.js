@@ -44,10 +44,76 @@ window.TemplateRegistry = (function() {
     `;
   }
 
+  function normalizeFlipDirection(direction) {
+    return direction === 'x' ? 'x' : 'y';
+  }
+
+  function renderFlipWrapper(options) {
+    const {
+      flipKey,
+      flipPath,
+      flipEnabled,
+      flipDirection,
+      frontHtml,
+      title,
+      titlePath,
+      detail,
+      detailPath,
+      wrapperClass = '',
+      frontShellClass = 'h-full',
+      backShellClass = 'h-full',
+      backPanelClass = 'w-full h-full p-[60px] flex flex-col justify-center gap-6 overflow-y-auto'
+    } = options;
+
+    const dir = normalizeFlipDirection(flipDirection);
+    const enabled = Boolean(flipEnabled);
+
+    return `
+      <div
+        class="flip-card w-full h-full ${wrapperClass} ${enabled ? '' : 'flip-disabled'}"
+        data-flip-card="${flipKey}"
+        data-flip-dir="${dir}"
+        data-flip-enabled="${enabled ? 'true' : 'false'}"
+        data-flip-configurable="true"
+        data-flip-path="${flipPath}"
+        data-flip-enabled-path="${flipPath}.flipEnabled"
+        data-flip-direction-path="${flipPath}.flipDirection"
+      >
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="flip-card-face-shell ${frontShellClass}">
+              ${frontHtml}
+            </div>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-card-face-shell ${backShellClass}">
+              <div class="${backPanelClass}">
+                <div class="flex items-center justify-between gap-4">
+                  <h4 class="text-[36px] font-semibold text-white leading-tight" data-material="${titlePath}">${title || ''}</h4>
+                  <button class="flip-back-trigger flex-shrink-0 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center" data-flip-target="${flipKey}">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                  </button>
+                </div>
+                <div class="w-16 h-[2px] bg-accent-blue"></div>
+                <div class="text-lg text-text-muted/90 font-normal leading-relaxed latex-content" data-material="${detailPath}">
+                  ${detail || 'Detail content goes here. Click to edit in edit mode.'}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
   // Hero Template
   function heroTemplate(sectionId, data, material) {
     const videoCover = getImageUrl(data.images?.videoCover, material);
-    const bgStyle = videoCover && !isVideoUrl(videoCover) ? `background-image: url(${videoCover}); background-size: cover; background-position: center;` : '';
+    const imgPos = data.images?.position || {};
+    const bgPosX = imgPos.x ?? 50;
+    const bgPosY = imgPos.y ?? 50;
+    const bgScale = imgPos.scale ?? 100;
+    const bgStyle = videoCover && !isVideoUrl(videoCover) ? `background-image: url(${videoCover}); background-size: ${bgScale}%; background-position: ${bgPosX}% ${bgPosY}%;` : '';
     const videoLayer = renderVideoLayer(videoCover);
     
     return `
@@ -112,12 +178,18 @@ window.TemplateRegistry = (function() {
       const tabData = data[key];
       if (!tabData) return '';
       const imgUrl = getImageUrl(tabData.images?.main, material);
-      const bgStyle = imgUrl && !isVideoUrl(imgUrl) ? `background-image: url(${imgUrl}); background-size: cover; background-position: center;` : '';
+      const imgPos = tabData.images?.position || {};
+      const bgPosX = imgPos.x ?? 50;
+      const bgPosY = imgPos.y ?? 50;
+      const bgScale = imgPos.scale ?? 100;
+      const bgStyle = imgUrl && !isVideoUrl(imgUrl) ? `background-image: url(${imgUrl}); background-size: ${bgScale}%; background-position: ${bgPosX}% ${bgPosY}%;` : '';
       const videoLayer = renderVideoLayer(imgUrl);
       const isActive = i === 0;
-      
-      return `
-        <div class="tab-content absolute inset-0 flex w-full h-full transition-opacity duration-500 ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'}" id="content-${key}">
+      const flipPath = `highlights.${key}`;
+      const flipKey = `highlights-${key}`;
+      const flipEnabled = tabData.flipEnabled !== false;
+      const frontHtml = `
+        <div class="flex w-full h-full">
           <div class="w-1/2 h-full bg-surface-darker relative flex items-center justify-center bg-cover bg-center" style="${bgStyle}" data-material-img="highlights.${key}.images.main">
             ${videoLayer}
             <div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20"></div>
@@ -127,10 +199,31 @@ window.TemplateRegistry = (function() {
             <p class="text-xl text-text-muted font-normal leading-relaxed" data-material="highlights.${key}.description">
               ${tabData.description || ''}
             </p>
-            <button class="w-fit px-6 py-3 rounded-full bg-white text-black font-medium hover:bg-gray-200 transition-colors mt-4" data-material="highlights.${key}.cta">
-              ${tabData.cta || 'Learn more'}
-            </button>
+            ${flipEnabled ? `
+              <button class="flip-trigger w-fit px-6 py-3 rounded-full bg-white text-black font-medium hover:bg-gray-200 transition-colors mt-4 flex items-center gap-2" data-flip-target="${flipKey}" data-material="highlights.${key}.cta">
+                ${tabData.cta || 'Learn more'}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </button>
+            ` : ''}
           </div>
+        </div>
+      `;
+
+      return `
+        <div class="tab-content absolute inset-0 w-full h-full transition-opacity duration-500 ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'}" id="content-${key}">
+          ${renderFlipWrapper({
+            flipKey,
+            flipPath,
+            flipEnabled,
+            flipDirection: tabData.flipDirection,
+            frontHtml,
+            title: tabData.title || '',
+            titlePath: `highlights.${key}.title`,
+            detail: tabData.detail || '',
+            detailPath: `highlights.${key}.detail`,
+            frontShellClass: 'h-full rounded-[32px] overflow-hidden bg-surface-dark',
+            backShellClass: 'h-full rounded-[32px] overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800'
+          })}
         </div>
       `;
     }).join('\n');
@@ -149,7 +242,7 @@ window.TemplateRegistry = (function() {
         </div>
 
         <div class="w-full max-w-[1440px] px-[120px] h-[600px] fade-in-up">
-          <div class="w-full h-full bg-surface-dark rounded-[32px] overflow-hidden flex relative group">
+          <div class="w-full h-full flex relative group" style="perspective: 1200px;">
             ${tabContents}
           </div>
         </div>
@@ -163,21 +256,54 @@ window.TemplateRegistry = (function() {
     
     const cardHtml = cards.map((card, i) => {
       const imgUrl = getImageUrl(card.image, material);
-      const bgStyle = imgUrl && !isVideoUrl(imgUrl) ? `background-image: url(${imgUrl}); background-size: cover; background-position: center;` : '';
+      const imgPos = card.imagePosition || {};
+      const bgPosX = imgPos.x ?? 50;
+      const bgPosY = imgPos.y ?? 50;
+      const bgScale = imgPos.scale ?? 100;
+      const bgStyle = imgUrl && !isVideoUrl(imgUrl) ? `background-image: url(${imgUrl}); background-size: ${bgScale}%; background-position: ${bgPosX}% ${bgPosY}%;` : '';
       const videoLayer = renderVideoLayer(imgUrl);
       const delay = (i + 1) * 0.1;
       
-      return `
-        <div class="bg-surface-dark rounded-[24px] overflow-hidden h-[560px] flex flex-col group hover:bg-surface-darker transition-colors duration-300 fade-in-up" style="transition-delay: ${delay}s;">
+      const flipPath = `features.cards.${i}`;
+      const flipKey = `features-card-${i}`;
+      const flipEnabled = card.flipEnabled === true;
+      const frontHtml = `
+        <div class="h-full flex flex-col group hover:bg-surface-darker transition-colors duration-300">
           <div class="h-[320px] bg-surface-darker w-full relative bg-cover bg-center" style="${bgStyle}" data-material-img="features.cards.${i}.image">
             ${videoLayer}
           </div>
-          <div class="p-8 flex flex-col gap-3">
+          <div class="p-8 flex flex-col gap-3 flex-1">
             <h3 class="text-2xl font-semibold text-white" data-material="features.cards.${i}.title">${card.title || ''}</h3>
             <p class="text-base text-text-muted leading-relaxed" data-material="features.cards.${i}.description">
               ${card.description || ''}
             </p>
+            ${flipEnabled ? `
+              <button class="flip-trigger mt-auto w-fit px-5 py-2.5 rounded-full bg-white text-black text-sm font-medium hover:bg-gray-200 transition-colors flex items-center gap-2" data-flip-target="${flipKey}" data-material="features.cards.${i}.cta">
+                ${card.cta || 'Learn more'}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </button>
+            ` : ''}
           </div>
+        </div>
+      `;
+
+      return `
+        <div class="fade-in-up h-[560px]" style="transition-delay: ${delay}s;">
+          ${renderFlipWrapper({
+            flipKey,
+            flipPath,
+            flipEnabled,
+            flipDirection: card.flipDirection,
+            wrapperClass: 'h-full rounded-[24px]',
+            frontHtml,
+            title: card.title || '',
+            titlePath: `features.cards.${i}.title`,
+            detail: card.detail || '',
+            detailPath: `features.cards.${i}.detail`,
+            frontShellClass: 'h-full rounded-[24px] overflow-hidden bg-surface-dark',
+            backShellClass: 'h-full rounded-[24px] overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800',
+            backPanelClass: 'w-full h-full p-8 flex flex-col justify-center gap-5 overflow-y-auto'
+          })}
         </div>
       `;
     }).join('\n');
@@ -201,23 +327,56 @@ window.TemplateRegistry = (function() {
   // Text + Image Left Template
   function textImageLeftTemplate(sectionId, data, material) {
     const imgUrl = getImageUrl(data.images?.main, material);
-    const bgStyle = imgUrl && !isVideoUrl(imgUrl) ? `background-image: url(${imgUrl}); background-size: cover; background-position: center;` : '';
+    const imgPos = data.images?.position || {};
+    const bgPosX = imgPos.x ?? 50;
+    const bgPosY = imgPos.y ?? 50;
+    const bgScale = imgPos.scale ?? 100;
+    const bgStyle = imgUrl && !isVideoUrl(imgUrl) ? `background-image: url(${imgUrl}); background-size: ${bgScale}%; background-position: ${bgPosX}% ${bgPosY}%;` : '';
     const videoLayer = renderVideoLayer(imgUrl);
     const theme = sectionId === 'safety' || sectionId === 'innovation' ? 'dark' : 'light';
     
+    const flipPath = `${sectionId}`;
+    const flipKey = `${sectionId}-section-card`;
+    const flipEnabled = data.flipEnabled === true;
+    const frontHtml = `
+      <div class="w-full h-full flex items-center gap-[80px]">
+        <div class="w-[500px] flex flex-col gap-6 fade-in-up">
+          <h2 class="text-[64px] font-semibold ${theme === 'dark' ? 'text-white' : 'text-text-primaryLight'} leading-[1.05]" data-material="${sectionId}.title">${data.title || ''}</h2>
+          <p class="text-[24px] font-normal text-text-muted leading-[1.4]" data-material="${sectionId}.description">
+            ${data.description || ''}
+          </p>
+          ${flipEnabled ? `
+            <button class="flip-trigger w-fit px-6 py-3 rounded-full ${theme === 'dark' ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-black/80'} font-medium transition-colors mt-2 flex items-center gap-2" data-flip-target="${flipKey}" data-material="${sectionId}.cta">
+              ${data.cta || 'Learn more'}
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          ` : ''}
+        </div>
+        <div class="flex-1 h-[600px] ${theme === 'dark' ? 'bg-surface-dark' : 'bg-white shadow-xl shadow-black/5'} rounded-[32px] relative overflow-hidden fade-in-up bg-cover bg-center" style="transition-delay: 0.2s; ${bgStyle}" data-material-img="${sectionId}.images.main">
+          ${videoLayer}
+          <div class="absolute inset-0 flex items-center justify-center ${theme === 'dark' ? 'text-white/20' : 'text-black/20'} text-3xl font-semibold" data-material="${sectionId}.imageLabel">${data.imageLabel || ''}</div>
+        </div>
+      </div>
+    `;
+
     return `
       <section id="${sectionId}" class="w-full ${theme === 'dark' ? 'bg-black' : 'bg-surface-light text-text-primaryLight'} py-[120px]">
-        <div class="max-w-[1440px] mx-auto px-[120px] flex items-center gap-[80px]">
-          <div class="w-[500px] flex flex-col gap-6 fade-in-up">
-            <h2 class="text-[64px] font-semibold ${theme === 'dark' ? 'text-white' : 'text-text-primaryLight'} leading-[1.05]" data-material="${sectionId}.title">${data.title || ''}</h2>
-            <p class="text-[24px] font-normal text-text-muted leading-[1.4]" data-material="${sectionId}.description">
-              ${data.description || ''}
-            </p>
-          </div>
-          <div class="flex-1 h-[600px] ${theme === 'dark' ? 'bg-surface-dark' : 'bg-white shadow-xl shadow-black/5'} rounded-[32px] relative overflow-hidden fade-in-up bg-cover bg-center" style="transition-delay: 0.2s; ${bgStyle}" data-material-img="${sectionId}.images.main">
-            ${videoLayer}
-            <div class="absolute inset-0 flex items-center justify-center ${theme === 'dark' ? 'text-white/20' : 'text-black/20'} text-3xl font-semibold" data-material="${sectionId}.imageLabel">${data.imageLabel || ''}</div>
-          </div>
+        <div class="max-w-[1440px] mx-auto px-[120px] h-[600px]">
+          ${renderFlipWrapper({
+            flipKey,
+            flipPath,
+            flipEnabled,
+            flipDirection: data.flipDirection,
+            wrapperClass: 'h-full rounded-[32px]',
+            frontHtml,
+            title: data.title || '',
+            titlePath: `${sectionId}.title`,
+            detail: data.detail || '',
+            detailPath: `${sectionId}.detail`,
+            frontShellClass: 'h-full rounded-[32px] overflow-hidden',
+            backShellClass: `h-full rounded-[32px] overflow-hidden ${theme === 'dark' ? 'bg-gradient-to-br from-slate-900 to-slate-800' : 'bg-white'}`,
+            backPanelClass: 'w-full h-full p-[60px] flex flex-col justify-center gap-6 overflow-y-auto'
+          })}
         </div>
       </section>
     `;
@@ -226,22 +385,55 @@ window.TemplateRegistry = (function() {
   // Text + Image Right Template
   function textImageRightTemplate(sectionId, data, material) {
     const imgUrl = getImageUrl(data.images?.main, material);
-    const bgStyle = imgUrl && !isVideoUrl(imgUrl) ? `background-image: url(${imgUrl}); background-size: cover; background-position: center;` : '';
+    const imgPos = data.images?.position || {};
+    const bgPosX = imgPos.x ?? 50;
+    const bgPosY = imgPos.y ?? 50;
+    const bgScale = imgPos.scale ?? 100;
+    const bgStyle = imgUrl && !isVideoUrl(imgUrl) ? `background-image: url(${imgUrl}); background-size: ${bgScale}%; background-position: ${bgPosX}% ${bgPosY}%;` : '';
     const videoLayer = renderVideoLayer(imgUrl);
     
+    const flipPath = `${sectionId}`;
+    const flipKey = `${sectionId}-section-card`;
+    const flipEnabled = data.flipEnabled === true;
+    const frontHtml = `
+      <div class="w-full h-full flex items-center gap-[80px]">
+        <div class="flex-1 h-[600px] bg-white rounded-[32px] shadow-xl shadow-black/5 relative overflow-hidden fade-in-up bg-cover bg-center" style="${bgStyle}" data-material-img="${sectionId}.images.main">
+          ${videoLayer}
+          <div class="absolute inset-0 flex items-center justify-center text-black/20 text-3xl font-semibold" data-material="${sectionId}.imageLabel">${data.imageLabel || ''}</div>
+        </div>
+        <div class="w-[500px] flex flex-col gap-6 fade-in-up" style="transition-delay: 0.2s;">
+          <h2 class="text-[64px] font-semibold text-text-primaryLight leading-[1.05]" data-material="${sectionId}.title">${data.title || ''}</h2>
+          <p class="text-[24px] font-normal text-text-muted leading-[1.4]" data-material="${sectionId}.description">
+            ${data.description || ''}
+          </p>
+          ${flipEnabled ? `
+            <button class="flip-trigger w-fit px-6 py-3 rounded-full bg-black text-white font-medium hover:bg-black/80 transition-colors mt-2 flex items-center gap-2" data-flip-target="${flipKey}" data-material="${sectionId}.cta">
+              ${data.cta || 'Learn more'}
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          ` : ''}
+        </div>
+      </div>
+    `;
+
     return `
       <section id="${sectionId}" class="w-full bg-surface-light py-[120px] text-text-primaryLight">
-        <div class="max-w-[1440px] mx-auto px-[120px] flex items-center gap-[80px]">
-          <div class="flex-1 h-[600px] bg-white rounded-[32px] shadow-xl shadow-black/5 relative overflow-hidden fade-in-up bg-cover bg-center" style="${bgStyle}" data-material-img="${sectionId}.images.main">
-            ${videoLayer}
-            <div class="absolute inset-0 flex items-center justify-center text-black/20 text-3xl font-semibold" data-material="${sectionId}.imageLabel">${data.imageLabel || ''}</div>
-          </div>
-          <div class="w-[500px] flex flex-col gap-6 fade-in-up" style="transition-delay: 0.2s;">
-            <h2 class="text-[64px] font-semibold text-text-primaryLight leading-[1.05]" data-material="${sectionId}.title">${data.title || ''}</h2>
-            <p class="text-[24px] font-normal text-text-muted leading-[1.4]" data-material="${sectionId}.description">
-              ${data.description || ''}
-            </p>
-          </div>
+        <div class="max-w-[1440px] mx-auto px-[120px] h-[600px]">
+          ${renderFlipWrapper({
+            flipKey,
+            flipPath,
+            flipEnabled,
+            flipDirection: data.flipDirection,
+            wrapperClass: 'h-full rounded-[32px]',
+            frontHtml,
+            title: data.title || '',
+            titlePath: `${sectionId}.title`,
+            detail: data.detail || '',
+            detailPath: `${sectionId}.detail`,
+            frontShellClass: 'h-full rounded-[32px] overflow-hidden',
+            backShellClass: 'h-full rounded-[32px] overflow-hidden bg-white',
+            backPanelClass: 'w-full h-full p-[60px] flex flex-col justify-center gap-6 overflow-y-auto'
+          })}
         </div>
       </section>
     `;
@@ -251,11 +443,54 @@ window.TemplateRegistry = (function() {
   function accordionTemplate(sectionId, data, material) {
     const features = data.features || [];
     const imgUrl = getImageUrl(data.images?.reactor, material);
-    const bgStyle = imgUrl && !isVideoUrl(imgUrl) ? `background-image: url(${imgUrl}); background-size: cover; background-position: center;` : '';
+    const imgPos = data.images?.position || {};
+    const bgPosX = imgPos.x ?? 50;
+    const bgPosY = imgPos.y ?? 50;
+    const bgScale = imgPos.scale ?? 100;
+    const bgStyle = imgUrl && !isVideoUrl(imgUrl) ? `background-image: url(${imgUrl}); background-size: ${bgScale}%; background-position: ${bgPosX}% ${bgPosY}%;` : '';
     const videoLayer = renderVideoLayer(imgUrl);
     
     const featuresHtml = features.map((feature, i) => {
       const isFirst = i === 0;
+      const flipEnabled = feature.flipEnabled === true;
+      const flipPath = `closerLook.features.${i}`;
+      const flipKey = `closer-feature-${i}`;
+
+      if (flipEnabled) {
+        const frontHtml = `
+          <div class="w-full h-full px-2 py-3 flex flex-col justify-center gap-3">
+            <h3 class="text-2xl font-semibold text-text-primaryLight" data-material="closerLook.features.${i}.title">${feature.title || ''}</h3>
+            <p class="text-base text-text-muted leading-relaxed" data-material="closerLook.features.${i}.description">
+              ${feature.description || ''}
+            </p>
+            <button class="flip-trigger w-fit px-4 py-2 rounded-full bg-text-primaryLight text-white text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2" data-flip-target="${flipKey}" data-material="closerLook.features.${i}.cta">
+              ${feature.cta || 'Learn more'}
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        `;
+
+        return `
+          <div class="py-4 border-b border-black/10">
+            ${renderFlipWrapper({
+              flipKey,
+              flipPath,
+              flipEnabled,
+              flipDirection: feature.flipDirection,
+              wrapperClass: 'h-[220px] rounded-2xl',
+              frontHtml,
+              title: feature.title || '',
+              titlePath: `closerLook.features.${i}.title`,
+              detail: feature.detail || '',
+              detailPath: `closerLook.features.${i}.detail`,
+              frontShellClass: 'h-full rounded-2xl overflow-hidden bg-white',
+              backShellClass: 'h-full rounded-2xl overflow-hidden bg-white',
+              backPanelClass: 'w-full h-full p-6 flex flex-col justify-center gap-4 overflow-y-auto'
+            })}
+          </div>
+        `;
+      }
+
       return `
         <div class="feature-item group cursor-pointer border-b border-black/10 py-6 ${isFirst ? 'active' : ''}" data-feature="feature-${i}">
           <div class="flex items-center justify-between mb-2">

@@ -5,7 +5,8 @@
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:css": "npx tailwindcss -i ./css/input.css -o ./css/styles.css --watch"
+    "build:css": "npx tailwindcss -i ./css/input.css -o ./css/styles.css --watch",
+    "sync:material": "node ./server/scripts/sync-inline-material.cjs"
   },
   "keywords": [],
   "author": "",

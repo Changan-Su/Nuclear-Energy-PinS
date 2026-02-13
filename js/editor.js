@@ -24,6 +24,7 @@ window.EditorSystem = (function() {
     enableInlineEditing();
     enableSectionToolbars();
     enableImageEditing();
+    enableFlipToggles();
     enableReferenceEditing();
     setupAtMentionSystem();
   }
@@ -41,6 +42,7 @@ window.EditorSystem = (function() {
     disableInlineEditing();
     disableSectionToolbars();
     disableImageEditing();
+    disableFlipToggles();
     disableReferenceEditing();
     cleanupAtMentionSystem();
   }
@@ -436,6 +438,86 @@ window.EditorSystem = (function() {
   function disableImageEditing() {
     const overlays = document.querySelectorAll('.image-edit-overlay');
     overlays.forEach(overlay => overlay.remove());
+  }
+
+  function enableFlipToggles() {
+    const flipCards = document.querySelectorAll('[data-flip-configurable="true"]');
+    flipCards.forEach(card => {
+      if (card.querySelector('.flip-config-controls')) return;
+
+      const flipPath = card.getAttribute('data-flip-path');
+      const enabledPath = card.getAttribute('data-flip-enabled-path');
+      const directionPath = card.getAttribute('data-flip-direction-path');
+      if (!flipPath || !enabledPath || !directionPath) return;
+
+      const currentEnabled = card.getAttribute('data-flip-enabled') === 'true';
+      const currentDirection = card.getAttribute('data-flip-dir') === 'x' ? 'x' : 'y';
+
+      const computedPos = window.getComputedStyle(card).position;
+      if (computedPos === 'static') {
+        card.style.position = 'relative';
+      }
+
+      const controls = document.createElement('div');
+      controls.className = 'flip-config-controls';
+      controls.innerHTML = `
+        <button class="flip-config-btn ${currentEnabled ? 'active' : ''}" data-flip-action="toggle" title="Enable / Disable Learn More Details">
+          <i data-lucide="book-open" class="w-4 h-4"></i>
+        </button>
+        <button class="flip-config-btn ${currentDirection === 'y' ? 'active' : ''}" data-flip-action="dir-y" title="Left / Right Flip">
+          <i data-lucide="flip-horizontal-2" class="w-4 h-4"></i>
+        </button>
+        <button class="flip-config-btn ${currentDirection === 'x' ? 'active' : ''}" data-flip-action="dir-x" title="Up / Down Flip">
+          <i data-lucide="flip-vertical-2" class="w-4 h-4"></i>
+        </button>
+      `;
+
+      controls.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const btn = event.target.closest('[data-flip-action]');
+        if (!btn) return;
+        const action = btn.getAttribute('data-flip-action');
+
+        if (window.ModeManager.captureSnapshot) {
+          window.ModeManager.captureSnapshot();
+        }
+
+        if (action === 'toggle') {
+          setFlipConfigValue(enabledPath, !currentEnabled);
+        } else if (action === 'dir-y') {
+          setFlipConfigValue(directionPath, 'y');
+        } else if (action === 'dir-x') {
+          setFlipConfigValue(directionPath, 'x');
+        }
+
+        if (window.SectionRenderer && window.SectionRenderer.render) {
+          window.SectionRenderer.render();
+        }
+        refresh();
+      });
+
+      card.appendChild(controls);
+    });
+
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  }
+
+  function disableFlipToggles() {
+    document.querySelectorAll('.flip-config-controls').forEach(el => el.remove());
+  }
+
+  function setFlipConfigValue(relativePath, value) {
+    const material = window.ModeManager.getMaterial();
+    updateMaterialByPath(material, `index.${relativePath}`, value);
+    window.ModeManager.updateMaterialInMemory(material);
+
+    const state = window.ModeManager.getState();
+    if (state.dataMode === 'online') {
+      window.ModeManager.patchMaterial(`index.${relativePath}`, value);
+    }
   }
 
   function isVideoUrl(url) {

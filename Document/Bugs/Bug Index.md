@@ -16,6 +16,26 @@ Currently no active bugs.
 
 ## Resolved Bugs | 已解决 Bug
 
+### Version 0.6 - Interactive Enhancements
+
+#### [Grid Card Display Issue](./BugReview_v0.6_Grid_Card_Display_Issue.md)
+- **Severity**: High | 高
+- **Description**: Features/Benefits section cards not visible on page
+- **描述**：Features/Benefits 区域的卡片在页面上不可见
+- **Solution**: Fixed fade-in-up container height allocation, moved h-[560px] from inner to outer wrapper
+- **解决方案**：修复 fade-in-up 容器高度分配，将 h-[560px] 从内层移到外层包装器
+- **Date**: 2026-02-13
+
+### Version 0.5 - SVG Template Gallery
+
+#### [Backend MySQL Startup Failure](./BugReview_v0.5_Backend_MySQL_Startup_Failure.md)
+- **Severity**: High | 高
+- **Description**: Server exits immediately on MySQL connection failure, preventing local development without database
+- **描述**：服务器在 MySQL 连接失败时立即退出，阻止无数据库的本地开发
+- **Solution**: Modified error handling to allow server to start with warnings instead of exiting
+- **解决方案**：修改错误处理，允许服务器启动并显示警告而不是退出
+- **Date**: 2026-02-10
+
 ### Version 0.3 - CMS System
 
 No bugs filed during implementation. Development proceeded smoothly with architecture-first approach.

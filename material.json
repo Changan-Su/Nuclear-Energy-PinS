@@ -41,24 +41,36 @@
         "title": "Unmatched Efficiency",
         "description": "One uranium fuel pellet creates as much energy as one ton of coal, 149 gallons of oil, or 17,000 cubic feet of natural gas.",
         "cta": "Learn more",
+        "detail": "Nuclear fuel has an incredibly high energy density. A single uranium-235 fuel pellet, weighing about 6 grams, can release energy equivalent to burning 1 ton of coal. The energy released per fission event is approximately $200\\,\\text{MeV}$, which is millions of times greater than the energy from chemical reactions in fossil fuels. This makes nuclear power one of the most efficient energy sources available today.",
+        "flipEnabled": true,
+        "flipDirection": "y",
         "images": { "main": "" }
       },
       "zeroCarbon": {
         "title": "Zero Emissions",
         "description": "Nuclear energy produces zero carbon emissions during operation, keeping our air clean and fighting climate change.",
         "cta": "Learn more",
+        "detail": "During electricity generation, nuclear power plants produce virtually zero greenhouse gas emissions. Life-cycle analysis shows nuclear energy emits about $12\\,\\text{g CO}_2/\\text{kWh}$, comparable to wind power and far less than coal ($820\\,\\text{g CO}_2/\\text{kWh}$) or natural gas ($490\\,\\text{g CO}_2/\\text{kWh}$). Nuclear energy is a critical tool in combating climate change.",
+        "flipEnabled": true,
+        "flipDirection": "y",
         "images": { "main": "" }
       },
       "safety": {
         "title": "Safety",
         "description": "Modern reactors use passive safety systems that shut down without human intervention.",
         "cta": "Learn more",
+        "detail": "Generation III+ and Generation IV reactor designs incorporate passive safety systems that rely on natural physical phenomena such as gravity, natural circulation, and convection. These systems can cool the reactor core without external power or operator action. The probability of a core damage event in modern designs is less than $1 \\times 10^{-7}$ per reactor-year.",
+        "flipEnabled": true,
+        "flipDirection": "y",
         "images": { "main": "" }
       },
       "reliability": {
         "title": "Reliability",
         "description": "Nuclear plants run at full power more than 93% of the time.",
         "cta": "Learn more",
+        "detail": "Nuclear power plants have the highest capacity factor of any energy source, operating at full power more than 93% of the time. This is significantly higher than coal (40%), natural gas (57%), wind (35%), and solar (25%). A single nuclear reactor can power approximately 750,000 homes continuously, providing baseload power regardless of weather conditions.",
+        "flipEnabled": true,
+        "flipDirection": "y",
         "images": { "main": "" }
       }
     },
@@ -69,16 +81,25 @@
         {
           "title": "High Energy Density",
           "description": "A single pellet the size of a fingertip contains the energy equivalent of one ton of coal.",
+          "detail": "Fuel pellets have extremely high energy density. Roughly one pellet can provide the same energy as one ton of coal, enabling compact fuel logistics and lower land-use intensity for large-scale electricity generation.",
+          "flipEnabled": false,
+          "flipDirection": "y",
           "image": ""
         },
         {
           "title": "Zero Emissions",
           "description": "Nuclear power plants produce no greenhouse gas emissions during operation.",
+          "detail": "Nuclear generation emits near-zero direct CO2 during operation and performs comparably to wind across lifecycle carbon intensity studies, helping stabilize grid decarbonization pathways.",
+          "flipEnabled": false,
+          "flipDirection": "y",
           "image": ""
         },
         {
           "title": "24/7 Reliability",
           "description": "Nuclear energy operates at full power more than 93% of the time, making it the most reliable energy source.",
+          "detail": "With very high capacity factors and long continuous run cycles, nuclear power provides stable baseload electricity that complements variable renewable resources and reduces curtailment pressure.",
+          "flipEnabled": false,
+          "flipDirection": "y",
           "image": ""
         }
       ]
@@ -86,29 +107,68 @@
     "safety": {
       "title": "Uncompromising Safety.",
       "description": "Advanced passive safety systems use natural laws of physics to shut down automatically without human intervention.",
+      "detail": "Passive systems rely on gravity, natural circulation, and thermal expansion to move the reactor to a safe state without active pumps or operator actions, improving defense-in-depth.",
+      "flipEnabled": false,
+      "flipDirection": "y",
       "imageLabel": "Safety Visualization",
       "images": { "main": "" }
     },
     "sustainability": {
       "title": "Green. Clean. Future.",
       "description": "Nuclear energy has one of the smallest carbon footprints of any energy source, protecting our air quality and climate.",
+      "detail": "From mining to decommissioning, lifecycle emissions remain low and predictable, making nuclear energy suitable for deep decarbonization scenarios with strict reliability constraints.",
+      "flipEnabled": false,
+      "flipDirection": "y",
       "imageLabel": "Ecosystem Visualization",
       "images": { "main": "" }
     },
     "innovation": {
       "title": "Limitless Potential.",
       "description": "Small Modular Reactors (SMRs) bring flexible, scalable power to remote communities and industrial hubs.",
+      "detail": "SMRs introduce modular deployment and shorter construction cycles, supporting district heating, industrial process heat, and resilient microgrid architectures in addition to electricity supply.",
+      "flipEnabled": false,
+      "flipDirection": "y",
       "imageLabel": "SMR Visualization",
       "images": { "main": "" }
     },
     "closerLook": {
       "headline": "Take a closer look.",
       "features": [
-        { "title": "Reactor Core", "description": "The heart of the system where fission occurs, generating intense heat safely contained within robust barriers." },
-        { "title": "Cooling System", "description": "Circulates water to transfer heat from the core to the steam generators." },
-        { "title": "Control Rods", "description": "Regulate the rate of fission by absorbing neutrons." },
-        { "title": "Containment", "description": "Reinforced structure that prevents release of radioactive material." },
-        { "title": "Steam Generator", "description": "Transfers heat from primary loop to produce steam for turbines." }
+        {
+          "title": "Reactor Core",
+          "description": "The heart of the system where fission occurs, generating intense heat safely contained within robust barriers.",
+          "detail": "The core contains fuel assemblies and control systems designed to sustain a controlled chain reaction while maintaining strict thermal margins.",
+          "flipEnabled": false,
+          "flipDirection": "y"
+        },
+        {
+          "title": "Cooling System",
+          "description": "Circulates water to transfer heat from the core to the steam generators.",
+          "detail": "Primary and secondary loops isolate radioactive coolant while efficiently moving thermal energy to steam systems for turbine generation.",
+          "flipEnabled": false,
+          "flipDirection": "y"
+        },
+        {
+          "title": "Control Rods",
+          "description": "Regulate the rate of fission by absorbing neutrons.",
+          "detail": "Neutron-absorbing materials provide fine-grained reactivity control and rapid shutdown capability for safe transient management.",
+          "flipEnabled": false,
+          "flipDirection": "y"
+        },
+        {
+          "title": "Containment",
+          "description": "Reinforced structure that prevents release of radioactive material.",
+          "detail": "Multi-layer containment barriers are engineered to withstand pressure, impact, and severe accident conditions while limiting release pathways.",
+          "flipEnabled": false,
+          "flipDirection": "y"
+        },
+        {
+          "title": "Steam Generator",
+          "description": "Transfers heat from primary loop to produce steam for turbines.",
+          "detail": "Heat exchangers convert reactor thermal output into turbine-grade steam with strict separation between primary coolant and turbine circuits.",
+          "flipEnabled": false,
+          "flipDirection": "y"
+        }
       ],
       "reactorLabel": "Interactive Reactor Diagram",
       "reactorHint": "Click features to explore",

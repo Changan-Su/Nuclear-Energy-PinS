@@ -311,23 +311,47 @@ window.ModeManager = (function() {
     }
   }
 
+  function readEmbeddedMaterial() {
+    if (window.__PRELOADED_MATERIAL__) {
+      return window.__PRELOADED_MATERIAL__;
+    }
+
+    const embedded = document.getElementById('material-inline-json');
+    if (!embedded) return null;
+
+    try {
+      const parsed = JSON.parse(embedded.textContent || '{}');
+      window.__PRELOADED_MATERIAL__ = parsed;
+      return parsed;
+    } catch (e) {
+      console.warn('Failed to parse embedded material JSON:', e);
+      return null;
+    }
+  }
+
   /**
-   * Load material.json with fallback for file:// protocol.
-   * fetch() is blocked by CORS on file://, so we fall back to XMLHttpRequest.
+   * Load material data with robust fallbacks.
+   * On file://, prefer embedded JSON to avoid browser CORS/security restrictions.
    */
   async function loadMaterial() {
     let materialData = null;
+    const isFileProtocol = window.location.protocol === 'file:';
 
-    // Method 1: Try fetch (works with http/https servers)
-    try {
-      const response = await fetch('./material.json');
-      materialData = await response.json();
-    } catch (e) {
-      console.warn('fetch() failed (expected on file:// protocol), trying XHR...', e.message);
+    // Method 1 (http/https): prefer material.json for canonical data.
+    // Method 1 (file://): prefer embedded JSON to avoid CORS/security restrictions.
+    if (isFileProtocol) {
+      materialData = readEmbeddedMaterial();
+    } else {
+      try {
+        const response = await fetch('./material.json');
+        materialData = await response.json();
+      } catch (e) {
+        console.warn('fetch() failed, trying XHR fallback...', e.message);
+      }
     }
 
-    // Method 2: Fallback to XMLHttpRequest (works with file:// in most browsers)
-    if (!materialData) {
+    // Method 2: Fallback to XMLHttpRequest (may work in some environments)
+    if (!materialData && !isFileProtocol) {
       try {
         materialData = await new Promise((resolve, reject) => {
           const xhr = new XMLHttpRequest();
@@ -354,13 +378,13 @@ window.ModeManager = (function() {
       }
     }
 
-    // Method 3: Try preloaded material (set by inline script in index.html)
-    if (!materialData && window.__PRELOADED_MATERIAL__) {
-      materialData = window.__PRELOADED_MATERIAL__;
+    // Method 3: Final fallback to embedded JSON for any environment.
+    if (!materialData) {
+      materialData = readEmbeddedMaterial();
     }
 
     if (!materialData) {
-      console.error('Could not load material.json. If using file:// protocol, please use a local server (e.g. npx http-server).');
+      console.error('Could not load material data. If using file://, ensure embedded material JSON exists in index.html.');
       return;
     }
 

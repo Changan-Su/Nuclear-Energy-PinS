@@ -102,6 +102,17 @@ window.SectionRenderer = (function() {
       // Reinitialize accordion
       initializeAccordion();
 
+      // Initialize flip cards
+      initializeFlipCards();
+
+      // Initialize image position controls
+      initializeImagePositionControls();
+
+      // Render LaTeX formulas
+      if (window.LatexRenderer && window.LatexRenderer.renderAll) {
+        window.LatexRenderer.renderAll();
+      }
+
       // Reinitialize scroll animations
       if (window.ScrollAnimations && window.ScrollAnimations.init) {
         window.ScrollAnimations.init();
@@ -304,6 +315,170 @@ window.SectionRenderer = (function() {
       top: targetPosition,
       behavior: 'smooth'
     });
+  }
+
+  function initializeFlipCards() {
+    // Flip triggers (Learn More buttons)
+    document.querySelectorAll('.flip-trigger').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const targetKey = btn.getAttribute('data-flip-target');
+        const card = document.querySelector(`[data-flip-card="${targetKey}"]`);
+        if (card && card.getAttribute('data-flip-enabled') === 'true') {
+          card.classList.add('flipped');
+        }
+      });
+    });
+
+    // Flip back triggers (close buttons)
+    document.querySelectorAll('.flip-back-trigger').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const targetKey = btn.getAttribute('data-flip-target');
+        const card = document.querySelector(`[data-flip-card="${targetKey}"]`);
+        if (card) {
+          card.classList.remove('flipped');
+        }
+      });
+    });
+  }
+
+  function initializeImagePositionControls() {
+    // Add position/scale controls to all image elements with data-material-img
+    document.querySelectorAll('[data-material-img]').forEach(imgEl => {
+      // Skip if already has controls
+      if (imgEl.querySelector('.img-position-controls')) return;
+
+      const materialPath = imgEl.getAttribute('data-material-img');
+      if (!materialPath) return;
+
+      // Ensure element has relative/absolute positioning
+      const pos = window.getComputedStyle(imgEl).position;
+      if (pos === 'static') {
+        imgEl.style.position = 'relative';
+      }
+
+      // Resolve position data path: e.g. "highlights.efficiency.images.main" → "highlights.efficiency.images.position"
+      const pathParts = materialPath.split('.');
+      // Replace last segment with "position"
+      const posPath = [...pathParts.slice(0, -1), 'position'].join('.');
+
+      // Get current values from material
+      const mat = material;
+      const posData = getNestedValue(mat, `${pageKey}.${posPath}`) || {};
+      const currentX = posData.x ?? 50;
+      const currentY = posData.y ?? 50;
+      const currentScale = posData.scale ?? 100;
+
+      const controls = document.createElement('div');
+      controls.className = 'img-position-controls';
+      controls.innerHTML = `
+        <label>X</label>
+        <input type="range" min="0" max="100" value="${currentX}" data-img-ctrl="x" title="Horizontal position">
+        <div class="divider"></div>
+        <label>Y</label>
+        <input type="range" min="0" max="100" value="${currentY}" data-img-ctrl="y" title="Vertical position">
+        <div class="divider"></div>
+        <label>Zoom</label>
+        <input type="range" min="50" max="300" value="${currentScale}" data-img-ctrl="scale" title="Zoom level">
+        <button class="reset-btn" data-img-ctrl="reset">Reset</button>
+      `;
+
+      // Prevent click events from bubbling to parent (avoid triggering image upload overlay, etc.)
+      controls.addEventListener('click', (e) => e.stopPropagation());
+      controls.addEventListener('mouseenter', (e) => e.stopPropagation());
+
+      // Bind range inputs
+      controls.querySelectorAll('input[type="range"]').forEach(input => {
+        const prop = input.getAttribute('data-img-ctrl');
+
+        input.addEventListener('input', () => {
+          const val = parseInt(input.value);
+          applyImagePosition(imgEl, prop, val);
+        });
+
+        input.addEventListener('change', () => {
+          const val = parseInt(input.value);
+          saveImagePosition(posPath, prop, val);
+        });
+      });
+
+      // Reset button
+      controls.querySelector('[data-img-ctrl="reset"]').addEventListener('click', () => {
+        controls.querySelector('[data-img-ctrl="x"]').value = 50;
+        controls.querySelector('[data-img-ctrl="y"]').value = 50;
+        controls.querySelector('[data-img-ctrl="scale"]').value = 100;
+        applyImagePosition(imgEl, 'x', 50);
+        applyImagePosition(imgEl, 'y', 50);
+        applyImagePosition(imgEl, 'scale', 100);
+        saveImagePosition(posPath, 'x', 50);
+        saveImagePosition(posPath, 'y', 50);
+        saveImagePosition(posPath, 'scale', 100);
+      });
+
+      imgEl.appendChild(controls);
+    });
+  }
+
+  function applyImagePosition(el, prop, value) {
+    if (prop === 'x') {
+      const current = el.style.backgroundPosition || '50% 50%';
+      const parts = current.split(' ');
+      el.style.backgroundPosition = `${value}% ${parts[1] || '50%'}`;
+    } else if (prop === 'y') {
+      const current = el.style.backgroundPosition || '50% 50%';
+      const parts = current.split(' ');
+      el.style.backgroundPosition = `${parts[0] || '50%'} ${value}%`;
+    } else if (prop === 'scale') {
+      el.style.backgroundSize = `${value}%`;
+    }
+  }
+
+  function saveImagePosition(posPath, prop, value) {
+    if (!material) return;
+
+    if (window.ModeManager && window.ModeManager.captureSnapshot) {
+      window.ModeManager.captureSnapshot();
+    }
+
+    const fullPath = `${pageKey}.${posPath}`;
+    let posObj = getNestedValue(material, fullPath) || {};
+
+    // Ensure position object exists in material
+    setNestedValue(material, fullPath, { ...posObj, [prop]: value });
+
+    if (window.ModeManager) {
+      window.ModeManager.updateMaterialInMemory(material);
+
+      const state = window.ModeManager.getState();
+      if (state.dataMode === 'online') {
+        window.ModeManager.patchMaterial(fullPath, { ...posObj, [prop]: value });
+      }
+    }
+  }
+
+  function getNestedValue(obj, path) {
+    const keys = path.split('.');
+    let current = obj;
+    for (const key of keys) {
+      if (current == null) return undefined;
+      current = current[key];
+    }
+    return current;
+  }
+
+  function setNestedValue(obj, path, value) {
+    const keys = path.split('.');
+    let current = obj;
+    for (let i = 0; i < keys.length - 1; i++) {
+      if (!current[keys[i]] || typeof current[keys[i]] !== 'object') {
+        current[keys[i]] = {};
+      }
+      current = current[keys[i]];
+    }
+    current[keys[keys.length - 1]] = value;
   }
 
   function formatSectionId(id) {
