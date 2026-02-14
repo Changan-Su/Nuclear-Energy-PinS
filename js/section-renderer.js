@@ -105,6 +105,9 @@ window.SectionRenderer = (function() {
       // Initialize flip cards
       initializeFlipCards();
 
+      // Initialize card-grid expanding detail overlays
+      initializeDetailOverlays();
+
       // Initialize image position controls
       initializeImagePositionControls();
 
@@ -348,8 +351,175 @@ window.SectionRenderer = (function() {
     });
   }
 
+  function initializeDetailOverlays() {
+    const triggers = document.querySelectorAll('.cg-flip-trigger');
+    if (!triggers.length) return;
+
+    let activeState = null;
+
+    /* ====== OPEN: flip in-place → then enlarge to fill grid ====== */
+    function openCard(trigger) {
+      if (activeState) closeCard(true);
+
+      const cardItem = trigger.closest('[data-card-grid-item="true"]');
+      const flipper = cardItem?.querySelector('.cg-flipper');
+      const grid = cardItem?.closest('.card-grid-collection');
+      if (!cardItem || !flipper || !grid) return;
+
+      // 1) Snapshot card geometry BEFORE any DOM change
+      const origTop = cardItem.offsetTop;
+      const origLeft = cardItem.offsetLeft;
+      const origW = cardItem.offsetWidth;
+      const origH = cardItem.offsetHeight;
+
+      // 2) Visual prep: dim siblings, highlight this card
+      grid.classList.add('cg-has-expanded');
+      cardItem.classList.add('cg-active');
+
+      // 3) Phase 1 — Flip (card stays in normal flow, no layout shift)
+      flipper.classList.add('cg-flipped');
+
+      activeState = { cardItem, flipper, grid, placeholder: null, origTop, origLeft, origW, origH };
+
+      // 4) When flip finishes → Phase 2 — Enlarge
+      const inner = flipper.querySelector('.cg-flipper-inner');
+      const onFlipEnd = (e) => {
+        if (e.propertyName !== 'transform') return;
+        inner.removeEventListener('transitionend', onFlipEnd);
+
+        // a) Insert invisible placeholder AFTER card to hold its row space
+        const placeholder = document.createElement('div');
+        placeholder.className = 'cg-placeholder card-grid-item';
+        placeholder.style.height = origH + 'px';
+        cardItem.after(placeholder);
+        activeState.placeholder = placeholder;
+
+        // b) Yank card out of flow at its original position (same paint frame)
+        cardItem.classList.add('cg-enlarging');
+        cardItem.style.top = origTop + 'px';
+        cardItem.style.left = origLeft + 'px';
+        cardItem.style.width = origW + 'px';
+        cardItem.style.height = origH + 'px';
+
+        // c) Force layout so browser registers the starting rect
+        void cardItem.offsetWidth;
+
+        // d) Animate to fill the entire card grid content area (all cards' bounding box)
+        requestAnimationFrame(() => {
+          const allCards = Array.from(grid.querySelectorAll('[data-card-grid-item="true"]'));
+          
+          if (allCards.length === 0) {
+            // Fallback: just use grid dimensions
+            cardItem.style.top = '0px';
+            cardItem.style.left = '0px';
+            cardItem.style.width = grid.clientWidth + 'px';
+            cardItem.style.height = grid.clientHeight + 'px';
+          } else {
+            // Calculate bounding box of all cards (relative to grid)
+            let minTop = Infinity, minLeft = Infinity;
+            let maxBottom = -Infinity, maxRight = -Infinity;
+            
+            allCards.forEach(card => {
+              const top = card.offsetTop;
+              const left = card.offsetLeft;
+              const bottom = top + card.offsetHeight;
+              const right = left + card.offsetWidth;
+              
+              minTop = Math.min(minTop, top);
+              minLeft = Math.min(minLeft, left);
+              maxBottom = Math.max(maxBottom, bottom);
+              maxRight = Math.max(maxRight, right);
+            });
+            
+            cardItem.style.top = minTop + 'px';
+            cardItem.style.left = minLeft + 'px';
+            cardItem.style.width = (maxRight - minLeft) + 'px';
+            cardItem.style.height = (maxBottom - minTop) + 'px';
+          }
+          
+          cardItem.classList.add('cg-enlarged');
+        });
+      };
+      inner.addEventListener('transitionend', onFlipEnd);
+    }
+
+    /* ====== CLOSE: shrink back → flip back → return to flow ====== */
+    function closeCard(immediate) {
+      if (!activeState) return;
+      const { cardItem, flipper, grid, placeholder, origTop, origLeft, origW, origH } = activeState;
+      activeState = null;
+
+      if (immediate) {
+        flipper.classList.remove('cg-flipped');
+        cardItem.classList.remove('cg-active', 'cg-enlarging', 'cg-enlarged');
+        cardItem.style.cssText = '';
+        grid.classList.remove('cg-has-expanded');
+        if (placeholder) placeholder.remove();
+        return;
+      }
+
+      // Phase 1 — Shrink back to original card rect
+      cardItem.classList.remove('cg-enlarged');
+      cardItem.style.top = origTop + 'px';
+      cardItem.style.left = origLeft + 'px';
+      cardItem.style.width = origW + 'px';
+      cardItem.style.height = origH + 'px';
+
+      const onShrinkEnd = (e) => {
+        if (!['top', 'left', 'width', 'height'].includes(e.propertyName)) return;
+        cardItem.removeEventListener('transitionend', onShrinkEnd);
+
+        // Return card to normal flow & remove placeholder
+        cardItem.classList.remove('cg-enlarging');
+        cardItem.style.cssText = '';
+        if (placeholder) placeholder.remove();
+
+        // Phase 2 — Flip back to front face
+        flipper.classList.remove('cg-flipped');
+
+        const inner = flipper.querySelector('.cg-flipper-inner');
+        const onFlipBack = (e2) => {
+          if (e2.propertyName !== 'transform') return;
+          inner.removeEventListener('transitionend', onFlipBack);
+          cardItem.classList.remove('cg-active');
+          grid.classList.remove('cg-has-expanded');
+        };
+        inner.addEventListener('transitionend', onFlipBack);
+      };
+      cardItem.addEventListener('transitionend', onShrinkEnd);
+    }
+
+    /* ====== Event wiring ====== */
+    triggers.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openCard(btn);
+      });
+    });
+
+    document.querySelectorAll('[data-cg-close="true"]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        closeCard(false);
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!activeState) return;
+      if (!activeState.cardItem.contains(e.target)) {
+        closeCard(false);
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeCard(false);
+    });
+  }
+
   function initializeImagePositionControls() {
-    // Add position/scale controls to all image elements with data-material-img
+    // Add position/scale controls to all image elements (including detail banner/end media)
     document.querySelectorAll('[data-material-img]').forEach(imgEl => {
       // Skip if already has controls
       if (imgEl.querySelector('.img-position-controls')) return;

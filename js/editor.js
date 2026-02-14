@@ -11,6 +11,7 @@ window.EditorSystem = (function() {
   let editorSidebar = null;
   let sectionObserver = null;
   let jsZipLoaderPromise = null;
+  let detailBannerTogglesTimeoutId = null;
 
   function enable() {
     if (enabled) return;
@@ -26,6 +27,15 @@ window.EditorSystem = (function() {
     enableSectionToolbars();
     enableImageEditing();
     enableFlipToggles();
+    // Run immediately (controls may already exist) and again after 150ms so all details
+    // (tabbed, card-grid, text-image, accordion) get toggle in bar after position controls mount
+    enableDetailBannerToggles();
+    if (detailBannerTogglesTimeoutId) clearTimeout(detailBannerTogglesTimeoutId);
+    detailBannerTogglesTimeoutId = setTimeout(() => {
+      detailBannerTogglesTimeoutId = null;
+      if (enabled) enableDetailBannerToggles();
+      if (window.lucide) window.lucide.createIcons();
+    }, 150);
     enableCollectionEditors();
     enableReferenceEditing();
     setupAtMentionSystem();
@@ -34,6 +44,10 @@ window.EditorSystem = (function() {
   function disable() {
     if (!enabled) return;
     enabled = false;
+    if (detailBannerTogglesTimeoutId) {
+      clearTimeout(detailBannerTogglesTimeoutId);
+      detailBannerTogglesTimeoutId = null;
+    }
     
     // Remove edit-mode class from body
     document.body.classList.remove('edit-mode');
@@ -45,6 +59,7 @@ window.EditorSystem = (function() {
     disableSectionToolbars();
     disableImageEditing();
     disableFlipToggles();
+    disableDetailBannerToggles();
     disableCollectionEditors();
     disableReferenceEditing();
     cleanupAtMentionSystem();
@@ -508,7 +523,8 @@ window.EditorSystem = (function() {
   }
 
   function enableImageEditing() {
-    const images = document.querySelectorAll('[data-material-img]');
+    // Exclude detail panel media so clicking banner/end image does not open upload.
+    const images = document.querySelectorAll('[data-material-img]:not([data-detail-media="true"])');
     images.forEach(img => {
       img.style.position = 'relative';
       img.style.cursor = 'pointer';
@@ -618,6 +634,75 @@ window.EditorSystem = (function() {
     document.querySelectorAll('.flip-config-controls').forEach(el => el.remove());
   }
 
+  function enableDetailBannerToggles() {
+    // All details (tabbed-content, card-grid, text-image-left/right, accordion) use the same panel + bar
+    const detailPanels = document.querySelectorAll('[data-detail-banner-configurable="true"]');
+    detailPanels.forEach(panel => {
+      const bannerPath = panel.getAttribute('data-detail-banner-path');
+      if (!bannerPath) return;
+      const currentEnabled = panel.getAttribute('data-detail-banner-enabled') !== 'false';
+
+      // Prefer: put toggle in the same bar as position/scale (on detail-banner-media)
+      const bannerMedia = panel.querySelector('.detail-banner-media');
+      const positionBar = bannerMedia ? bannerMedia.querySelector('.img-position-controls') : null;
+
+      if (positionBar && !positionBar.querySelector('.detail-banner-toggle-wrap')) {
+        panel.querySelector('.detail-banner-config-controls')?.remove();
+        const wrap = document.createElement('div');
+        wrap.className = 'detail-banner-toggle-wrap';
+        wrap.innerHTML = `
+          <button type="button" class="img-position-banner-btn ${currentEnabled ? 'active' : ''}" data-detail-banner-action="toggle" title="Show / Hide Banner">
+            <i data-lucide="image" class="w-4 h-4"></i>
+          </button>
+          <div class="divider"></div>
+        `;
+        positionBar.insertBefore(wrap, positionBar.firstChild);
+
+        wrap.addEventListener('click', (event) => {
+          const btn = event.target.closest('[data-detail-banner-action="toggle"]');
+          if (!btn) return;
+          event.preventDefault();
+          event.stopPropagation();
+          if (window.ModeManager.captureSnapshot) window.ModeManager.captureSnapshot();
+          setFlipConfigValue(bannerPath, !currentEnabled);
+          if (window.SectionRenderer && window.SectionRenderer.render) window.SectionRenderer.render();
+          refresh();
+        });
+      } else if (!positionBar && !panel.querySelector('.detail-banner-config-controls')) {
+        // Fallback: floating button when banner is hidden (no .detail-banner-media)
+        const computedPos = window.getComputedStyle(panel).position;
+        if (computedPos === 'static') panel.style.position = 'relative';
+        const controls = document.createElement('div');
+        controls.className = 'flip-config-controls detail-banner-config-controls';
+        controls.innerHTML = `
+          <button class="flip-config-btn ${currentEnabled ? 'active' : ''}" data-detail-banner-action="toggle" title="Show / Hide Details Banner">
+            <i data-lucide="image" class="w-4 h-4"></i>
+          </button>
+        `;
+        controls.addEventListener('click', (event) => {
+          const btn = event.target.closest('[data-detail-banner-action="toggle"]');
+          if (!btn) return;
+          event.preventDefault();
+          event.stopPropagation();
+          if (window.ModeManager.captureSnapshot) window.ModeManager.captureSnapshot();
+          setFlipConfigValue(bannerPath, !currentEnabled);
+          if (window.SectionRenderer && window.SectionRenderer.render) window.SectionRenderer.render();
+          refresh();
+        });
+        panel.appendChild(controls);
+      }
+    });
+
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  }
+
+  function disableDetailBannerToggles() {
+    document.querySelectorAll('.detail-banner-toggle-wrap').forEach(el => el.remove());
+    document.querySelectorAll('.detail-banner-config-controls').forEach(el => el.remove());
+  }
+
   const collectionEditorConfig = {
     'tabbed-content': {
       collectionType: 'tabbed-content',
@@ -716,6 +801,7 @@ window.EditorSystem = (function() {
           description: source.description || '',
           cta: source.cta || 'Learn more',
           detail: source.detail || '',
+          showDetailBanner: source.showDetailBanner !== false,
           flipEnabled: source.flipEnabled !== false,
           flipDirection: source.flipDirection || 'y',
           images: source.images || {}
@@ -749,6 +835,7 @@ window.EditorSystem = (function() {
         description: 'Edit this tab description.',
         cta: 'Learn more',
         detail: 'Add detail content here.',
+        showDetailBanner: true,
         flipEnabled: true,
         flipDirection: 'y',
         images: { main: '' }
@@ -760,6 +847,7 @@ window.EditorSystem = (function() {
         title: `New Card ${nextIndex}`,
         description: 'Edit this card description.',
         detail: 'Add card detail content here.',
+        showDetailBanner: true,
         cta: 'Learn more',
         flipEnabled: false,
         flipDirection: 'y',
@@ -771,6 +859,7 @@ window.EditorSystem = (function() {
       title: `New Item ${nextIndex}`,
       description: 'Edit this accordion item description.',
       detail: 'Add accordion detail content here.',
+      showDetailBanner: true,
       cta: 'Learn more',
       flipEnabled: false,
       flipDirection: 'y'
@@ -1886,7 +1975,6 @@ window.EditorSystem = (function() {
 
     const title = material?.index?.meta?.title || 'Nuclear Energy of Durham PinS';
     const navLogo = material?.index?.nav?.logo || 'Nuclear Energy of Durham PinS';
-    const navLinks = material?.index?.nav?.links || ['Overview', 'Science', 'Benefits', 'Future'];
     const navCta = material?.index?.nav?.cta || 'Ask AI';
 
     return `<!DOCTYPE html>
@@ -1922,10 +2010,12 @@ window.EditorSystem = (function() {
 <body class="font-sans antialiased bg-primary-dark text-text-primaryDark overflow-x-hidden">
     <nav class="fixed top-0 w-full z-50 transition-all duration-300 bg-black/80 backdrop-blur-md border-b border-white/10" id="navbar">
         <div class="max-w-[1440px] mx-auto px-6 h-[52px] flex items-center justify-between">
-            <a href="#" class="text-xl font-semibold tracking-tight text-white hover:opacity-80 transition-opacity">${escapeHtml(navLogo)}</a>
+            <a href="#" class="text-xl font-semibold tracking-tight text-white hover:opacity-80 transition-opacity" data-material="nav.logo">${escapeHtml(navLogo)}</a>
             <div class="hidden md:flex items-center gap-8">
-                ${navLinks.map((link) => `<a href="#${String(link).toLowerCase()}" class="nav-link text-xs text-[#E5E5E5] hover:text-white transition-colors">${escapeHtml(String(link))}</a>`).join('\n                ')}
-                <button id="nav-chat-btn" class="bg-accent-blue text-white text-xs font-medium px-4 py-1.5 rounded-full hover:bg-blue-600 transition-colors">${escapeHtml(navCta)}</button>
+                <div id="nav-links-container" class="flex items-center gap-8">
+                    <!-- Dynamic nav links will be inserted here -->
+                </div>
+                <button id="nav-chat-btn" class="bg-accent-blue text-white text-xs font-medium px-4 py-1.5 rounded-full hover:bg-blue-600 transition-colors" data-material="nav.cta">${escapeHtml(navCta)}</button>
             </div>
         </div>
     </nav>

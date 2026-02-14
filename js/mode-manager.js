@@ -365,23 +365,19 @@ window.ModeManager = (function() {
       }
     }
 
-    // Method 3 (http/https): prefer material.json for canonical data.
-    // Method 3 (file://): prefer embedded JSON to avoid CORS/security restrictions.
+    // Method 3: prefer material.json for canonical data in all environments.
+    // file:// may fail with fetch, so XHR fallback below remains important.
     if (!materialData) {
-      if (isFileProtocol) {
-        materialData = readEmbeddedMaterial();
-      } else {
-        try {
-          const response = await fetch('./material.json');
-          materialData = await response.json();
-        } catch (e) {
-          console.warn('fetch() failed, trying XHR fallback...', e.message);
-        }
+      try {
+        const response = await fetch('./material.json');
+        materialData = await response.json();
+      } catch (e) {
+        console.warn('fetch() failed, trying XHR fallback...', e.message);
       }
     }
 
-    // Method 4: Fallback to XMLHttpRequest (may work in some environments)
-    if (!materialData && !isFileProtocol) {
+    // Method 4: Fallback to XMLHttpRequest (works in many file:// environments)
+    if (!materialData) {
       try {
         materialData = await new Promise((resolve, reject) => {
           const xhr = new XMLHttpRequest();

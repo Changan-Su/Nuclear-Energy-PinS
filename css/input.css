@@ -333,9 +333,165 @@ body.edit-mode #app {
   pointer-events: none;
 }
 
+/* When flipped, front face must not receive clicks so back (detail) receives them */
+.flip-card.flipped .flip-card-front {
+  pointer-events: none;
+}
+
 .flip-card-back .latex-content {
   font-size: 1.125rem;
   line-height: 1.8;
+}
+
+/* Improve readability for long scientific detail text */
+.detail-rich-text {
+  white-space: pre-line;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.detail-rich-text p {
+  margin: 0 0 0.95em 0;
+}
+
+.detail-rich-text p:last-child {
+  margin-bottom: 0;
+}
+
+.detail-content-panel {
+  flex: 1;
+  min-height: 0;
+}
+
+.detail-banner-media {
+  width: 100%;
+  height: 220px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.detail-end-media {
+  width: 100%;
+  min-height: 180px;
+  border-radius: 16px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* ========== Card Grid: Container ========== */
+.card-grid-collection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1440px;
+  padding-left: 120px;
+  padding-right: 120px;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.card-grid-item {
+  width: 100%;
+  height: 560px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  transition: opacity 0.35s ease, filter 0.35s ease;
+}
+
+@media (min-width: 768px) {
+  .card-grid-item {
+    flex: 0 0 calc((100% - 4rem) / 3);
+    max-width: calc((100% - 4rem) / 3);
+    width: calc((100% - 4rem) / 3);
+  }
+}
+
+/* Dim sibling cards when one is expanded */
+.card-grid-collection.cg-has-expanded .card-grid-item {
+  opacity: 0.35;
+  filter: saturate(0.6) brightness(0.7);
+  pointer-events: none;
+}
+.card-grid-collection.cg-has-expanded .card-grid-item.cg-active {
+  opacity: 1;
+  filter: none;
+  pointer-events: auto;
+  z-index: 10;
+}
+
+/* ========== Card Grid: Flip Card ========== */
+.cg-flipper {
+  width: 100%;
+  height: 100%;
+  perspective: 1200px;
+}
+
+.cg-flipper-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.cg-flipper.cg-flipped .cg-flipper-inner {
+  transform: rotateY(180deg);
+}
+
+.cg-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.cg-face-back {
+  transform: rotateY(180deg);
+}
+
+/* When flipped, front face must not receive clicks so back (detail) receives them */
+.cg-flipper.cg-flipped .cg-face-front {
+  pointer-events: none;
+}
+
+/* ========== Card Grid: Enlarge Animation ========== */
+.card-grid-item.cg-active.cg-enlarging {
+  position: absolute;
+  max-width: none;
+  flex: none;
+  transition:
+    top 0.55s cubic-bezier(0.2, 0.9, 0.2, 1),
+    left 0.55s cubic-bezier(0.2, 0.9, 0.2, 1),
+    width 0.55s cubic-bezier(0.2, 0.9, 0.2, 1),
+    height 0.55s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+.card-grid-item.cg-active.cg-enlarging .cg-face-back {
+  overflow-y: auto;
+}
+
+/* Keep the back face's inner container scrollable when enlarged */
+.card-grid-item.cg-active.cg-enlarged .cg-face-back {
+  overflow-y: auto;
+}
+
+/* Placeholder keeps grid height stable when card goes absolute */
+.cg-placeholder {
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .flip-config-controls {
@@ -456,6 +612,37 @@ body.edit-mode .img-position-controls {
   width: 1px;
   height: 20px;
   background: rgba(255, 255, 255, 0.15);
+}
+
+.img-position-controls .detail-banner-toggle-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.img-position-controls .img-position-banner-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 28px;
+  padding: 0 6px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.img-position-controls .img-position-banner-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.img-position-controls .img-position-banner-btn.active {
+  background: rgba(34, 211, 238, 0.24);
+  color: #67e8f9;
 }
 
 .img-position-controls .reset-btn {

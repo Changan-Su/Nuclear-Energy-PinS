@@ -230,7 +230,6 @@ window.OfflineSiteSaver = (function() {
 
     const title = material?.index?.meta?.title || 'Nuclear Energy of Durham PinS';
     const navLogo = material?.index?.nav?.logo || 'Nuclear Energy of Durham PinS';
-    const navLinks = material?.index?.nav?.links || ['Overview', 'Science', 'Benefits', 'Future'];
     const navCta = material?.index?.nav?.cta || 'Ask AI';
 
     return `<!DOCTYPE html>
@@ -266,10 +265,12 @@ window.OfflineSiteSaver = (function() {
 <body class="font-sans antialiased bg-primary-dark text-text-primaryDark overflow-x-hidden">
     <nav class="fixed top-0 w-full z-50 transition-all duration-300 bg-black/80 backdrop-blur-md border-b border-white/10" id="navbar">
         <div class="max-w-[1440px] mx-auto px-6 h-[52px] flex items-center justify-between">
-            <a href="#" class="text-xl font-semibold tracking-tight text-white hover:opacity-80 transition-opacity">${escapeHtml(navLogo)}</a>
+            <a href="#" class="text-xl font-semibold tracking-tight text-white hover:opacity-80 transition-opacity" data-material="nav.logo">${escapeHtml(navLogo)}</a>
             <div class="hidden md:flex items-center gap-8">
-                ${navLinks.map((link) => `<a href="#${String(link).toLowerCase()}" class="nav-link text-xs text-[#E5E5E5] hover:text-white transition-colors">${escapeHtml(String(link))}</a>`).join('\n                ')}
-                <button id="nav-chat-btn" class="bg-accent-blue text-white text-xs font-medium px-4 py-1.5 rounded-full hover:bg-blue-600 transition-colors">${escapeHtml(navCta)}</button>
+                <div id="nav-links-container" class="flex items-center gap-8">
+                    <!-- Dynamic nav links will be inserted here -->
+                </div>
+                <button id="nav-chat-btn" class="bg-accent-blue text-white text-xs font-medium px-4 py-1.5 rounded-full hover:bg-blue-600 transition-colors" data-material="nav.cta">${escapeHtml(navCta)}</button>
             </div>
         </div>
     </nav>
