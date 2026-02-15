@@ -155,6 +155,46 @@ window.TemplateRegistry = (function() {
     `;
   }
 
+  function renderDetailBlocks(blocks, detailBlocksPath = '') {
+    if (!Array.isArray(blocks) || blocks.length === 0) {
+      return 'Detail content goes here. Click to edit in edit mode.';
+    }
+    
+    return blocks.map((block, index) => {
+      if (block.type === 'text') {
+        const blockPath = detailBlocksPath ? `${detailBlocksPath}.${index}.content` : '';
+        return `<div class="detail-text-block" data-block-index="${index}" ${blockPath ? `data-material="${blockPath}"` : ''}>${block.content || ''}</div>`;
+      } else if (block.type === 'image') {
+        const width = block.width || 600;
+        return `
+          <div class="detail-media-block" data-block-index="${index}" data-media-type="image">
+            <div class="detail-media-wrapper" style="width: ${width}px;">
+              <img src="${block.url}" alt="" class="detail-media-content" />
+              <div class="detail-media-resize-handle edit-mode-only"></div>
+              <button class="detail-media-delete edit-mode-only" data-block-index="${index}">
+                <i data-lucide="x" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      } else if (block.type === 'video') {
+        const width = block.width || 800;
+        return `
+          <div class="detail-media-block" data-block-index="${index}" data-media-type="video">
+            <div class="detail-media-wrapper" style="width: ${width}px;">
+              <video src="${block.url}" class="detail-media-content" controls></video>
+              <div class="detail-media-resize-handle edit-mode-only"></div>
+              <button class="detail-media-delete edit-mode-only" data-block-index="${index}">
+                <i data-lucide="x" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+      return '';
+    }).join('');
+  }
+
   function normalizeLegacyComparisonTable(raw) {
     if (!raw) return raw;
     const normalized = String(raw).replace(/\r\n/g, '\n');
@@ -289,6 +329,8 @@ window.TemplateRegistry = (function() {
       titlePath,
       detail,
       detailPath,
+      detailBlocks,
+      detailBlocksPath,
       showBanner = true,
       detailBannerPath = '',
       detailRichTextClass = '',
@@ -304,16 +346,29 @@ window.TemplateRegistry = (function() {
     } = options;
 
     const closeTarget = closeTargetValue ? `${closeTargetAttr}="${closeTargetValue}"` : '';
-    const detailMaterialAttr = detailIsHtml
-      ? `data-material="${detailPath}" data-ref-content="true"`
-      : `data-material="${detailPath}"`;
+    
+    // Determine content to render
+    let detailContent;
+    let detailMaterialAttr;
+    
+    if (Array.isArray(detailBlocks) && detailBlocks.length > 0) {
+      // Use detailBlocks if available
+      detailContent = renderDetailBlocks(detailBlocks, detailBlocksPath);
+      detailMaterialAttr = detailBlocksPath ? `data-material="${detailBlocksPath}"` : '';
+    } else {
+      // Fallback to old detail string
+      detailMaterialAttr = detailIsHtml
+        ? `data-material="${detailPath}" data-ref-content="true"`
+        : `data-material="${detailPath}"`;
+      detailContent = detailIsHtml
+        ? (detail || 'Detail content goes here. Click to edit in edit mode.')
+        : (detail || 'Detail content goes here. Click to edit in edit mode.');
+    }
+    
     const bannerEnabled = showBanner !== false;
     const bannerControlAttrs = detailBannerPath
       ? `data-detail-banner-configurable="true" data-detail-banner-path="${detailBannerPath}" data-detail-banner-enabled="${bannerEnabled ? 'true' : 'false'}"`
       : '';
-    const detailContent = detailIsHtml
-      ? (detail || 'Detail content goes here. Click to edit in edit mode.')
-      : (detail || 'Detail content goes here. Click to edit in edit mode.');
 
     return `
       <div class="detail-content-wrap w-full h-full flex flex-col" ${bannerControlAttrs}>
@@ -351,6 +406,8 @@ window.TemplateRegistry = (function() {
       titlePath,
       detail,
       detailPath,
+      detailBlocks,
+      detailBlocksPath,
       bannerImageUrl = '',
       bannerImagePath = '',
       detailBannerPath = '',
@@ -389,6 +446,8 @@ window.TemplateRegistry = (function() {
                 titlePath,
                 detail,
                 detailPath,
+                detailBlocks,
+                detailBlocksPath,
                 showBanner,
                 detailBannerPath,
                 backPanelClass,
@@ -577,6 +636,8 @@ window.TemplateRegistry = (function() {
             titlePath: `highlights.items.${i}.title`,
             detail: item.detail || '',
             detailPath: `highlights.items.${i}.detail`,
+            detailBlocks: item.detailBlocks,
+            detailBlocksPath: `highlights.items.${i}.detailBlocks`,
             bannerImageUrl: imgUrl,
             bannerImagePath: `highlights.items.${i}.images.main`,
             detailBannerPath: `highlights.items.${i}.showDetailBanner`,
@@ -757,6 +818,8 @@ window.TemplateRegistry = (function() {
             titlePath: `${sectionId}.title`,
             detail: data.detail || '',
             detailPath: `${sectionId}.detail`,
+            detailBlocks: data.detailBlocks,
+            detailBlocksPath: `${sectionId}.detailBlocks`,
             bannerImageUrl: imgUrl,
             bannerImagePath: `${sectionId}.images.main`,
             detailBannerPath: `${sectionId}.showDetailBanner`,
@@ -822,6 +885,8 @@ window.TemplateRegistry = (function() {
             titlePath: `${sectionId}.title`,
             detail: data.detail || '',
             detailPath: `${sectionId}.detail`,
+            detailBlocks: data.detailBlocks,
+            detailBlocksPath: `${sectionId}.detailBlocks`,
             bannerImageUrl: imgUrl,
             bannerImagePath: `${sectionId}.images.main`,
             detailBannerPath: `${sectionId}.showDetailBanner`,
@@ -883,6 +948,8 @@ window.TemplateRegistry = (function() {
               titlePath: `closerLook.features.${i}.title`,
               detail: feature.detail || '',
               detailPath: `closerLook.features.${i}.detail`,
+              detailBlocks: feature.detailBlocks,
+              detailBlocksPath: `closerLook.features.${i}.detailBlocks`,
               bannerImageUrl: imgUrl,
               bannerImagePath: 'closerLook.images.reactor',
               detailBannerPath: `closerLook.features.${i}.showDetailBanner`,
@@ -924,6 +991,91 @@ window.TemplateRegistry = (function() {
               <div class="text-center">
                 <h3 class="text-xl font-semibold text-text-primaryLight" data-material="closerLook.reactorLabel">${data.reactorLabel || ''}</h3>
                 <p class="text-text-muted" data-material="closerLook.reactorHint">${data.reactorHint || ''}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  // Interactive Details Template (Dark)
+  function interactiveDetailsTemplate(sectionId, data, material) {
+    const items = data.items || [];
+
+    const itemsHtml = items.map((item, i) => {
+      const isFirst = i === 0;
+      return `
+        <div class="id-item group cursor-pointer border-b border-white/10 py-6 ${isFirst ? 'active' : ''}"
+             data-id-item="${i}"
+             data-collection-item="true"
+             data-collection-type="interactive-details"
+             data-collection-path="${sectionId}.items"
+             data-item-index="${i}">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-[28px] font-semibold ${isFirst ? 'text-white' : 'text-white/50'} group-hover:text-white transition-colors duration-300"
+                data-material="${sectionId}.items.${i}.title">${item.title || ''}</h3>
+            <i data-lucide="${isFirst ? 'chevron-down' : 'chevron-right'}"
+               class="w-6 h-6 ${isFirst ? 'text-white' : 'text-white/30'} group-hover:text-white/70 transition-all duration-300 flex-shrink-0"></i>
+          </div>
+          <div class="id-item-desc text-[17px] text-white/60 leading-relaxed ${isFirst ? 'id-item-desc--open' : ''} transition-all duration-500 ease-out"
+               data-material="${sectionId}.items.${i}.description">
+            ${item.description || ''}
+          </div>
+        </div>
+      `;
+    }).join('\n');
+
+    // Build detail panels for the right side - each has its own background
+    const detailPanelsHtml = items.map((item, i) => {
+      const isFirst = i === 0;
+      
+      // Render detail content - support both detailBlocks and plain detail
+      let detailContent;
+      if (Array.isArray(item.detailBlocks) && item.detailBlocks.length > 0) {
+        detailContent = renderDetailBlocks(item.detailBlocks, `${sectionId}.items.${i}.detailBlocks`);
+      } else {
+        detailContent = item.detail || 'Detail content goes here.';
+      }
+      
+      return `
+        <div class="id-detail-panel ${isFirst ? 'id-detail-panel--active' : ''} bg-surface-dark rounded-[32px]"
+             data-id-detail="${i}"
+             data-panel-index="${i}">
+          <div class="w-full h-full p-[60px] overflow-y-auto flex flex-col gap-6">
+            <div class="detail-rich-text text-[19px] text-white/80 font-normal leading-[1.6] latex-content flex-1 min-h-0 overflow-y-auto pr-2"
+                 data-material="${sectionId}.items.${i}.detail">
+              ${detailContent}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('\n');
+
+    return `
+      <section id="${sectionId}" class="w-full bg-black py-[120px]">
+        <div class="max-w-[1440px] mx-auto px-[120px]">
+          ${data.headline ? `<h2 class="text-[64px] font-semibold text-white leading-[1.05] mb-[80px] fade-in-up" data-material="${sectionId}.headline">${data.headline}</h2>` : ''}
+          <div class="flex gap-[80px] items-start">
+            <div class="w-[500px] flex flex-col fade-in-up"
+                 data-id-list="${sectionId}"
+                 data-collection-container="true"
+                 data-collection-type="interactive-details"
+                 data-collection-path="${sectionId}.items">
+              ${itemsHtml}
+            </div>
+
+            <div class="flex-1 h-[600px] relative overflow-visible fade-in-up id-detail-container-wrapper"
+                 style="transition-delay: 0.2s;">
+              <div class="id-detail-container w-full h-full shadow-2xl shadow-black/40 rounded-[32px] relative overflow-hidden"
+                   data-id-detail-container="${sectionId}"
+                   data-animation="flip-y"
+                   data-current-index="0"
+                   data-total-panels="${items.length}">
+                <div class="id-detail-flipper w-full h-full absolute inset-0"
+                     data-id-flipper="${sectionId}">
+                  ${detailPanelsHtml}
+                </div>
               </div>
             </div>
           </div>
@@ -1103,6 +1255,7 @@ window.TemplateRegistry = (function() {
     'accordion': accordionTemplate,
     'ai-chat': aiChatTemplate,
     'quiz': quizTemplate,
+    'interactive-details': interactiveDetailsTemplate,
     'image-gallery': imageGalleryTemplate,
     'footer': footerTemplate
   };

@@ -102,6 +102,9 @@ window.SectionRenderer = (function() {
       // Reinitialize accordion
       initializeAccordion();
 
+      // Initialize interactive details
+      initializeInteractiveDetails();
+
       // Initialize flip cards
       initializeFlipCards();
 
@@ -260,6 +263,132 @@ window.SectionRenderer = (function() {
         if (window.lucide) {
           window.lucide.createIcons();
         }
+      });
+    });
+  }
+
+  function initializeInteractiveDetails() {
+    const lists = document.querySelectorAll('[data-id-list]');
+
+    lists.forEach(list => {
+      const sectionId = list.getAttribute('data-id-list');
+      const container = document.querySelector(`[data-id-detail-container="${sectionId}"]`);
+      if (!container) return;
+
+      const items = list.querySelectorAll('.id-item');
+      const panels = container.querySelectorAll('.id-detail-panel');
+      let currentIndex = 0;
+      let isAnimating = false;
+
+      items.forEach(item => {
+        item.addEventListener('click', () => {
+          const targetIndex = parseInt(item.getAttribute('data-id-item'), 10);
+          if (targetIndex === currentIndex || isAnimating) return;
+
+          isAnimating = true;
+
+          // --- Update left side: collapse old, expand new ---
+          items.forEach(it => {
+            it.classList.remove('active');
+            const title = it.querySelector('h3');
+            const desc = it.querySelector('.id-item-desc');
+            const icon = it.querySelector('i');
+
+            if (title) {
+              title.classList.remove('text-white');
+              title.classList.add('text-white/50');
+            }
+            if (desc) {
+              desc.classList.remove('id-item-desc--open');
+            }
+            if (icon) {
+              icon.setAttribute('data-lucide', 'chevron-right');
+              icon.classList.remove('text-white');
+              icon.classList.add('text-white/30');
+            }
+          });
+
+          item.classList.add('active');
+          const newTitle = item.querySelector('h3');
+          const newDesc = item.querySelector('.id-item-desc');
+          const newIcon = item.querySelector('i');
+
+          if (newTitle) {
+            newTitle.classList.add('text-white');
+            newTitle.classList.remove('text-white/50');
+          }
+          if (newDesc) {
+            newDesc.classList.add('id-item-desc--open');
+          }
+          if (newIcon) {
+            newIcon.setAttribute('data-lucide', 'chevron-down');
+            newIcon.classList.add('text-white');
+            newIcon.classList.remove('text-white/30');
+          }
+
+          // Refresh Lucide icons
+          if (window.lucide) {
+            window.lucide.createIcons();
+          }
+
+          // --- Animation logic based on animation type ---
+          const animationType = container.getAttribute('data-animation') || 'flip-y';
+          const currentPanel = panels[currentIndex];
+          const targetPanel = panels[targetIndex];
+          if (!currentPanel || !targetPanel) {
+            isAnimating = false;
+            return;
+          }
+
+          if (animationType === 'cube-y' || animationType === 'cube-x') {
+            // Cube animation: update data-current-index to trigger CSS rotation
+            container.setAttribute('data-current-index', targetIndex);
+            
+            // Update active panel immediately
+            currentPanel.classList.remove('id-detail-panel--active');
+            targetPanel.classList.add('id-detail-panel--active');
+            currentIndex = targetIndex;
+
+            // Wait for rotation to complete
+            setTimeout(() => {
+              isAnimating = false;
+
+              // Render LaTeX in new panel if available
+              if (window.LatexRenderer && window.LatexRenderer.renderAll) {
+                window.LatexRenderer.renderAll();
+              }
+            }, 700); // Match CSS transition duration
+
+          } else {
+            // Flip animation: flip out current, flip in target
+            currentPanel.classList.remove('id-detail-panel--active');
+            currentPanel.classList.add('id-detail-panel--flip-out');
+
+            const onFlipOutEnd = () => {
+              currentPanel.removeEventListener('animationend', onFlipOutEnd);
+              currentPanel.classList.remove('id-detail-panel--flip-out');
+
+              targetPanel.classList.add('id-detail-panel--flip-in');
+
+              const onFlipInEnd = () => {
+                targetPanel.removeEventListener('animationend', onFlipInEnd);
+                targetPanel.classList.remove('id-detail-panel--flip-in');
+                targetPanel.classList.add('id-detail-panel--active');
+                currentIndex = targetIndex;
+                isAnimating = false;
+
+                // Render LaTeX in new panel if available
+                if (window.LatexRenderer && window.LatexRenderer.renderAll) {
+                  window.LatexRenderer.renderAll();
+                }
+              };
+
+              targetPanel.addEventListener('animationend', onFlipInEnd);
+            };
+
+            currentPanel.addEventListener('animationend', onFlipOutEnd);
+          }
+        });
       });
     });
   }

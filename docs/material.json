@@ -17,45 +17,51 @@
         "name": "Fission Introduction"
       },
       {
+        "id": "MSR",
+        "template": "interactive-details",
+        "enabled": true,
+        "order": 2
+      },
+      {
         "id": "features",
         "template": "card-grid",
         "enabled": true,
-        "order": 2,
+        "order": 3,
         "name": "Benefits"
       },
       {
         "id": "safety",
         "template": "text-image-left",
         "enabled": true,
-        "order": 3,
+        "order": 4,
         "name": "Safety"
       },
       {
         "id": "sustainability",
         "template": "text-image-right",
         "enabled": true,
-        "order": 4,
+        "order": 5,
         "name": "Sustainability"
       },
       {
         "id": "innovation",
         "template": "text-image-left",
         "enabled": true,
-        "order": 5,
+        "order": 6,
         "name": "Innovation"
       },
       {
         "id": "closerLook",
         "template": "accordion",
         "enabled": true,
-        "order": 6,
+        "order": 7,
         "name": "Closer Look"
       },
       {
         "id": "aiChat",
         "template": "ai-chat",
         "enabled": true,
-        "order": 7,
+        "order": 8,
         "name": "Ask AI"
       }
     ]
@@ -490,6 +496,26 @@
       },
       "githubLinkText": "View on GitHub",
       "credits": "Designed by "
+    },
+    "MSR": {
+      "headline": "Alternative Fission Design - Molten Salt Reactors (MSRs)",
+      "items": [
+        {
+          "title": "1. What are MSRs?",
+          "description": "An alternative fission reactor design using molten salts as fuel carrier, coolant, moderator, or some combination.",
+          "detail": "<h5 class='detail-subtitle'>Section</h5><p>1. What are MSRs?</p>\n\n<h5 class='detail-subtitle'>Key Sentences</h5><ul><li>Fission based reactors have a massive range of different designs, each having their own advantages and disadvantages over the others.</li><li>One of the most interesting and potentially advantageous of these designs is molten salt reactors.</li><li>Molten Salt Reactors are an alternative design of fission reactor to the currently used LWRs.</li><li>They use molten salts, often fluoride based such as Lithium-Beryllium Fluoride, for some significant part of the reactor, such as carrying the fuel or acting as a coolant or moderator.</li><li>The 3 primary classes of MSRs are – Graphite based, Homogeneous, Heterogeneous.</li></ul>\n\n<h5 class='detail-subtitle'>Details</h5><p><strong>Summary for Main Page –</strong></p><p>Fission based reactors have a massive range of different designs, each having their own advantages and disadvantages over the others. One of the most interesting and potentially advantageous of these designs is molten salt reactors.</p><p>These types of reactors use molten salt within the core for a variety of purposes such as carrying the fuel or acting as a coolant or moderator, or some combination of these, and it is the molten salt that allows for significant advantages over standard reactors, while also providing major engineering challenges.</p><p><strong>What are MSRs?</strong></p><p>Molten Salt Reactors are an alternative design of fission reactor to the currently used LWRs. They use molten salts, often fluoride based such as Lithium-Beryllium Fluoride, for some significant part of the reactor, such as carrying the fuel or acting as a coolant or moderator. They are significantly more complicated than standard reactors, requiring complicated plumbing for the salt to be properly cycled, however have massive benefits, such as increased efficiency and significantly reduced waste, over standard reactors.</p><p>There are various designs possible, using different salts, moderators, neutron speeds etc. Classifications were formalized in 2023s IAEA-TRS-489 MSR technology report [1] pg. 32</p><p>The 3 primary classes of MSRs are –</p><ul><li><strong>Graphite based</strong>: There is a presence of graphite in the core i.e. as a moderator.</li><li><strong>Homogeneous</strong>: There are no structural materials separating the fuel salt and coolant/moderator in the core. I.e. the core is filled entirely by the fuel salt</li><li><strong>Heterogeneous</strong>: There are structural materials separating the fuel salt from the coolant/moderator.</li></ul><p>Other reactors designs exist outside these classes, but the majority of designs and research are encapsulated by these 3.</p><p>Within the classes themselves, there are more sub-classes based on what salts/fuel type the reactors use etc., the below graphic from the 2024 Gen IV International Forum (GIF) [2] pg. 21showing some of these. Other diagrams are available on page 36 and 37 of the IAEA report that goes into more detail [1].</p>"
+        },
+        {
+          "title": "2. How MSRs Work",
+          "description": "Same fission physics as LWRs, but molten salt enables fuel pumping, cleaning, and safety mechanisms such as freeze-plug draining.",
+          "detail": "<h5 class='detail-subtitle'>Section</h5><p>2. How MSRs Work</p>\n\n<h5 class='detail-subtitle'>Key Sentences</h5><ul><li>MSRs are similar to standard reactors in that fissile material is placed into a reactor, undergoes nuclear fission, releasing energy and excess neutrons that continue this chain reaction.</li><li>The primary difference of MSRs is that molten salts have a significant role in the function of the reactor.</li><li>The majority use molten salt as a solvent for the fuel, allowing it to be pumped around the system, allowing various operations such as cleaning the fuel of fission products, or using a ‘freeze plug’ to drain the core if the temperature gets too high.</li></ul>\n\n<h5 class='detail-subtitle'>Details</h5><h5 class='detail-subtitle'>Similarities to LWRs</h5><p>MSRs are similar to standard reactors in that fissile material is placed into a reactor, undergoes nuclear fission (splitting into 2 smaller, more stable, nuclei with a small mass deficit, md), releasing energy (given by E = mdc2, assuming constant kinetic energy during the reaction), and excess neutrons that cause fission in other nuclei to continue this chain reaction until there is not enough fissile material left in the reactor, compared to the amount of other material (such as fission products, moderator or coolant), causing this chain reaction to slow and become inefficient. The energy produced is absorbed by the coolant, which is pumped through a heat exchanger, boiling water and rotating a turbine so generate electricity. (see more about standard reactors and nuclear fission here <a href='#highlights'>Fission Introduction</a>)</p>\n\n<h5 class='detail-subtitle'>Differences to LWRs</h5><p>The primary difference of MSRs is that, as the name suggests, molten salts have a significant role in the function of the reactor. The majority use molten salt as a solvent for the fuel, allowing it to be pumped around the system, allowing various operations such as cleaning the fuel of fission products, or using a ‘freeze plug’ to drain the core if the temperature gets too high.</p>"
+        },
+        {
+          "title": "3. Benefits and challenges",
+          "description": "Recycling/cleaning, alternative fuel cycles, passive safety and waste advantages—plus the key engineering challenges holding deployment back.",
+          "detail": "<h5 class='detail-subtitle'>Section</h5><p>3. Benefits and challenges</p>\n\n<h5 class='detail-subtitle'>Key Sentences</h5><ul><li>The primary benefits of these types of reactors are due to additional capabilities that standard reactors are unable to complete such as fuel recycling/cleaning, alternative fuel sources, increased passive safety, and reduced/less dangerous waste and byproducts.</li><li>While the base physics behind MSRs is understood and proven, due to their design complexity, they have various engineering and technical challenges that has prevented the technology being used on a larger scale.</li><li>These challenges include reactor longevity and fuel cleaning / reprocessing.</li></ul>\n\n<h5 class='detail-subtitle'>Details</h5><p>The mechanics and engineering behind each MSR design significantly vary due to different material choices, capability goals, fuel choice etc., but the primary benefits of these types of reactors are due to additional capabilities that standard reactors are unable to complete such as –</p><ul><li><strong>Fuel Recycling / cleaning</strong></li><li><strong>Alternative fuel sources</strong></li><li><strong>Increased Passive Safety</strong></li><li><strong>Reduced/less dangerous waste and byproducts</strong></li></ul>\n\n<h5 class='detail-subtitle'>Fuel Recycling / Cleaning</h5><p>The majority of designs incorporate built in chemical processing of the molten salts, removing fission products that would absorb thermal neutrons instead of fuel nuclei, meaning the reactor can work longer without needing refuelling to maintain sufficient power output and will be more efficient as less neutrons are wasted by being absorbed by other nuclei aside from the fuel.</p>\n\n<h5 class='detail-subtitle'>Alternative Fuel Sources</h5><p>While MSRs still require fissile fuel, the same as LWRs, some designs include built in breeder circuits, where non fissile material is converted into fissile material, which then is dissolved into the salt and used as fuel. Some designs place these circuits surrounding the core, using neutrons from the fission reactions to produce more fuel for the reactions. One example of this is Thorium-232, which decays naturally once it absorbs a neutron through to Uranium-233, which is fissile and used as fuel inside the core itself.</p><p>Uranium-233 produces an average of 2.50 ± 0.03 thermal neutrons per fission[3]. These neutrons are used either to continue fission or, in designs with fertile material surrounding the core, starting this decay chain again to produce more Uranium.</p><p>Other designs use a similar method to recycle spent fuel from other reactors and from itself as all actinides (elements usually found in spent nuclear fuel) can be used by an MSR, either within a breeder or the core itself. [2] pg17.</p>\n\n<h5 class='detail-subtitle'>Increased Passive Safety</h5><p>MSRs have various intrinsic safety features that LWRs can’t meet due to differences in designs. For example, MSRs work at near atmospheric pressures, meaning should components become damaged, nuclear material is significantly less likely to be dispersed over a wide area, rather than just the area of the damage. Also, these lower pressures mean the components are under less mechanical pressure and so are less likely to catastrophically fail in the first place.</p><p>Another example is due to the properties of the salt, as it heats, it reduces the reactivity of the core, regardless of what task(s) it is performing. For example, as the salt expands as it heats, separating the fissile nuclei so fewer neutrons reach other nuclei at thermal speeds and so reactivity decreases. This gives MSRs a strong negative reactivity-temperature coefficient, providing higher core stability and allowing for passive reactor shutdown if the temperature rises too high.</p>\n\n<h5 class='detail-subtitle'>Reduced / Less Dangerous Waste and Byproducts</h5><p>As mentioned, MSRs are able to make use of all Actinide elements in some way or another, which are commonly found in spent nuclear fuel. This ability to use spent fuel means that the eventual waste/byproducts of MSRs is significantly less radioactive than that of other types of reactors. A consequence of this is that the byproducts of MSRs cannot be used as nuclear weapons at the same scale or effectiveness as LWRs or other reactors. The UK National Nuclear Laboratory produced the following graphic demonstrating the closed fuel cycle that MSRs allow (MSR part is in green).</p>\n\n<h5 class='detail-subtitle'>Challenges surrounding MSRs</h5><p>While the base physics behind MSRs is understood and proven, due to their design complexity, they have various engineering and technical challenges that has prevented the technology being used on a larger scale. These challenges include –</p><ul><li><strong>Reactor Longevity</strong>: Due to the corrosivity of molten salts, the pipes and other reactor parts are estimated to require replacement approximately every 5-7 years.</li><li><strong>Fuel Cleaning</strong>: Effective removal of byproducts is a major difficulty in MSR designs. For gaseous waste, the mixture of various byproducts causes standard filters to become clogged, more effective designs must be designed to prevent build up, significantly decreasing efficiency over time. For solid/liquid waste, the options are either to replace the salt as a whole, massively increasing the overall waste of the reactor (open fuel cycles), or by reprocessing the fuel salt either in small batches frequently or in its entirety every few years, both having their technical challenges for optimizing the fuel use and power generation of the reactor (closed fuel cycles).</li></ul>\n\n<h5 class='detail-subtitle'>References</h5><ol class='detail-reference-list'><li class='detail-reference-item'><a class='detail-reference-link' href='https://www-pub.iaea.org/MTCD/Publications/PDF/STI-DOC-010-489_web.pdf' target='_blank' rel='noopener noreferrer'>https://www-pub.iaea.org/MTCD/Publications/PDF/STI-DOC-010-489_web.pdf</a> (Feb 12 26)</li><li class='detail-reference-item'><a class='detail-reference-link' href='https://www.gen-4.org/resources/webinars/education-and-training-series-97-overview-and-update-msr-activities-within-gif' target='_blank' rel='noopener noreferrer'>https://www.gen-4.org/resources/webinars/education-and-training-series-97-overview-and-update-msr-activities-within-gif</a> (Feb 13, 26)</li><li class='detail-reference-item'>Gordeeva, L.D., Smirenkin, G.N. An empirical formula for the average number of fission neutrons. At Energy 14, 562–566 (1964) <a class='detail-reference-link' href='https://doi.org/10.1007/BF01119969' target='_blank' rel='noopener noreferrer'>https://doi.org/10.1007/BF01119969</a> (Feb 13, 26)</li></ol>"
+        }
+      ]
     }
   },
   "admin": {

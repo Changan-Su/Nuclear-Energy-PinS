@@ -27,6 +27,7 @@ window.EditorSystem = (function() {
     enableSectionToolbars();
     enableImageEditing();
     enableFlipToggles();
+    enableInteractiveDetailsAnimationSelector();
     // Run immediately (controls may already exist) and again after 150ms so all details
     // (tabbed, card-grid, text-image, accordion) get toggle in bar after position controls mount
     enableDetailBannerToggles();
@@ -39,6 +40,9 @@ window.EditorSystem = (function() {
     enableCollectionEditors();
     enableReferenceEditing();
     setupAtMentionSystem();
+    setupSlashCommandSystem();
+    setupCitationClickHandlers();
+    initMediaResizeHandlers();
   }
 
   function disable() {
@@ -59,10 +63,13 @@ window.EditorSystem = (function() {
     disableSectionToolbars();
     disableImageEditing();
     disableFlipToggles();
+    disableInteractiveDetailsAnimationSelector();
     disableDetailBannerToggles();
     disableCollectionEditors();
     disableReferenceEditing();
     cleanupAtMentionSystem();
+    cleanupSlashCommandSystem();
+    removeCitationClickHandlers();
   }
 
   function createEditToolbar() {
@@ -634,6 +641,51 @@ window.EditorSystem = (function() {
     document.querySelectorAll('.flip-config-controls').forEach(el => el.remove());
   }
 
+  function enableInteractiveDetailsAnimationSelector() {
+    const containers = document.querySelectorAll('.id-detail-container');
+    
+    containers.forEach(container => {
+      if (container.querySelector('.id-animation-selector')) return;
+
+      const currentAnimation = container.getAttribute('data-animation') || 'flip-y';
+      
+      const selector = document.createElement('div');
+      selector.className = 'id-animation-selector edit-mode-only';
+      selector.innerHTML = `
+        <button class="id-anim-btn ${currentAnimation === 'flip-y' ? 'active' : ''}" data-anim="flip-y" title="Y轴翻转">
+          <span style="display:inline-block;transform:rotateY(30deg)">⟲</span>
+        </button>
+        <button class="id-anim-btn ${currentAnimation === 'flip-x' ? 'active' : ''}" data-anim="flip-x" title="X轴翻转">
+          <span style="display:inline-block;transform:rotateX(30deg)">⟲</span>
+        </button>
+        <button class="id-anim-btn ${currentAnimation === 'cube-y' ? 'active' : ''}" data-anim="cube-y" title="立方体Y轴">
+          <span style="display:inline-block;">🔄</span>
+        </button>
+        <button class="id-anim-btn ${currentAnimation === 'cube-x' ? 'active' : ''}" data-anim="cube-x" title="立方体X轴">
+          <span style="display:inline-block;transform:rotate(90deg)">🔄</span>
+        </button>
+      `;
+      
+      selector.querySelectorAll('.id-anim-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const animType = btn.getAttribute('data-anim');
+          container.setAttribute('data-animation', animType);
+          
+          // Update active state
+          selector.querySelectorAll('.id-anim-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+      
+      container.appendChild(selector);
+    });
+  }
+
+  function disableInteractiveDetailsAnimationSelector() {
+    document.querySelectorAll('.id-animation-selector').forEach(el => el.remove());
+  }
+
   function enableDetailBannerToggles() {
     // All details (tabbed-content, card-grid, text-image-left/right, accordion) use the same panel + bar
     const detailPanels = document.querySelectorAll('[data-detail-banner-configurable="true"]');
@@ -721,6 +773,11 @@ window.EditorSystem = (function() {
       path: 'closerLook.features',
       addLabel: 'Add Item',
       minItems: 1
+    },
+    'interactive-details': {
+      collectionType: 'interactive-details',
+      addLabel: 'Add Item',
+      minItems: 1
     }
   };
 
@@ -732,6 +789,8 @@ window.EditorSystem = (function() {
       if (!config) return;
 
       const container = section.querySelector(`[data-collection-container="true"][data-collection-type="${config.collectionType}"]`);
+      // Prefer dynamic path from DOM attribute, fall back to static config path
+      const collectionPath = (container && container.getAttribute('data-collection-path')) || config.path;
       if (container && !container.querySelector('.collection-add-btn')) {
         const addBtn = document.createElement('button');
         addBtn.className = 'collection-add-btn edit-mode-only px-3 py-1.5 rounded-full border border-white/20 text-white/85 text-xs font-medium hover:bg-white/10 transition-colors flex items-center gap-1.5';
@@ -739,7 +798,7 @@ window.EditorSystem = (function() {
         addBtn.addEventListener('click', (event) => {
           event.preventDefault();
           event.stopPropagation();
-          handleAddCollectionItem(template, config.path);
+          handleAddCollectionItem(template, collectionPath);
         });
         container.appendChild(addBtn);
       }
@@ -763,7 +822,7 @@ window.EditorSystem = (function() {
           event.preventDefault();
           event.stopPropagation();
           const itemIndex = parseInt(deleteBtn.getAttribute('data-delete-index'), 10);
-          handleDeleteCollectionItem(template, config.path, itemIndex, config.minItems);
+          handleDeleteCollectionItem(template, collectionPath, itemIndex, config.minItems);
         });
         item.appendChild(deleteBtn);
       });
@@ -852,6 +911,14 @@ window.EditorSystem = (function() {
         flipEnabled: false,
         flipDirection: 'y',
         image: ''
+      };
+    }
+
+    if (template === 'interactive-details') {
+      return {
+        title: `Topic ${nextIndex}`,
+        description: 'A brief overview of this topic. Click to see full details on the right.',
+        detail: 'Full detailed content goes here.\n\nYou can write **Markdown** content with multiple paragraphs, lists, and more.'
       };
     }
 
@@ -1241,6 +1308,29 @@ window.EditorSystem = (function() {
           <rect x="70" y="120" width="60" height="10" rx="5" ${accentFill}/>
         </svg>
       `,
+      'interactive-details': `
+        <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
+          <rect width="320" height="180" fill="#0a0a0a"/>
+          <rect x="20" y="30" width="100" height="120" rx="4" fill="none"/>
+          <rect x="24" y="38" width="55" height="7" rx="3" fill="#eee"/>
+          <rect x="24" y="50" width="80" height="4" rx="2" fill="#555"/>
+          <rect x="24" y="58" width="70" height="4" rx="2" fill="#555"/>
+          <line x1="24" y1="70" x2="116" y2="70" stroke="#333" stroke-width="0.5"/>
+          <rect x="24" y="78" width="50" height="7" rx="3" fill="#666"/>
+          <line x1="24" y1="93" x2="116" y2="93" stroke="#333" stroke-width="0.5"/>
+          <rect x="24" y="101" width="60" height="7" rx="3" fill="#666"/>
+          <line x1="24" y1="116" x2="116" y2="116" stroke="#333" stroke-width="0.5"/>
+          <rect x="24" y="124" width="45" height="7" rx="3" fill="#666"/>
+          <rect x="140" y="30" width="160" height="120" rx="8" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+          <rect x="155" y="48" width="80" height="8" rx="3" fill="#ccc"/>
+          <rect x="155" y="64" width="24" height="2" rx="1" ${accentFill}/>
+          <rect x="155" y="76" width="120" height="4" rx="2" fill="#555"/>
+          <rect x="155" y="86" width="110" height="4" rx="2" fill="#444"/>
+          <rect x="155" y="96" width="115" height="4" rx="2" fill="#444"/>
+          <rect x="155" y="106" width="100" height="4" rx="2" fill="#444"/>
+          <rect x="17" y="35" width="3" height="30" rx="1.5" fill="#3b82f6"/>
+        </svg>
+      `,
       'image-gallery': `
         <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
           <rect width="320" height="180" fill="#1a1a1a"/>
@@ -1563,6 +1653,16 @@ window.EditorSystem = (function() {
         reactorLabel: 'Interactive Diagram',
         reactorHint: 'Click features to explore',
         images: { reactor: '' }
+      };
+    }
+    if (template === 'interactive-details') {
+      return {
+        headline: 'Explore The Details.',
+        items: [
+          createDefaultCollectionItem('interactive-details', 0),
+          createDefaultCollectionItem('interactive-details', 1),
+          createDefaultCollectionItem('interactive-details', 2)
+        ]
       };
     }
     return {
@@ -2669,6 +2769,640 @@ window.EditorSystem = (function() {
     setTimeout(() => {
       refElement.classList.remove('ref-highlight');
     }, 2000);
+  }
+
+  // ========== Slash Command System ==========
+  
+  let commandDropdown = null;
+  let commandListeners = [];
+  let selectedCommandIndex = 0;
+  let commandTargetElement = null;
+  let commandRange = null;
+  
+  const COMMANDS = [
+    { id: 'image', label: 'Insert Image', icon: 'image', description: 'Upload and insert an image' },
+    { id: 'video', label: 'Insert Video', icon: 'video', description: 'Upload and insert a video' }
+  ];
+  
+  function setupSlashCommandSystem() {
+    // Add keyup listener to all detail editable elements
+    const detailElements = document.querySelectorAll('[data-material*="detail"][contenteditable="true"]');
+    
+    detailElements.forEach(el => {
+      const listener = (e) => handleSlashKeyup(e, el);
+      el.addEventListener('keyup', listener);
+      commandListeners.push({ el, listener });
+    });
+  }
+  
+  function cleanupSlashCommandSystem() {
+    // Remove all listeners
+    commandListeners.forEach(({ el, listener }) => {
+      el.removeEventListener('keyup', listener);
+    });
+    commandListeners = [];
+    
+    // Remove dropdown if exists
+    if (commandDropdown) {
+      commandDropdown.remove();
+      commandDropdown = null;
+    }
+  }
+  
+  function handleSlashKeyup(event, element) {
+    const key = event.key;
+    
+    // Handle dropdown navigation if dropdown is open
+    if (commandDropdown) {
+      if (key === 'Escape') {
+        closeCommandDropdown();
+        return;
+      } else if (key === 'ArrowDown') {
+        event.preventDefault();
+        navigateCommandDropdown(1);
+        return;
+      } else if (key === 'ArrowUp') {
+        event.preventDefault();
+        navigateCommandDropdown(-1);
+        return;
+      } else if (key === 'Enter') {
+        event.preventDefault();
+        selectCurrentCommand();
+        return;
+      }
+    }
+    
+    // Check caret and text context for '/' trigger
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return;
+    
+    const range = selection.getRangeAt(0);
+
+    // Direct trigger for newly typed '/'
+    if (key === '/') {
+      showCommandDropdown(range, element);
+      return;
+    }
+
+    // Robust detection: inspect full text before caret
+    if (hasRecentSlashBeforeCaret(range, element, 20)) {
+      showCommandDropdown(range, element);
+    } else {
+      if (commandDropdown) closeCommandDropdown();
+    }
+  }
+
+  function hasRecentSlashBeforeCaret(caretRange, rootElement, maxDistance) {
+    try {
+      const preRange = caretRange.cloneRange();
+      preRange.selectNodeContents(rootElement);
+      preRange.setEnd(caretRange.endContainer, caretRange.endOffset);
+      const textBeforeCaret = preRange.toString();
+      const slashIndex = textBeforeCaret.lastIndexOf('/');
+      if (slashIndex === -1) return false;
+      return (textBeforeCaret.length - slashIndex) <= maxDistance;
+    } catch (error) {
+      return false;
+    }
+  }
+  
+  function showCommandDropdown(range, element) {
+    // Create or update dropdown
+    if (!commandDropdown) {
+      commandDropdown = document.createElement('div');
+      commandDropdown.className = 'command-dropdown';
+      document.body.appendChild(commandDropdown);
+      
+      // Close on click outside
+      document.addEventListener('click', handleClickOutsideCommand);
+    }
+    commandTargetElement = element;
+    commandRange = range.cloneRange();
+    
+    // Populate dropdown
+    commandDropdown.innerHTML = COMMANDS.map((cmd, index) => {
+      return `
+        <div class="command-dropdown-item ${index === 0 ? 'selected' : ''}" data-command-id="${cmd.id}" data-command-index="${index}">
+          <i data-lucide="${cmd.icon}" class="command-dropdown-item-icon"></i>
+          <div class="command-dropdown-item-content">
+            <div class="command-dropdown-item-label">${cmd.label}</div>
+            <div class="command-dropdown-item-desc">${cmd.description}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    selectedCommandIndex = 0;
+    
+    // Initialize icons
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+    
+    // Bind click handlers
+    commandDropdown.querySelectorAll('.command-dropdown-item').forEach(item => {
+      item.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+      });
+      item.addEventListener('click', () => {
+        const cmdId = item.getAttribute('data-command-id');
+        executeCommand(cmdId, commandTargetElement);
+      });
+    });
+    
+    // Position dropdown at caret
+    const point = getCaretViewportPoint(range, element);
+    const dropdownWidth = 320;
+    const padding = 12;
+    const left = Math.max(
+      padding,
+      Math.min(point.x, window.innerWidth - dropdownWidth - padding)
+    );
+    const top = Math.min(point.y + 8, window.innerHeight - 16);
+
+    commandDropdown.style.position = 'fixed';
+    commandDropdown.style.left = `${left}px`;
+    commandDropdown.style.top = `${top}px`;
+    commandDropdown.style.minWidth = `${dropdownWidth}px`;
+  }
+  
+  function navigateCommandDropdown(direction) {
+    if (!commandDropdown) return;
+    
+    const items = commandDropdown.querySelectorAll('.command-dropdown-item');
+    if (items.length === 0) return;
+    
+    // Remove current selection
+    items[selectedCommandIndex].classList.remove('selected');
+    
+    // Update index
+    selectedCommandIndex += direction;
+    if (selectedCommandIndex < 0) selectedCommandIndex = items.length - 1;
+    if (selectedCommandIndex >= items.length) selectedCommandIndex = 0;
+    
+    // Add new selection
+    items[selectedCommandIndex].classList.add('selected');
+    
+    // Scroll into view
+    items[selectedCommandIndex].scrollIntoView({ block: 'nearest' });
+  }
+  
+  function selectCurrentCommand() {
+    if (!commandDropdown) return;
+    
+    const items = commandDropdown.querySelectorAll('.command-dropdown-item');
+    if (items.length === 0) return;
+    
+    const selectedItem = items[selectedCommandIndex];
+    const cmdId = selectedItem.getAttribute('data-command-id');
+    
+    executeCommand(cmdId, commandTargetElement);
+  }
+  
+  function executeCommand(commandId, element) {
+    if (commandId === 'image') {
+      triggerMediaUpload('image', element);
+    } else if (commandId === 'video') {
+      triggerMediaUpload('video', element);
+    }
+    
+    closeCommandDropdown();
+  }
+  
+  function triggerMediaUpload(mediaType, element) {
+    // Create hidden file input
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = mediaType === 'image' ? 'image/*' : 'video/*';
+    input.style.display = 'none';
+    
+    input.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      
+      try {
+        // Show loading indicator
+        showUploadingIndicator(element);
+        
+        // Upload file
+        const uploadResult = await uploadMediaFile(file);
+        
+        if (uploadResult.success) {
+          // Insert media block
+          await insertMediaBlock(mediaType, uploadResult.url, element);
+          hideUploadingIndicator(element);
+        } else {
+          hideUploadingIndicator(element);
+          alert(`Failed to upload ${mediaType}: ${uploadResult.error || 'Unknown error'}`);
+        }
+      } catch (error) {
+        hideUploadingIndicator(element);
+        console.error('Media upload error:', error);
+        alert(`Failed to upload ${mediaType}: ${error.message}`);
+      }
+      
+      // Clean up input
+      input.remove();
+    });
+    
+    // Trigger file picker
+    document.body.appendChild(input);
+    input.click();
+  }
+  
+  async function uploadMediaFile(file) {
+    const formData = new FormData();
+    formData.append('media', file);
+    
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        return { success: false, error: errorText || 'Upload failed' };
+      }
+      
+      const result = await response.json();
+      return { success: true, url: result.url };
+    } catch (error) {
+      console.error('Upload error:', error);
+      return { success: false, error: error.message };
+    }
+  }
+  
+  async function insertMediaBlock(mediaType, mediaUrl, element) {
+    // Get material path from element
+    const materialPath = element.getAttribute('data-material');
+    if (!materialPath) {
+      console.error('No material path found on element');
+      return;
+    }
+    
+    console.log('Material path:', materialPath);
+    
+    // Get current material and navigate to parent
+    const material = window.ModeManager.getMaterial();
+    const parent = navigateToParentByPath(material, materialPath);
+    
+    if (!parent) {
+      console.error('Failed to navigate to parent object');
+      return;
+    }
+    
+    console.log('Parent object found:', parent);
+    
+    // Initialize detailBlocks if not exists
+    if (!Array.isArray(parent.detailBlocks)) {
+      // Migrate existing detail text to detailBlocks
+      if (parent.detail && typeof parent.detail === 'string') {
+        parent.detailBlocks = [
+          { type: 'text', content: parent.detail }
+        ];
+      } else {
+        parent.detailBlocks = [];
+      }
+    }
+    
+    // Add media block
+    parent.detailBlocks.push({
+      type: mediaType,
+      url: mediaUrl,
+      width: mediaType === 'image' ? 600 : 800
+    });
+    
+    console.log('Updated detailBlocks:', parent.detailBlocks);
+    
+    // Update material
+    window.ModeManager.updateMaterialInMemory(material);
+    
+    // Re-render the detail content
+    await refreshDetailDisplay(element, parent);
+    
+    // Mark as modified
+    element.dispatchEvent(new Event('blur'));
+  }
+  
+  async function refreshDetailDisplay(element, parentData) {
+    // Find the detail content container
+    const detailContainer = element.closest('.detail-rich-text');
+    if (!detailContainer) {
+      console.error('Detail container not found');
+      return;
+    }
+    
+    // Use provided parent data or fetch from material
+    let data = parentData;
+    
+    if (!data) {
+      const materialPath = element.getAttribute('data-material');
+      const material = window.ModeManager.getMaterial();
+      
+      // Parse path to get the data
+      const pathParts = materialPath.split('.');
+      data = material;
+      
+      for (let i = 0; i < pathParts.length - 1; i++) {
+        const key = pathParts[i];
+        if (!isNaN(key)) {
+          data = data[parseInt(key)];
+        } else {
+          data = data[key];
+        }
+        if (!data) {
+          console.error('Data not found at path:', pathParts.slice(0, i + 1).join('.'));
+          return;
+        }
+      }
+    }
+    
+    // Render detailBlocks
+    const newContent = renderDetailBlocks(data.detailBlocks || []);
+    detailContainer.innerHTML = newContent;
+    
+    // Re-initialize media resize handlers
+    initMediaResizeHandlers();
+    
+    // Re-initialize icons
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  }
+  
+  function renderDetailBlocks(blocks) {
+    if (!Array.isArray(blocks) || blocks.length === 0) {
+      return 'Detail content goes here. Click to edit in edit mode.';
+    }
+    
+    return blocks.map((block, index) => {
+      if (block.type === 'text') {
+        return `<div class="detail-text-block" data-block-index="${index}">${block.content || ''}</div>`;
+      } else if (block.type === 'image') {
+        const width = block.width || 600;
+        return `
+          <div class="detail-media-block" data-block-index="${index}" data-media-type="image">
+            <div class="detail-media-wrapper" style="width: ${width}px;">
+              <img src="${block.url}" alt="" class="detail-media-content" />
+              <div class="detail-media-resize-handle"></div>
+              <button class="detail-media-delete edit-mode-only" data-block-index="${index}">
+                <i data-lucide="x" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      } else if (block.type === 'video') {
+        const width = block.width || 800;
+        return `
+          <div class="detail-media-block" data-block-index="${index}" data-media-type="video">
+            <div class="detail-media-wrapper" style="width: ${width}px;">
+              <video src="${block.url}" class="detail-media-content" controls></video>
+              <div class="detail-media-resize-handle"></div>
+              <button class="detail-media-delete edit-mode-only" data-block-index="${index}">
+                <i data-lucide="x" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+      return '';
+    }).join('');
+  }
+  
+  function showUploadingIndicator(element) {
+    const container = element.closest('.detail-rich-text');
+    if (!container) return;
+    
+    const indicator = document.createElement('div');
+    indicator.className = 'upload-indicator';
+    indicator.innerHTML = `
+      <div class="upload-indicator-content">
+        <div class="upload-spinner"></div>
+        <span>Uploading...</span>
+      </div>
+    `;
+    container.appendChild(indicator);
+  }
+  
+  function hideUploadingIndicator(element) {
+    const container = element.closest('.detail-rich-text');
+    if (!container) return;
+    
+    const indicator = container.querySelector('.upload-indicator');
+    if (indicator) {
+      indicator.remove();
+    }
+  }
+  
+  function closeCommandDropdown() {
+    if (commandDropdown) {
+      commandDropdown.remove();
+      commandDropdown = null;
+      document.removeEventListener('click', handleClickOutsideCommand);
+    }
+    commandTargetElement = null;
+    commandRange = null;
+  }
+  
+  function handleClickOutsideCommand(event) {
+    if (commandDropdown && !commandDropdown.contains(event.target)) {
+      closeCommandDropdown();
+    }
+  }
+
+  // ========== Media Resize Handlers ==========
+  
+  let resizeState = null;
+  
+  /**
+   * Helper function to navigate material path with automatic 'index' prefix detection
+   * Returns the parent object that contains the data
+   */
+  function navigateToParentByPath(material, materialPath) {
+    const pathParts = materialPath.split('.');
+    let parent = material;
+    const parentPath = [];
+    
+    // Check if we need to add 'index' prefix
+    const firstPart = pathParts[0];
+    if (!parent[firstPart] && parent.index && parent.index[firstPart]) {
+      parent = parent.index;
+      parentPath.push('index');
+    }
+    
+    // Navigate through the path (excluding the last part which is usually 'detail')
+    for (let i = 0; i < pathParts.length - 1; i++) {
+      const key = pathParts[i];
+      
+      // Handle array indices
+      if (!isNaN(key)) {
+        const index = parseInt(key);
+        if (!Array.isArray(parent)) {
+          console.error(`Expected array at ${parentPath.join('.')}, got:`, typeof parent);
+          return null;
+        }
+        parent = parent[index];
+        parentPath.push(`[${index}]`);
+      } else {
+        if (!parent[key]) {
+          console.error(`Path not found: ${parentPath.join('.')}.${key}`);
+          console.error('Available keys:', Object.keys(parent));
+          return null;
+        }
+        parent = parent[key];
+        parentPath.push(key);
+      }
+    }
+    
+    return parent;
+  }
+  
+  function initMediaResizeHandlers() {
+    // Clean up old handlers
+    document.removeEventListener('mousedown', handleResizeStart);
+    document.removeEventListener('mousemove', handleResizeMove);
+    document.removeEventListener('mouseup', handleResizeEnd);
+    
+    // Add new handlers
+    document.addEventListener('mousedown', handleResizeStart);
+    document.addEventListener('mousemove', handleResizeMove);
+    document.addEventListener('mouseup', handleResizeEnd);
+    
+    // Add delete button handlers
+    document.querySelectorAll('.detail-media-delete').forEach(btn => {
+      btn.addEventListener('click', handleMediaDelete);
+    });
+  }
+  
+  function handleResizeStart(e) {
+    const handle = e.target.closest('.detail-media-resize-handle');
+    if (!handle) return;
+    
+    const wrapper = handle.closest('.detail-media-wrapper');
+    const block = handle.closest('.detail-media-block');
+    if (!wrapper || !block) return;
+    
+    e.preventDefault();
+    
+    resizeState = {
+      wrapper,
+      block,
+      startX: e.clientX,
+      startWidth: wrapper.offsetWidth
+    };
+  }
+  
+  function handleResizeMove(e) {
+    if (!resizeState) return;
+    
+    e.preventDefault();
+    
+    const deltaX = e.clientX - resizeState.startX;
+    const newWidth = Math.max(200, Math.min(1200, resizeState.startWidth + deltaX));
+    
+    resizeState.wrapper.style.width = `${newWidth}px`;
+  }
+  
+  function handleResizeEnd(e) {
+    if (!resizeState) return;
+    
+    const finalWidth = parseInt(resizeState.wrapper.style.width);
+    const blockIndex = parseInt(resizeState.block.getAttribute('data-block-index'));
+    
+    // Update material with new width
+    updateMediaBlockWidth(resizeState.block, blockIndex, finalWidth);
+    
+    resizeState = null;
+  }
+  
+  function updateMediaBlockWidth(blockElement, blockIndex, newWidth) {
+    // Find the detail container and get material path
+    const detailContainer = blockElement.closest('.detail-rich-text');
+    if (!detailContainer) {
+      console.error('Detail container not found');
+      return;
+    }
+    
+    const materialPath = detailContainer.getAttribute('data-material');
+    if (!materialPath) {
+      console.error('Material path not found');
+      return;
+    }
+    
+    console.log('Updating width for block:', blockIndex, 'to:', newWidth, 'path:', materialPath);
+    
+    // Get material and navigate to parent
+    const material = window.ModeManager.getMaterial();
+    const parent = navigateToParentByPath(material, materialPath);
+    
+    if (!parent) {
+      console.error('Failed to navigate to parent object');
+      return;
+    }
+    
+    // Update the block width
+    if (parent.detailBlocks && parent.detailBlocks[blockIndex]) {
+      parent.detailBlocks[blockIndex].width = newWidth;
+      window.ModeManager.updateMaterialInMemory(material);
+      console.log('Width updated successfully');
+    } else {
+      console.error('Block not found at index:', blockIndex);
+    }
+  }
+  
+  function handleMediaDelete(e) {
+    const btn = e.target.closest('.detail-media-delete');
+    if (!btn) return;
+    
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const blockIndex = parseInt(btn.getAttribute('data-block-index'));
+    const block = btn.closest('.detail-media-block');
+    const detailContainer = block.closest('.detail-rich-text');
+    
+    if (!detailContainer) {
+      console.error('Detail container not found');
+      return;
+    }
+    
+    const materialPath = detailContainer.getAttribute('data-material');
+    if (!materialPath) {
+      console.error('Material path not found');
+      return;
+    }
+    
+    console.log('Deleting block at index:', blockIndex, 'path:', materialPath);
+    
+    // Get material and navigate to parent
+    const material = window.ModeManager.getMaterial();
+    const parent = navigateToParentByPath(material, materialPath);
+    
+    if (!parent) {
+      console.error('Failed to navigate to parent object');
+      return;
+    }
+    
+    // Remove the block
+    if (parent.detailBlocks && parent.detailBlocks[blockIndex]) {
+      console.log('Removing block:', parent.detailBlocks[blockIndex]);
+      parent.detailBlocks.splice(blockIndex, 1);
+      window.ModeManager.updateMaterialInMemory(material);
+      
+      // Re-render
+      const newContent = renderDetailBlocks(parent.detailBlocks);
+      detailContainer.innerHTML = newContent;
+      initMediaResizeHandlers();
+      
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+      
+      console.log('Block deleted successfully');
+    } else {
+      console.error('Block not found at index:', blockIndex);
+    }
   }
 
   // ========== Folder Management UI ==========

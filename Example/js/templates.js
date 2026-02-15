@@ -46,6 +46,350 @@ window.TemplateRegistry = (function() {
     `;
   }
 
+  function renderDetailMedia(url, materialPath, variant = 'banner') {
+    if (!url) return '';
+    const targetClass = variant === 'banner' ? 'detail-banner-media' : 'detail-end-media';
+    const materialAttr = materialPath ? `data-material-img="${materialPath}"` : '';
+    const detailMediaAttr = 'data-detail-media="true"';
+
+    if (isVideoUrl(url)) {
+      return `
+        <div class="${targetClass}" ${materialAttr} ${detailMediaAttr}>
+          <video
+            src="${url}"
+            class="w-full h-full object-cover"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            data-material-video="true"
+          ></video>
+        </div>
+      `;
+    }
+
+    return `<div class="${targetClass}" style="background-image: url('${url}');" ${materialAttr} ${detailMediaAttr}></div>`;
+  }
+
+  function splitTableCells(line) {
+    return line
+      .trim()
+      .replace(/^\|/, '')
+      .replace(/\|$/, '')
+      .split('|')
+      .map(cell => cell.trim());
+  }
+
+  function isTableSeparatorLine(line) {
+    if (!line) return false;
+    const normalized = line.trim();
+    return /^[:|\-\s]+$/.test(normalized) && normalized.includes('-');
+  }
+
+  function renderMarkdownTable(lines, startIndex) {
+    const headerLine = lines[startIndex];
+    const separatorLine = lines[startIndex + 1];
+    if (!headerLine || !separatorLine) return null;
+    if (!headerLine.includes('|') || !isTableSeparatorLine(separatorLine)) return null;
+
+    const headers = splitTableCells(headerLine);
+    if (headers.length < 2) return null;
+
+    const bodyRows = [];
+    let cursor = startIndex + 2;
+    while (cursor < lines.length) {
+      const rowLine = lines[cursor];
+      if (!rowLine || !rowLine.includes('|')) break;
+      const cells = splitTableCells(rowLine);
+      if (cells.length < 2) break;
+      bodyRows.push(cells);
+      cursor += 1;
+    }
+
+    if (!bodyRows.length) return null;
+
+    const headerHtml = headers.map(cell => `<th>${cell}</th>`).join('');
+    const bodyHtml = bodyRows
+      .map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`)
+      .join('');
+
+    return {
+      endIndex: cursor - 1,
+      html: `
+        <div class="detail-table-wrap">
+          <table class="detail-table">
+            <thead><tr>${headerHtml}</tr></thead>
+            <tbody>${bodyHtml}</tbody>
+          </table>
+        </div>
+      `
+    };
+  }
+
+  function renderCardReferences(references, referencesPath = '') {
+    if (!Array.isArray(references) || !references.length) return '';
+
+    const listHtml = references.map((entry, index) => {
+      const ref = typeof entry === 'string' ? { text: entry } : (entry || {});
+      const text = String(ref.text || '').trim();
+      const url = String(ref.url || '').trim();
+      const hasUrl = /^https?:\/\//.test(url);
+      const textPath = referencesPath ? `${referencesPath}.${index}.text` : '';
+      const urlHtml = hasUrl
+        ? ` <a href="${url}" target="_blank" rel="noopener noreferrer" class="detail-reference-link">${url}</a>`
+        : '';
+
+      return `
+        <li class="detail-reference-item">
+          <span ${textPath ? `data-material="${textPath}"` : ''}>${text}</span>${urlHtml}
+        </li>
+      `;
+    }).join('');
+
+    return `
+      <div class="detail-reference-block">
+        <h5 class="detail-subtitle">References</h5>
+        <ol class="detail-reference-list">${listHtml}</ol>
+      </div>
+    `;
+  }
+
+  function renderDetailBlocks(blocks, detailBlocksPath = '') {
+    if (!Array.isArray(blocks) || blocks.length === 0) {
+      return 'Detail content goes here. Click to edit in edit mode.';
+    }
+    
+    return blocks.map((block, index) => {
+      if (block.type === 'text') {
+        const blockPath = detailBlocksPath ? `${detailBlocksPath}.${index}.content` : '';
+        return `<div class="detail-text-block" data-block-index="${index}" ${blockPath ? `data-material="${blockPath}"` : ''}>${block.content || ''}</div>`;
+      } else if (block.type === 'image') {
+        const width = block.width || 600;
+        return `
+          <div class="detail-media-block" data-block-index="${index}" data-media-type="image">
+            <div class="detail-media-wrapper" style="width: ${width}px;">
+              <img src="${block.url}" alt="" class="detail-media-content" />
+              <div class="detail-media-resize-handle edit-mode-only"></div>
+              <button class="detail-media-delete edit-mode-only" data-block-index="${index}">
+                <i data-lucide="x" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      } else if (block.type === 'video') {
+        const width = block.width || 800;
+        return `
+          <div class="detail-media-block" data-block-index="${index}" data-media-type="video">
+            <div class="detail-media-wrapper" style="width: ${width}px;">
+              <video src="${block.url}" class="detail-media-content" controls></video>
+              <div class="detail-media-resize-handle edit-mode-only"></div>
+              <button class="detail-media-delete edit-mode-only" data-block-index="${index}">
+                <i data-lucide="x" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+      return '';
+    }).join('');
+  }
+
+  function normalizeLegacyComparisonTable(raw) {
+    if (!raw) return raw;
+    const normalized = String(raw).replace(/\r\n/g, '\n');
+    if (!/Feature\s*\n\s*Nuclear\s*\n\s*Renewables/i.test(normalized)) return normalized;
+    if (normalized.includes('---|---|---')) return normalized;
+
+    const lines = normalized.split('\n');
+    const start = lines.findIndex((line, idx) => {
+      const a = line.trim().toLowerCase();
+      const b = (lines[idx + 1] || '').trim().toLowerCase();
+      const c = (lines[idx + 2] || '').trim().toLowerCase();
+      return a === 'feature' && b === 'nuclear' && c === 'renewables';
+    });
+    if (start < 0) return normalized;
+
+    let i = start + 3;
+    const rows = [];
+    while (i < lines.length) {
+      while (i < lines.length && !lines[i].trim()) i += 1;
+      if (i >= lines.length) break;
+
+      const c1 = (lines[i] || '').trim();
+      const c2 = (lines[i + 1] || '').trim();
+      const c3 = (lines[i + 2] || '').trim();
+      const stopToken = c1.toLowerCase();
+      if (
+        !c1 || !c2 || !c3 ||
+        stopToken.startsWith('societal views') ||
+        stopToken.startsWith('public perception') ||
+        stopToken.startsWith('the choice between')
+      ) {
+        break;
+      }
+
+      rows.push([c1, c2, c3]);
+      i += 3;
+    }
+
+    if (!rows.length) return normalized;
+
+    const tableLines = [
+      'Feature | Nuclear | Renewables',
+      '---|---|---',
+      ...rows.map((r) => `${r[0]} | ${r[1]} | ${r[2]}`)
+    ];
+
+    const before = lines.slice(0, start).join('\n').trim();
+    const after = lines.slice(i).join('\n').trim();
+    const parts = [];
+    if (before) parts.push(before);
+    parts.push(tableLines.join('\n'));
+    if (after) parts.push(after);
+    return parts.join('\n\n');
+  }
+
+  function hasExistingReferenceBlock(html) {
+    if (!html || typeof html !== 'string') return false;
+    return /detail-reference-block|detail-reference-list/i.test(html);
+  }
+
+  function formatCardGridDetail(detail, references, referencesPath) {
+    const raw = normalizeLegacyComparisonTable(String(detail || '')).trim();
+    if (!raw) return 'Detail content goes here. Click to edit in edit mode.';
+
+    if (/<(p|ul|ol|li|table|div|h\d|blockquote|pre|code)\b/i.test(raw)) {
+      if (hasExistingReferenceBlock(raw)) return raw;
+      return `${raw}${renderCardReferences(references, referencesPath)}`;
+    }
+
+    const lines = raw.split('\n');
+    const blocks = [];
+    let paragraph = [];
+    let listItems = [];
+
+    function flushParagraph() {
+      if (!paragraph.length) return;
+      blocks.push(`<p>${paragraph.join(' ')}</p>`);
+      paragraph = [];
+    }
+
+    function flushList() {
+      if (!listItems.length) return;
+      const listHtml = listItems.map(item => `<li>${item}</li>`).join('');
+      blocks.push(`<ul>${listHtml}</ul>`);
+      listItems = [];
+    }
+
+    for (let i = 0; i < lines.length; i += 1) {
+      const line = lines[i];
+      const trimmed = line.trim();
+      if (!trimmed) {
+        flushParagraph();
+        flushList();
+        continue;
+      }
+
+      const parsedTable = renderMarkdownTable(lines, i);
+      if (parsedTable) {
+        flushParagraph();
+        flushList();
+        blocks.push(parsedTable.html);
+        i = parsedTable.endIndex;
+        continue;
+      }
+
+      if (/^[-*•]\s+/.test(trimmed)) {
+        flushParagraph();
+        listItems.push(trimmed.replace(/^[-*•]\s+/, ''));
+        continue;
+      }
+
+      if (/:$/.test(trimmed) && trimmed.length <= 64) {
+        flushParagraph();
+        flushList();
+        blocks.push(`<h5 class="detail-subtitle">${trimmed.replace(/:$/, '')}</h5>`);
+        continue;
+      }
+
+      flushList();
+      paragraph.push(trimmed);
+    }
+
+    flushParagraph();
+    flushList();
+
+    return `${blocks.join('')}${renderCardReferences(references, referencesPath)}`;
+  }
+
+  function renderDetailContent(options) {
+    const {
+      title,
+      titlePath,
+      detail,
+      detailPath,
+      detailBlocks,
+      detailBlocksPath,
+      showBanner = true,
+      detailBannerPath = '',
+      detailRichTextClass = '',
+      detailIsHtml = false,
+      backPanelClass = 'w-full h-full p-[60px] flex flex-col justify-center gap-6 overflow-y-auto',
+      closeButtonClass = 'flip-back-trigger',
+      closeTargetAttr = 'data-flip-target',
+      closeTargetValue = '',
+      bannerImageUrl = '',
+      bannerImagePath = '',
+      detailEndImageUrl = '',
+      detailEndImagePath = ''
+    } = options;
+
+    const closeTarget = closeTargetValue ? `${closeTargetAttr}="${closeTargetValue}"` : '';
+    
+    // Determine content to render
+    let detailContent;
+    let detailMaterialAttr;
+    
+    if (Array.isArray(detailBlocks) && detailBlocks.length > 0) {
+      // Use detailBlocks if available
+      detailContent = renderDetailBlocks(detailBlocks, detailBlocksPath);
+      detailMaterialAttr = detailBlocksPath ? `data-material="${detailBlocksPath}"` : '';
+    } else {
+      // Fallback to old detail string
+      detailMaterialAttr = detailIsHtml
+        ? `data-material="${detailPath}" data-ref-content="true"`
+        : `data-material="${detailPath}"`;
+      detailContent = detailIsHtml
+        ? (detail || 'Detail content goes here. Click to edit in edit mode.')
+        : (detail || 'Detail content goes here. Click to edit in edit mode.');
+    }
+    
+    const bannerEnabled = showBanner !== false;
+    const bannerControlAttrs = detailBannerPath
+      ? `data-detail-banner-configurable="true" data-detail-banner-path="${detailBannerPath}" data-detail-banner-enabled="${bannerEnabled ? 'true' : 'false'}"`
+      : '';
+
+    return `
+      <div class="detail-content-wrap w-full h-full flex flex-col" ${bannerControlAttrs}>
+        ${bannerEnabled ? renderDetailMedia(bannerImageUrl, bannerImagePath, 'banner') : ''}
+        <div class="${backPanelClass} detail-content-panel">
+          <div class="flex items-center justify-between gap-4">
+            <h4 class="text-[36px] font-semibold text-white leading-tight" data-material="${titlePath}">${title || ''}</h4>
+            <button class="${closeButtonClass} flex-shrink-0 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center" ${closeTarget}>
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <div class="w-16 h-[2px] bg-accent-blue"></div>
+          <div class="detail-rich-text ${detailRichTextClass} text-lg text-text-muted/90 font-normal leading-relaxed latex-content flex-1 min-h-0 overflow-y-auto pr-2" style="max-height:100%;" ${detailMaterialAttr}>
+            ${detailContent}
+          </div>
+          ${renderDetailMedia(detailEndImageUrl, detailEndImagePath, 'end')}
+        </div>
+      </div>
+    `;
+  }
+
   function normalizeFlipDirection(direction) {
     return direction === 'x' ? 'x' : 'y';
   }
@@ -56,11 +400,19 @@ window.TemplateRegistry = (function() {
       flipPath,
       flipEnabled,
       flipDirection,
+      showBanner = true,
       frontHtml,
       title,
       titlePath,
       detail,
       detailPath,
+      detailBlocks,
+      detailBlocksPath,
+      bannerImageUrl = '',
+      bannerImagePath = '',
+      detailBannerPath = '',
+      detailEndImageUrl = '',
+      detailEndImagePath = '',
       wrapperClass = '',
       frontShellClass = 'h-full',
       backShellClass = 'h-full',
@@ -89,18 +441,24 @@ window.TemplateRegistry = (function() {
           </div>
           <div class="flip-card-back">
             <div class="flip-card-face-shell ${backShellClass}">
-              <div class="${backPanelClass}">
-                <div class="flex items-center justify-between gap-4">
-                  <h4 class="text-[36px] font-semibold text-white leading-tight" data-material="${titlePath}">${title || ''}</h4>
-                  <button class="flip-back-trigger flex-shrink-0 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center" data-flip-target="${flipKey}">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                  </button>
-                </div>
-                <div class="w-16 h-[2px] bg-accent-blue"></div>
-                <div class="text-lg text-text-muted/90 font-normal leading-relaxed latex-content flex-1 overflow-y-auto pr-2" style="max-height:100%;" data-material="${detailPath}">
-                  ${detail || 'Detail content goes here. Click to edit in edit mode.'}
-                </div>
-              </div>
+              ${renderDetailContent({
+                title,
+                titlePath,
+                detail,
+                detailPath,
+                detailBlocks,
+                detailBlocksPath,
+                showBanner,
+                detailBannerPath,
+                backPanelClass,
+                closeButtonClass: 'flip-back-trigger',
+                closeTargetAttr: 'data-flip-target',
+                closeTargetValue: flipKey,
+                bannerImageUrl,
+                bannerImagePath,
+                detailEndImageUrl,
+                detailEndImagePath
+              })}
             </div>
           </div>
         </div>
@@ -125,6 +483,8 @@ window.TemplateRegistry = (function() {
         description: item?.description || '',
         cta: item?.cta || 'Learn more',
         detail: item?.detail || '',
+        showDetailBanner: item?.showDetailBanner !== false,
+        detailEndImage: item?.detailEndImage || '',
         flipEnabled: item?.flipEnabled !== false,
         flipDirection: item?.flipDirection || 'y',
         images: item?.images || {}
@@ -143,6 +503,8 @@ window.TemplateRegistry = (function() {
           description: legacy.description || '',
           cta: legacy.cta || 'Learn more',
           detail: legacy.detail || '',
+          showDetailBanner: legacy.showDetailBanner !== false,
+          detailEndImage: legacy.detailEndImage || '',
           flipEnabled: legacy.flipEnabled !== false,
           flipDirection: legacy.flipDirection || 'y',
           images: legacy.images || {}
@@ -235,9 +597,11 @@ window.TemplateRegistry = (function() {
       const bgStyle = imgUrl && !isVideoUrl(imgUrl) ? `background-image: url(${imgUrl}); background-size: ${bgScale}%; background-position: ${bgPosX}% ${bgPosY}%;` : '';
       const videoLayer = renderVideoLayer(imgUrl);
       const isActive = i === 0;
+      const detailEndImageUrl = getImageUrl(item.detailEndImage, material);
       const flipPath = `highlights.items.${i}`;
       const flipKey = `highlights-item-${i}`;
       const flipEnabled = item.flipEnabled !== false;
+      const showDetailBanner = item.showDetailBanner !== false;
       const frontHtml = `
         <div class="flex w-full h-full">
           <div class="w-1/2 h-full bg-surface-darker relative flex items-center justify-center bg-cover bg-center" style="${bgStyle}" data-material-img="highlights.items.${i}.images.main">
@@ -266,11 +630,19 @@ window.TemplateRegistry = (function() {
             flipPath,
             flipEnabled,
             flipDirection: item.flipDirection,
+            showBanner: showDetailBanner,
             frontHtml,
             title: item.title || '',
             titlePath: `highlights.items.${i}.title`,
             detail: item.detail || '',
             detailPath: `highlights.items.${i}.detail`,
+            detailBlocks: item.detailBlocks,
+            detailBlocksPath: `highlights.items.${i}.detailBlocks`,
+            bannerImageUrl: imgUrl,
+            bannerImagePath: `highlights.items.${i}.images.main`,
+            detailBannerPath: `highlights.items.${i}.showDetailBanner`,
+            detailEndImageUrl,
+            detailEndImagePath: `highlights.items.${i}.detailEndImage`,
             frontShellClass: 'h-full rounded-[32px] overflow-hidden bg-surface-dark',
             backShellClass: 'h-full rounded-[32px] overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800'
           })}
@@ -303,9 +675,16 @@ window.TemplateRegistry = (function() {
   // Card Grid Template (like Features)
   function cardGridTemplate(sectionId, data, material) {
     const cards = data.cards || [];
+    const overlayKey = `${sectionId}-cards`;
+    const rawCoverRatio = Number(data.coverMediaRatio);
+    const coverRatio = Number.isFinite(rawCoverRatio)
+      ? Math.max(25, Math.min(75, Math.round(rawCoverRatio)))
+      : 57;
+    const textRatio = 100 - coverRatio;
     
     const cardHtml = cards.map((card, i) => {
       const imgUrl = getImageUrl(card.image, material);
+      const detailEndImageUrl = getImageUrl(card.detailEndImage, material);
       const imgPos = card.imagePosition || {};
       const bgPosX = imgPos.x ?? 50;
       const bgPosY = imgPos.y ?? 50;
@@ -313,22 +692,21 @@ window.TemplateRegistry = (function() {
       const bgStyle = imgUrl && !isVideoUrl(imgUrl) ? `background-image: url(${imgUrl}); background-size: ${bgScale}%; background-position: ${bgPosX}% ${bgPosY}%;` : '';
       const videoLayer = renderVideoLayer(imgUrl);
       const delay = (i + 1) * 0.1;
-      
-      const flipPath = `features.cards.${i}`;
-      const flipKey = `features-card-${i}`;
       const flipEnabled = card.flipEnabled === true;
-      const frontHtml = `
-        <div class="h-full flex flex-col group hover:bg-surface-darker transition-colors duration-300">
-          <div class="h-[320px] bg-surface-darker w-full relative bg-cover bg-center" style="${bgStyle}" data-material-img="features.cards.${i}.image">
+      const showDetailBanner = card.showDetailBanner !== false;
+
+      const frontContent = `
+        <div class="h-full rounded-[24px] overflow-hidden bg-surface-dark grid card-grid-front-layout group hover:bg-surface-darker transition-colors duration-300" style="grid-template-rows: ${coverRatio}% ${textRatio}%;" data-card-grid-front-layout="true">
+          <div class="h-full bg-surface-darker w-full relative bg-cover bg-center" style="${bgStyle}" data-material-img="features.cards.${i}.image">
             ${videoLayer}
           </div>
-          <div class="p-8 flex flex-col gap-3 flex-1">
+          <div class="p-8 flex flex-col gap-3 min-h-0">
             <h3 class="text-2xl font-semibold text-white" data-material="features.cards.${i}.title">${card.title || ''}</h3>
             <p class="text-base text-text-muted leading-relaxed" data-material="features.cards.${i}.description">
               ${card.description || ''}
             </p>
             ${flipEnabled ? `
-              <button class="flip-trigger mt-auto w-fit px-5 py-2.5 rounded-full bg-white text-black text-sm font-medium hover:bg-gray-200 transition-colors flex items-center gap-2" data-flip-target="${flipKey}" data-material="features.cards.${i}.cta">
+              <button class="cg-flip-trigger mt-auto w-fit px-5 py-2.5 rounded-full bg-white text-black text-sm font-medium hover:bg-gray-200 transition-colors flex items-center gap-2" data-material="features.cards.${i}.cta">
                 ${card.cta || 'Learn more'}
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               </button>
@@ -337,23 +715,37 @@ window.TemplateRegistry = (function() {
         </div>
       `;
 
-      return `
-        <div class="fade-in-up h-[560px]" style="transition-delay: ${delay}s;" data-collection-item="true" data-collection-type="card-grid" data-collection-path="features.cards" data-item-index="${i}">
-          ${renderFlipWrapper({
-            flipKey,
-            flipPath,
-            flipEnabled,
-            flipDirection: card.flipDirection,
-            wrapperClass: 'h-full rounded-[24px]',
-            frontHtml,
+      const backContent = flipEnabled ? `
+        <div class="h-full rounded-[24px] overflow-hidden bg-surface-dark">
+          ${renderDetailContent({
             title: card.title || '',
             titlePath: `features.cards.${i}.title`,
-            detail: card.detail || '',
+            detail: formatCardGridDetail(card.detail || '', card.references, `features.cards.${i}.references`),
             detailPath: `features.cards.${i}.detail`,
-            frontShellClass: 'h-full rounded-[24px] overflow-hidden bg-surface-dark',
-            backShellClass: 'h-full rounded-[24px] overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800',
-            backPanelClass: 'w-full h-full p-8 flex flex-col justify-center gap-5 overflow-y-auto'
+            showBanner: showDetailBanner,
+            detailBannerPath: `features.cards.${i}.showDetailBanner`,
+            detailRichTextClass: 'detail-rich-text--formatted',
+            detailIsHtml: true,
+            backPanelClass: 'w-full h-full p-8 flex flex-col gap-5 overflow-y-auto',
+            closeButtonClass: 'cg-close-trigger',
+            closeTargetAttr: 'data-cg-close',
+            closeTargetValue: 'true',
+            bannerImageUrl: imgUrl,
+            bannerImagePath: `features.cards.${i}.image`,
+            detailEndImageUrl,
+            detailEndImagePath: `features.cards.${i}.detailEndImage`
           })}
+        </div>
+      ` : '';
+
+      return `
+        <div class="card-grid-item fade-in-up" style="transition-delay: ${delay}s;" data-card-grid-item="true" data-collection-item="true" data-collection-type="card-grid" data-collection-path="features.cards" data-item-index="${i}">
+          <div class="cg-flipper" data-cg-flip-enabled="${flipEnabled}">
+            <div class="cg-flipper-inner">
+              <div class="cg-face cg-face-front">${frontContent}</div>
+              ${flipEnabled ? `<div class="cg-face cg-face-back">${backContent}</div>` : ''}
+            </div>
+          </div>
         </div>
       `;
     }).join('\n');
@@ -367,7 +759,7 @@ window.TemplateRegistry = (function() {
           </p>
         </div>
 
-        <div class="w-full max-w-[1440px] px-[120px] grid grid-cols-1 md:grid-cols-3 gap-8" data-collection-container="true" data-collection-type="card-grid" data-collection-path="features.cards">
+        <div class="card-grid-collection" data-card-grid-container="${overlayKey}" data-collection-container="true" data-collection-type="card-grid" data-collection-path="features.cards">
           ${cardHtml}
         </div>
       </section>
@@ -377,6 +769,7 @@ window.TemplateRegistry = (function() {
   // Text + Image Left Template
   function textImageLeftTemplate(sectionId, data, material) {
     const imgUrl = getImageUrl(data.images?.main, material);
+    const detailEndImageUrl = getImageUrl(data.detailEndImage, material);
     const imgPos = data.images?.position || {};
     const bgPosX = imgPos.x ?? 50;
     const bgPosY = imgPos.y ?? 50;
@@ -388,6 +781,7 @@ window.TemplateRegistry = (function() {
     const flipPath = `${sectionId}`;
     const flipKey = `${sectionId}-section-card`;
     const flipEnabled = data.flipEnabled === true;
+    const showDetailBanner = data.showDetailBanner !== false;
     const frontHtml = `
       <div class="w-full h-full flex items-center gap-[80px]">
         <div class="w-[500px] flex flex-col gap-6 fade-in-up">
@@ -417,12 +811,20 @@ window.TemplateRegistry = (function() {
             flipPath,
             flipEnabled,
             flipDirection: data.flipDirection,
+            showBanner: showDetailBanner,
             wrapperClass: 'h-full rounded-[32px]',
             frontHtml,
             title: data.title || '',
             titlePath: `${sectionId}.title`,
             detail: data.detail || '',
             detailPath: `${sectionId}.detail`,
+            detailBlocks: data.detailBlocks,
+            detailBlocksPath: `${sectionId}.detailBlocks`,
+            bannerImageUrl: imgUrl,
+            bannerImagePath: `${sectionId}.images.main`,
+            detailBannerPath: `${sectionId}.showDetailBanner`,
+            detailEndImageUrl,
+            detailEndImagePath: `${sectionId}.detailEndImage`,
             frontShellClass: 'h-full rounded-[32px] overflow-hidden',
             backShellClass: `h-full rounded-[32px] overflow-hidden ${theme === 'dark' ? 'bg-gradient-to-br from-slate-900 to-slate-800' : 'bg-white'}`,
             backPanelClass: 'w-full h-full p-[60px] flex flex-col justify-center gap-6 overflow-y-auto'
@@ -435,6 +837,7 @@ window.TemplateRegistry = (function() {
   // Text + Image Right Template
   function textImageRightTemplate(sectionId, data, material) {
     const imgUrl = getImageUrl(data.images?.main, material);
+    const detailEndImageUrl = getImageUrl(data.detailEndImage, material);
     const imgPos = data.images?.position || {};
     const bgPosX = imgPos.x ?? 50;
     const bgPosY = imgPos.y ?? 50;
@@ -445,6 +848,7 @@ window.TemplateRegistry = (function() {
     const flipPath = `${sectionId}`;
     const flipKey = `${sectionId}-section-card`;
     const flipEnabled = data.flipEnabled === true;
+    const showDetailBanner = data.showDetailBanner !== false;
     const frontHtml = `
       <div class="w-full h-full flex items-center gap-[80px]">
         <div class="flex-1 h-[600px] bg-white rounded-[32px] shadow-xl shadow-black/5 relative overflow-hidden fade-in-up bg-cover bg-center" style="${bgStyle}" data-material-img="${sectionId}.images.main">
@@ -474,12 +878,20 @@ window.TemplateRegistry = (function() {
             flipPath,
             flipEnabled,
             flipDirection: data.flipDirection,
+            showBanner: showDetailBanner,
             wrapperClass: 'h-full rounded-[32px]',
             frontHtml,
             title: data.title || '',
             titlePath: `${sectionId}.title`,
             detail: data.detail || '',
             detailPath: `${sectionId}.detail`,
+            detailBlocks: data.detailBlocks,
+            detailBlocksPath: `${sectionId}.detailBlocks`,
+            bannerImageUrl: imgUrl,
+            bannerImagePath: `${sectionId}.images.main`,
+            detailBannerPath: `${sectionId}.showDetailBanner`,
+            detailEndImageUrl,
+            detailEndImagePath: `${sectionId}.detailEndImage`,
             frontShellClass: 'h-full rounded-[32px] overflow-hidden',
             backShellClass: 'h-full rounded-[32px] overflow-hidden bg-white',
             backPanelClass: 'w-full h-full p-[60px] flex flex-col justify-center gap-6 overflow-y-auto'
@@ -507,6 +919,8 @@ window.TemplateRegistry = (function() {
       const flipKey = `closer-feature-${i}`;
 
       if (flipEnabled) {
+        const detailEndImageUrl = getImageUrl(feature.detailEndImage, material);
+        const showDetailBanner = feature.showDetailBanner !== false;
         const frontHtml = `
           <div class="w-full h-full px-2 py-3 flex flex-col justify-center gap-3">
             <h3 class="text-2xl font-semibold text-text-primaryLight" data-material="closerLook.features.${i}.title">${feature.title || ''}</h3>
@@ -527,12 +941,20 @@ window.TemplateRegistry = (function() {
               flipPath,
               flipEnabled,
               flipDirection: feature.flipDirection,
+              showBanner: showDetailBanner,
               wrapperClass: 'h-[220px] rounded-2xl',
               frontHtml,
               title: feature.title || '',
               titlePath: `closerLook.features.${i}.title`,
               detail: feature.detail || '',
               detailPath: `closerLook.features.${i}.detail`,
+              detailBlocks: feature.detailBlocks,
+              detailBlocksPath: `closerLook.features.${i}.detailBlocks`,
+              bannerImageUrl: imgUrl,
+              bannerImagePath: 'closerLook.images.reactor',
+              detailBannerPath: `closerLook.features.${i}.showDetailBanner`,
+              detailEndImageUrl,
+              detailEndImagePath: `closerLook.features.${i}.detailEndImage`,
               frontShellClass: 'h-full rounded-2xl overflow-hidden bg-white',
               backShellClass: 'h-full rounded-2xl overflow-hidden bg-white',
               backPanelClass: 'w-full h-full p-6 flex flex-col justify-center gap-4 overflow-y-auto'
@@ -569,6 +991,91 @@ window.TemplateRegistry = (function() {
               <div class="text-center">
                 <h3 class="text-xl font-semibold text-text-primaryLight" data-material="closerLook.reactorLabel">${data.reactorLabel || ''}</h3>
                 <p class="text-text-muted" data-material="closerLook.reactorHint">${data.reactorHint || ''}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  // Interactive Details Template (Dark)
+  function interactiveDetailsTemplate(sectionId, data, material) {
+    const items = data.items || [];
+
+    const itemsHtml = items.map((item, i) => {
+      const isFirst = i === 0;
+      return `
+        <div class="id-item group cursor-pointer border-b border-white/10 py-6 ${isFirst ? 'active' : ''}"
+             data-id-item="${i}"
+             data-collection-item="true"
+             data-collection-type="interactive-details"
+             data-collection-path="${sectionId}.items"
+             data-item-index="${i}">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-[28px] font-semibold ${isFirst ? 'text-white' : 'text-white/50'} group-hover:text-white transition-colors duration-300"
+                data-material="${sectionId}.items.${i}.title">${item.title || ''}</h3>
+            <i data-lucide="${isFirst ? 'chevron-down' : 'chevron-right'}"
+               class="w-6 h-6 ${isFirst ? 'text-white' : 'text-white/30'} group-hover:text-white/70 transition-all duration-300 flex-shrink-0"></i>
+          </div>
+          <div class="id-item-desc text-[17px] text-white/60 leading-relaxed ${isFirst ? 'id-item-desc--open' : ''} transition-all duration-500 ease-out"
+               data-material="${sectionId}.items.${i}.description">
+            ${item.description || ''}
+          </div>
+        </div>
+      `;
+    }).join('\n');
+
+    // Build detail panels for the right side - each has its own background
+    const detailPanelsHtml = items.map((item, i) => {
+      const isFirst = i === 0;
+      
+      // Render detail content - support both detailBlocks and plain detail
+      let detailContent;
+      if (Array.isArray(item.detailBlocks) && item.detailBlocks.length > 0) {
+        detailContent = renderDetailBlocks(item.detailBlocks, `${sectionId}.items.${i}.detailBlocks`);
+      } else {
+        detailContent = item.detail || 'Detail content goes here.';
+      }
+      
+      return `
+        <div class="id-detail-panel ${isFirst ? 'id-detail-panel--active' : ''} bg-surface-dark rounded-[32px]"
+             data-id-detail="${i}"
+             data-panel-index="${i}">
+          <div class="w-full h-full p-[60px] overflow-y-auto flex flex-col gap-6">
+            <div class="detail-rich-text text-[19px] text-white/80 font-normal leading-[1.6] latex-content flex-1 min-h-0 overflow-y-auto pr-2"
+                 data-material="${sectionId}.items.${i}.detail">
+              ${detailContent}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('\n');
+
+    return `
+      <section id="${sectionId}" class="w-full bg-black py-[120px]">
+        <div class="max-w-[1440px] mx-auto px-[120px]">
+          ${data.headline ? `<h2 class="text-[64px] font-semibold text-white leading-[1.05] mb-[80px] fade-in-up" data-material="${sectionId}.headline">${data.headline}</h2>` : ''}
+          <div class="flex gap-[80px] items-start">
+            <div class="w-[500px] flex flex-col fade-in-up"
+                 data-id-list="${sectionId}"
+                 data-collection-container="true"
+                 data-collection-type="interactive-details"
+                 data-collection-path="${sectionId}.items">
+              ${itemsHtml}
+            </div>
+
+            <div class="flex-1 h-[600px] relative overflow-visible fade-in-up id-detail-container-wrapper"
+                 style="transition-delay: 0.2s;">
+              <div class="id-detail-container w-full h-full shadow-2xl shadow-black/40 rounded-[32px] relative overflow-hidden"
+                   data-id-detail-container="${sectionId}"
+                   data-animation="flip-y"
+                   data-current-index="0"
+                   data-total-panels="${items.length}">
+                <div class="id-detail-flipper w-full h-full absolute inset-0"
+                     data-id-flipper="${sectionId}">
+                  ${detailPanelsHtml}
+                </div>
               </div>
             </div>
           </div>
@@ -748,6 +1255,7 @@ window.TemplateRegistry = (function() {
     'accordion': accordionTemplate,
     'ai-chat': aiChatTemplate,
     'quiz': quizTemplate,
+    'interactive-details': interactiveDetailsTemplate,
     'image-gallery': imageGalleryTemplate,
     'footer': footerTemplate
   };

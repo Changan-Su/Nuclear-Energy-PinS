@@ -102,6 +102,9 @@ window.SectionRenderer = (function() {
       // Reinitialize accordion
       initializeAccordion();
 
+      // Initialize interactive details
+      initializeInteractiveDetails();
+
       // Initialize flip cards
       initializeFlipCards();
 
@@ -260,6 +263,111 @@ window.SectionRenderer = (function() {
         if (window.lucide) {
           window.lucide.createIcons();
         }
+      });
+    });
+  }
+
+  function initializeInteractiveDetails() {
+    const lists = document.querySelectorAll('[data-id-list]');
+
+    lists.forEach(list => {
+      const sectionId = list.getAttribute('data-id-list');
+      const container = document.querySelector(`[data-id-detail-container="${sectionId}"]`);
+      if (!container) return;
+
+      const items = list.querySelectorAll('.id-item');
+      const panels = container.querySelectorAll('.id-detail-panel');
+      let currentIndex = 0;
+      let isAnimating = false;
+
+      items.forEach(item => {
+        item.addEventListener('click', () => {
+          const targetIndex = parseInt(item.getAttribute('data-id-item'), 10);
+          if (targetIndex === currentIndex || isAnimating) return;
+
+          isAnimating = true;
+
+          // --- Update left side: collapse old, expand new ---
+          items.forEach(it => {
+            it.classList.remove('active');
+            const title = it.querySelector('h3');
+            const desc = it.querySelector('.id-item-desc');
+            const icon = it.querySelector('i');
+
+            if (title) {
+              title.classList.remove('text-white');
+              title.classList.add('text-white/40');
+            }
+            if (desc) {
+              desc.classList.remove('id-item-desc--open');
+            }
+            if (icon) {
+              icon.setAttribute('data-lucide', 'plus');
+              icon.classList.remove('text-white');
+              icon.classList.add('text-white/40');
+            }
+          });
+
+          item.classList.add('active');
+          const newTitle = item.querySelector('h3');
+          const newDesc = item.querySelector('.id-item-desc');
+          const newIcon = item.querySelector('i');
+
+          if (newTitle) {
+            newTitle.classList.add('text-white');
+            newTitle.classList.remove('text-white/40');
+          }
+          if (newDesc) {
+            newDesc.classList.add('id-item-desc--open');
+          }
+          if (newIcon) {
+            newIcon.setAttribute('data-lucide', 'chevron-down');
+            newIcon.classList.add('text-white');
+            newIcon.classList.remove('text-white/40');
+          }
+
+          // Refresh Lucide icons
+          if (window.lucide) {
+            window.lucide.createIcons();
+          }
+
+          // --- Flip animation on right side ---
+          const currentPanel = panels[currentIndex];
+          const targetPanel = panels[targetIndex];
+          if (!currentPanel || !targetPanel) {
+            isAnimating = false;
+            return;
+          }
+
+          // Phase 1: Flip out the current panel
+          currentPanel.classList.remove('id-detail-panel--active');
+          currentPanel.classList.add('id-detail-panel--flip-out');
+
+          const onFlipOutEnd = () => {
+            currentPanel.removeEventListener('animationend', onFlipOutEnd);
+            currentPanel.classList.remove('id-detail-panel--flip-out');
+
+            // Phase 2: Flip in the target panel
+            targetPanel.classList.add('id-detail-panel--flip-in');
+
+            const onFlipInEnd = () => {
+              targetPanel.removeEventListener('animationend', onFlipInEnd);
+              targetPanel.classList.remove('id-detail-panel--flip-in');
+              targetPanel.classList.add('id-detail-panel--active');
+              currentIndex = targetIndex;
+              isAnimating = false;
+
+              // Render LaTeX in new panel if available
+              if (window.LatexRenderer && window.LatexRenderer.renderAll) {
+                window.LatexRenderer.renderAll();
+              }
+            };
+
+            targetPanel.addEventListener('animationend', onFlipInEnd);
+          };
+
+          currentPanel.addEventListener('animationend', onFlipOutEnd);
+        });
       });
     });
   }
