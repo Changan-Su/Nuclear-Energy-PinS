@@ -332,6 +332,8 @@
       ]
     },
     "safety": {
+      "headline": "Safety First.",
+      "subheadline": "Nuclear reactors employ multiple redundant safety systems designed with defense-in-depth principles.",
       "items": [
         {
           "tab": "Safety Overview",
@@ -340,6 +342,18 @@
           "cta": "Learn more",
           "detail": "Modern nuclear reactors incorporate multiple layers of safety systems designed to prevent accidents and contain any potential releases. Passive safety features use gravity, natural convection, and other physical phenomena rather than active mechanical systems or human intervention.",
           "imageLabel": "Safety Visualization",
+          "detailImageShrinkRatio": 55,
+          "images": {
+            "main": "uploads/media-i7g9kd-12.png"
+          }
+        },
+        {
+          "tab": "Section 2",
+          "title": "New Section 2",
+          "description": "Edit this section description.",
+          "cta": "Learn more",
+          "detail": "Add detail content here.",
+          "imageLabel": "",
           "detailImageShrinkRatio": 60,
           "images": {
             "main": ""
@@ -356,6 +370,8 @@
       }
     },
     "innovation": {
+      "headline": "The Future is Modular.",
+      "subheadline": "Next-generation reactors deliver cleaner, safer, and more flexible energy solutions.",
       "items": [
         {
           "tab": "Innovation Overview",

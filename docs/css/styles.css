@@ -3524,6 +3524,11 @@ body.edit-mode .id-animation-selector {
   overflow: hidden; /* Prevent content from sliding outside container */
 }
 
+/* TIL left area in detail state: dynamic width based on right wrapper */
+.til-container[data-til-detail-state="expanded"] .til-left-area {
+  /* Width will be calculated dynamically in JS: totalWidth - rightWrapperWidth - gap(60px) */
+}
+
 /* TIL switcher container at top */
 .til-switcher-container {
   z-index: 3;

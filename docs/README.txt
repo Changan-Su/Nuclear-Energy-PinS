@@ -13,4 +13,4 @@ Notes:
 - Media files are stored in the uploads/ directory
 - To edit content, use the full CMS version
 
-Generated: 2026-02-15T17:50:09.146Z
+Generated: 2026-02-15T18:33:31.607Z

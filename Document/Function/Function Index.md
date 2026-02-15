@@ -8,6 +8,10 @@ Index of all implemented features and their documentation.
 
 ## Features by Version | 按版本分类的功能
 
+### Version 1.1 - Recovery Procedures
+
+- [Material and Assets Recovery Procedure](./FunctionReview_v1.1_Material_And_Assets_Recovery.md) - 从备用数据源恢复 Section 数据与媒体资源的可复现流程（Runbook）
+
 ### Version 0.5 - SVG Template Gallery
 
 - [SVG Template Gallery](./FunctionReview_v0.5_SVG_Template_Gallery.md) - Visual template selection with SVG wireframe previews and interactive gallery

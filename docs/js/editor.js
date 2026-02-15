@@ -3569,15 +3569,24 @@ window.EditorSystem = (function() {
     const handle = e.target.closest('.til-resize-handle');
     if (!handle) return;
     
+    console.log('[Editor] TIL resize start - handle found');
+    
     const rightWrapper = handle.closest('.til-right-wrapper');
     const container = handle.closest('.til-container');
-    if (!rightWrapper || !container) return;
+    if (!rightWrapper || !container) {
+      console.warn('[Editor] TIL resize - missing rightWrapper or container');
+      return;
+    }
+    
+    console.log('[Editor] TIL resize - rightWrapper and container found');
     
     e.preventDefault();
     
     const currentWidth = rightWrapper.offsetWidth;
     const containerWidth = container.offsetWidth;
     const currentRatio = (currentWidth / containerWidth) * 100;
+    
+    console.log('[Editor] TIL resize - currentRatio:', currentRatio);
     
     tilResizeState = {
       rightWrapper,
@@ -3598,6 +3607,17 @@ window.EditorSystem = (function() {
     const newRatio = Math.max(30, Math.min(80, tilResizeState.startRatio + deltaRatio));
     
     tilResizeState.rightWrapper.style.width = `${newRatio}%`;
+    
+    // Dynamically adjust left area width: totalWidth - rightWrapperWidth - gap(60px)
+    const containerWidth = tilResizeState.container.offsetWidth;
+    const rightWrapperWidth = (containerWidth * newRatio) / 100;
+    const gapWidth = 60;
+    const leftAreaWidth = containerWidth - rightWrapperWidth - gapWidth;
+    
+    const leftArea = tilResizeState.container.querySelector('[data-til-left-area]');
+    if (leftArea) {
+      leftArea.style.width = `${leftAreaWidth}px`;
+    }
   }
 
   function handleTILResizeEnd(e) {

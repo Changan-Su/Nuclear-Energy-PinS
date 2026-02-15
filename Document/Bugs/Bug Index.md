@@ -16,6 +16,16 @@ Currently no active bugs.
 
 ## Resolved Bugs | 已解决 Bug
 
+### Version 1.1 - Renewable Grid Recovery
+
+#### [Renewable Grid 内容/设置/图片丢失](./BugReview_v1.1_Renewable_Grid_Content_Settings_Images_Lost.md)
+- **Severity**: High | 高
+- **Description**: Grid card section showed nuclear three-card content instead of Renewable five-card content; card cover images 404
+- **描述**：Grid card 区域显示核能三卡片且封面图 404，Renewable 五张卡片内容与设置“丢失”
+- **Solution**: Restored `index.features` from embedded data in index.html into material.json and docs/material.json; created root uploads/ and copied images from docs/uploads/
+- **解决方案**：从 index.html 内嵌数据恢复 index.features 到两份 material；新建根目录 uploads/ 并从 docs/uploads/ 复制图片
+- **Date**: 2026-02-15
+
 ### Version 0.6 - Interactive Enhancements
 
 #### [Grid Card Display Issue](./BugReview_v0.6_Grid_Card_Display_Issue.md)

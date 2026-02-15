@@ -578,6 +578,13 @@ window.SectionRenderer = (function() {
         rightWrapper.style.width = `${shrinkRatio}%`;
         rightWrapper.style.right = '0';
         
+        // Dynamically adjust left area width: totalWidth - rightWrapperWidth - gap(60px)
+        const containerWidth = container.offsetWidth;
+        const rightWrapperWidth = (containerWidth * shrinkRatio) / 100;
+        const gapWidth = 60; // Gap between left and right areas
+        const leftAreaWidth = containerWidth - rightWrapperWidth - gapWidth;
+        leftArea.style.width = `${leftAreaWidth}px`;
+        
         // Switch to natural-size image display in detail state
         // Get current image URL from imageWrapper's background-image or data attribute
         let currentImageUrl = '';
@@ -726,7 +733,10 @@ window.SectionRenderer = (function() {
         detailContent.style.pointerEvents = 'none';
 
         // Expand right image area back
-        rightWrapper.style.width = 'calc(100% - 500px - 80px)';
+        rightWrapper.style.width = 'calc(100% - 500px - 60px)';
+        
+        // Restore left area width to fixed 500px
+        leftArea.style.width = '500px';
         
         // Restore background image display
         const currentItem = items[currentIndex];
@@ -909,6 +919,10 @@ window.SectionRenderer = (function() {
           // Set background image
           if (imgUrl) {
             imageWrapper.style.backgroundImage = `url(${imgUrl})`;
+            // Update data-material-img attribute for expandDetail to use
+            const hasItemsArray = container.getAttribute('data-til-has-items') === 'true';
+            const materialPath = hasItemsArray ? `${sectionId}.items.${targetIndex}.images.main` : `${sectionId}.images.main`;
+            imageWrapper.setAttribute('data-material-img', materialPath);
           } else {
             imageWrapper.style.backgroundImage = '';
           }

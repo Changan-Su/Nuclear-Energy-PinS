@@ -332,6 +332,8 @@
       ]
     },
     "safety": {
+      "headline": "Safety First.",
+      "subheadline": "Nuclear reactors employ multiple redundant safety systems designed with defense-in-depth principles.",
       "items": [
         {
           "tab": "Safety Overview",
@@ -356,6 +358,8 @@
       }
     },
     "innovation": {
+      "headline": "The Future is Modular.",
+      "subheadline": "Next-generation reactors deliver cleaner, safer, and more flexible energy solutions.",
       "items": [
         {
           "tab": "Innovation Overview",

@@ -834,6 +834,10 @@ window.TemplateRegistry = (function() {
   function textImageLeftTemplate(sectionId, data, material) {
     const items = buildTextImageLeftItemsCompat(data);
     const theme = sectionId === 'safety' || sectionId === 'innovation' ? 'dark' : 'light';
+    
+    // Extract headline and subheadline
+    const headline = data?.headline || '';
+    const subheadline = data?.subheadline || '';
 
     if (!items.length) {
       return `
@@ -886,8 +890,20 @@ window.TemplateRegistry = (function() {
 
     return `
       <section id="${sectionId}" class="w-full ${theme === 'dark' ? 'bg-black' : 'bg-surface-light text-text-primaryLight'} py-[120px]" data-section-id="${sectionId}" data-template="text-image-left">
-        <div class="max-w-[1440px] mx-auto px-[120px] h-[600px]">
-          <div class="til-container w-full h-full relative"
+        <div class="max-w-[1440px] mx-auto px-[120px]">
+          
+          <!-- Section Headline (if provided, independent and full-width) -->
+          ${headline ? `
+          <div class="til-headline-wrapper text-center mb-16" data-til-headline-wrapper>
+            <h2 class="til-headline text-[56px] font-semibold ${theme === 'dark' ? 'text-white' : 'text-text-primaryLight'} leading-[1.05] mb-4"
+                data-material="${sectionId}.headline">${headline}</h2>
+            ${subheadline ? `<p class="til-subheadline text-[21px] ${theme === 'dark' ? 'text-text-muted' : 'text-text-primaryLight/70'} leading-[1.4] max-w-[980px] mx-auto"
+                data-material="${sectionId}.subheadline">${subheadline}</p>` : ''}
+          </div>
+          ` : ''}
+          
+          <!-- Main Content Container -->
+          <div class="til-container w-full h-[600px] relative"
                data-til-section-id="${sectionId}"
                data-til-active-index="0"
                data-til-detail-state="collapsed"
@@ -948,7 +964,7 @@ window.TemplateRegistry = (function() {
             
             <!-- Right Image Area Wrapper (slides with left content) -->
             <div class="til-right-wrapper absolute right-0 top-0 h-full transition-all duration-500 overflow-hidden"
-                 style="width: calc(100% - 500px - 80px);"
+                 style="width: calc(100% - 500px - 60px);"
                  data-til-right-wrapper>
               <div class="til-right-area w-full h-full relative" data-til-right-area>
                 <div class="til-image-wrapper w-full h-full ${theme === 'dark' ? 'bg-surface-dark' : 'bg-white shadow-xl shadow-black/5'} rounded-[32px] relative overflow-hidden bg-cover bg-center transition-all duration-500" 
