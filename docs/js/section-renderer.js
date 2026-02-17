@@ -683,16 +683,24 @@ window.SectionRenderer = (function() {
         // Helper function to get image URL from material
         function getImageUrl(path, material) {
           if (!path || !material) return '';
-          const parts = path.split('.');
-          let value = material;
-          for (const part of parts) {
-            if (value && typeof value === 'object') {
-              value = value[part];
-            } else {
-              return '';
-            }
+
+          const fullPath = path.startsWith(`${pageKey}.`) ? path : `${pageKey}.${path}`;
+          const raw = getNestedValue(material, fullPath) ?? getNestedValue(material, path);
+          if (typeof raw !== 'string' || raw.trim() === '') return '';
+
+          if (
+            raw.startsWith('http') ||
+            raw.startsWith('/') ||
+            raw.startsWith('data:') ||
+            raw.startsWith('blob:') ||
+            raw.startsWith('uploads/') ||
+            raw.startsWith('./uploads/')
+          ) {
+            return raw;
           }
-          return typeof value === 'string' ? value : '';
+
+          const base = material?.config?.imagesBasePath || material?.imagesBasePath || 'assets/images/';
+          return `${base}${raw}`;
         }
         
         // Hide image label in detail state
@@ -1169,16 +1177,24 @@ window.SectionRenderer = (function() {
       // Helper function to get image URL from material
       function getImageUrl(path, material) {
         if (!path || !material) return '';
-        const parts = path.split('.');
-        let value = material;
-        for (const part of parts) {
-          if (value && typeof value === 'object') {
-            value = value[part];
-          } else {
-            return '';
-          }
+
+        const fullPath = path.startsWith(`${pageKey}.`) ? path : `${pageKey}.${path}`;
+        const raw = getNestedValue(material, fullPath) ?? getNestedValue(material, path);
+        if (typeof raw !== 'string' || raw.trim() === '') return '';
+
+        if (
+          raw.startsWith('http') ||
+          raw.startsWith('/') ||
+          raw.startsWith('data:') ||
+          raw.startsWith('blob:') ||
+          raw.startsWith('uploads/') ||
+          raw.startsWith('./uploads/')
+        ) {
+          return raw;
         }
-        return typeof value === 'string' ? value : '';
+
+        const base = material?.config?.imagesBasePath || material?.imagesBasePath || 'assets/images/';
+        return `${base}${raw}`;
       }
       
       // Helper function to update button states
