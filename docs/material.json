@@ -234,7 +234,11 @@
           "flipEnabled": true,
           "flipDirection": "y",
           "detailEndImage": "",
-          "image": "uploads/media-k8uxap-7.png"
+          "image": "uploads/media-k8uxap-7.png",
+          "position": {
+            "scale": 59,
+            "y": 0
+          }
         },
         {
           "title": "2. Wind power",
@@ -260,8 +264,9 @@
           "detailEndImage": "",
           "image": "uploads/media-ftntjq-8.png",
           "position": {
-            "scale": 112
-          }
+            "scale": 80
+          },
+          "detailBannerRatio": 66
         },
         {
           "title": "3. Hydroelectric power",
@@ -285,7 +290,10 @@
           "flipEnabled": true,
           "flipDirection": "y",
           "detailEndImage": "",
-          "image": "uploads/media-ni5a27-9.png"
+          "image": "uploads/media-ni5a27-9.png",
+          "position": {
+            "scale": 52
+          }
         },
         {
           "title": "4. Geothermal Energy",
@@ -303,8 +311,9 @@
           "detailEndImage": "",
           "image": "uploads/media-9fpp0x-10.png",
           "position": {
-            "scale": 258
-          }
+            "scale": 98
+          },
+          "detailBannerRatio": 35
         },
         {
           "title": "5.  Comparison of Energy Sources",
@@ -326,8 +335,9 @@
           "detailEndImage": "",
           "image": "uploads/media-f4odw4-11.png",
           "position": {
-            "scale": 136
-          }
+            "scale": 100
+          },
+          "detailBannerRatio": 68
         }
       ]
     },

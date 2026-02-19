@@ -3783,9 +3783,9 @@ body.edit-mode .id-animation-selector {
 
 /* Detail panel: banner image shrink (configurable ratio, image not stretched to fill) */
 .detail-content-wrap--banner-shrunk .detail-banner-media {
-  height: clamp(120px, calc(var(--detail-banner-shrink-ratio, 60) * 1vh), 60vh);
+  height: clamp(120px, calc(var(--detail-banner-shrink-ratio, 60) * 1vh), 85vh);
   min-height: 120px;
-  max-height: 60vh;
+  max-height: 85vh;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -3877,5 +3877,26 @@ body.edit-mode .id-animation-selector {
 .detail-shrink-controls .reset-btn:hover {
   background: rgba(255, 255, 255, 0.2);
   color: white;
+}
+
+/* Hero Cinema Mode Transitions */
+.hero-content-overlay,
+.hero-scroll-hint {
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+section#overview.cinema-mode .hero-content-overlay,
+section#overview.cinema-mode .hero-scroll-hint {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.hero-exit-cinema {
+  position: fixed;
+  top: 4.25rem;
+  right: 1.5rem;
+  z-index: 80;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 

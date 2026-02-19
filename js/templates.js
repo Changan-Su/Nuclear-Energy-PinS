@@ -609,7 +609,12 @@ window.TemplateRegistry = (function() {
           </div>
         </div>
 
-        <div class="relative z-10 w-full max-w-[1440px] px-[120px] pb-[160px] flex flex-col items-end text-right">
+        <button class="hero-exit-cinema hidden fixed top-6 right-6 z-50 px-4 py-2 rounded-full bg-black/50 backdrop-blur-md text-white border border-white/20 hover:bg-white/20 transition-all flex items-center gap-2">
+          <i data-lucide="x" class="w-4 h-4"></i>
+          <span>Exit Video Mod</span>
+        </button>
+
+        <div class="hero-content-overlay relative z-10 w-full max-w-[1440px] px-[120px] pb-[160px] flex flex-col items-end text-right">
           <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/10 backdrop-blur-md mb-6 border border-white/10">
             <span class="text-sm font-medium text-white" data-material="hero.badge">${data.badge || ''}</span>
           </div>
@@ -626,14 +631,14 @@ window.TemplateRegistry = (function() {
             <button class="px-6 py-3 rounded-full bg-accent-blue text-white font-medium hover:bg-blue-600 transition-colors flex items-center gap-2" data-material="hero.ctaPrimary">
               ${data.ctaPrimary || 'Explore'}
             </button>
-            <button class="px-6 py-3 rounded-full border border-accent-blue text-accent-blue font-medium hover:bg-accent-blue/10 transition-colors flex items-center gap-2">
+            <button class="hero-cinema-secondary px-6 py-3 rounded-full border border-accent-blue text-accent-blue font-medium hover:bg-accent-blue/10 transition-colors flex items-center gap-2">
               <i data-lucide="play-circle" class="w-4 h-4"></i>
               <span data-material="hero.ctaSecondary">${data.ctaSecondary || 'Watch'}</span>
             </button>
           </div>
         </div>
 
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-80 animate-bounce">
+        <div class="hero-scroll-hint absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-80 animate-bounce">
           <span class="text-sm font-medium text-white/80" data-material="hero.scrollHint">${data.scrollHint || 'Scroll to explore'}</span>
           <i data-lucide="arrow-down" class="w-6 h-6 text-white/80"></i>
         </div>
