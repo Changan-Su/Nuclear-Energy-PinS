@@ -1065,6 +1065,10 @@ body {
   max-width: 600px;
 }
 
+.max-w-\[720px\] {
+  max-width: 720px;
+}
+
 .max-w-\[800px\] {
   max-width: 800px;
 }
@@ -1532,6 +1536,12 @@ body {
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
+.from-black\/80 {
+  --tw-gradient-from: rgb(0 0 0 / 0.8) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(0 0 0 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
 .from-blue-900\/20 {
   --tw-gradient-from: rgb(30 58 138 / 0.2) var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(30 58 138 / 0) var(--tw-gradient-to-position);
@@ -1548,6 +1558,11 @@ body {
   --tw-gradient-from: #0f172a var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(15 23 42 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.via-black\/20 {
+  --tw-gradient-to: rgb(0 0 0 / 0)  var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), rgb(0 0 0 / 0.2) var(--tw-gradient-via-position), var(--tw-gradient-to);
 }
 
 .via-transparent {
@@ -1616,6 +1631,10 @@ body {
   padding: 2rem;
 }
 
+.p-\[52px\] {
+  padding: 52px;
+}
+
 .p-\[60px\] {
   padding: 60px;
 }
@@ -1643,6 +1662,11 @@ body {
 .px-6 {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+}
+
+.px-7 {
+  padding-left: 1.75rem;
+  padding-right: 1.75rem;
 }
 
 .px-8 {
@@ -1683,6 +1707,11 @@ body {
 .py-3 {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
+}
+
+.py-3\.5 {
+  padding-top: 0.875rem;
+  padding-bottom: 0.875rem;
 }
 
 .py-4 {
@@ -1843,6 +1872,10 @@ body {
 
 .leading-\[1\.4\] {
   line-height: 1.4;
+}
+
+.leading-\[1\.5\] {
+  line-height: 1.5;
 }
 
 .leading-\[1\.6\] {
@@ -3406,6 +3439,110 @@ body.edit-mode .card-grid-ratio-controls {
   opacity: 1;
 }
 
+/* ========== Interactive Details: Cover Flip Card ========== */
+
+.id-panel-flipper {
+  perspective: 1200px;
+  width: 100%;
+  height: 100%;
+}
+
+.id-panel-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.id-panel-inner.id-panel-flipped {
+  transform: rotateY(180deg);
+}
+
+.id-panel-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 32px;
+  overflow: hidden;
+}
+
+.id-panel-back {
+  transform: rotateY(180deg);
+}
+
+/* ========== Interactive Details: Edit Mode Override ========== */
+
+/* Container: allow auto height and visible overflow for stacked layout */
+
+body.edit-mode .id-detail-container {
+  height: auto !important;
+  overflow: visible !important;
+  min-height: 580px;
+}
+
+body.edit-mode .id-detail-container-wrapper {
+  height: auto !important;
+}
+
+/* Active panel: flatten from 3D flip to vertical stack */
+
+body.edit-mode .id-detail-panel--active {
+  position: relative !important;
+  transform: none !important;
+}
+
+body.edit-mode .id-detail-panel--active .id-panel-flipper {
+  perspective: none;
+  height: auto;
+}
+
+body.edit-mode .id-detail-panel--active .id-panel-inner {
+  position: relative !important;
+  height: auto !important;
+  transform: none !important;
+  transform-style: flat;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+body.edit-mode .id-detail-panel--active .id-panel-face {
+  position: relative !important;
+  transform: none !important;
+  backface-visibility: visible !important;
+  -webkit-backface-visibility: visible !important;
+  height: auto;
+}
+
+/* Cover face: compact thumbnail strip for image editing */
+
+body.edit-mode .id-detail-panel--active .id-panel-front {
+  height: 180px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* Text face: scrollable content area */
+
+body.edit-mode .id-detail-panel--active .id-panel-back {
+  flex: 1;
+  min-height: 340px;
+  border-radius: 24px;
+  overflow: visible;
+}
+
+/* Hide flip buttons in edit mode */
+
+body.edit-mode .id-panel-learn-more,
+body.edit-mode .id-panel-back-btn {
+  display: none !important;
+}
+
 .focus-within\:border-accent-cyan\/50:focus-within {
   border-color: rgb(34 211 238 / 0.5);
 }
@@ -3446,6 +3583,11 @@ body.edit-mode .card-grid-ratio-controls {
 .hover\:bg-cyan-400:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(34 211 238 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-gray-100:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
 }
 
 .hover\:bg-gray-200:hover {

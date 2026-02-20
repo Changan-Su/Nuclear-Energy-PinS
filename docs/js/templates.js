@@ -1307,18 +1307,54 @@ window.TemplateRegistry = (function() {
       } else {
         detailContent = item.detail || 'Detail content goes here.';
       }
+
+      // Cover image (optional) for the front face
+      const coverImgUrl = getImageUrl(item.coverImage, material);
+      const coverBgStyle = coverImgUrl
+        ? `background-image: url('${coverImgUrl}'); background-size: cover; background-position: center;`
+        : '';
       
       return `
-        <div class="id-detail-panel ${isFirst ? 'id-detail-panel--active' : ''} bg-surface-dark rounded-[32px]"
+        <div class="id-detail-panel ${isFirst ? 'id-detail-panel--active' : ''} rounded-[32px]"
              data-id-detail="${i}"
              data-panel-index="${i}">
-          <div class="w-full h-full p-[60px] flex flex-col gap-6">
-            <h3 class="text-[40px] font-semibold text-white leading-tight flex-shrink-0"
-                data-material="${sectionId}.items.${i}.title">${item.title || ''}</h3>
-            <div class="w-16 h-[2px] bg-accent-blue flex-shrink-0"></div>
-            <div class="detail-rich-text text-[19px] text-white/80 font-normal leading-[1.6] latex-content flex-1 min-h-0 overflow-y-auto pr-2"
-                 data-material="${sectionId}.items.${i}.detail">
-              ${detailContent}
+          <!-- Flip card wrapper -->
+          <div class="id-panel-flipper">
+            <div class="id-panel-inner">
+
+              <!-- FRONT: Cover face -->
+              <div class="id-panel-face id-panel-front bg-surface-dark">
+                <div class="w-full h-full relative" style="${coverBgStyle}"
+                     data-material-img="${sectionId}.items.${i}.coverImage">
+                  <!-- Gradient overlay for bottom legibility -->
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none"></div>
+                  <!-- Learn More button -->
+                  <div class="absolute bottom-0 left-0 right-0 p-[52px]">
+                    <button class="id-panel-learn-more px-7 py-3.5 rounded-full bg-white text-black text-[17px] font-medium hover:bg-gray-100 transition-colors flex items-center gap-2">
+                      Learn More
+                      <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- BACK: Text detail face -->
+              <div class="id-panel-face id-panel-back bg-surface-dark">
+                <!-- Back button -->
+                <button class="id-panel-back-btn absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center z-10">
+                  <i data-lucide="x" class="w-5 h-5 text-white"></i>
+                </button>
+                <div class="w-full h-full p-[60px] flex flex-col gap-6">
+                  <h3 class="text-[40px] font-semibold text-white leading-tight flex-shrink-0"
+                      data-material="${sectionId}.items.${i}.title">${item.title || ''}</h3>
+                  <div class="w-16 h-[2px] bg-accent-blue flex-shrink-0"></div>
+                  <div class="detail-rich-text text-[19px] text-white/80 font-normal leading-[1.6] latex-content flex-1 min-h-0 overflow-y-auto pr-2"
+                       data-material="${sectionId}.items.${i}.detail">
+                    ${detailContent}
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>

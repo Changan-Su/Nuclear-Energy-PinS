@@ -349,6 +349,12 @@ window.SectionRenderer = (function() {
             return;
           }
 
+          // Reset any flipped cover cards before switching
+          panels.forEach(p => {
+            const inner = p.querySelector('.id-panel-inner');
+            if (inner) inner.classList.remove('id-panel-flipped');
+          });
+
           // Swap active class — CSS transition handles the smooth cross-fade
           currentPanel.classList.remove('id-detail-panel--active');
           targetPanel.classList.add('id-detail-panel--active');
@@ -364,6 +370,31 @@ window.SectionRenderer = (function() {
             }
           }, 400);
         });
+      });
+    });
+
+    // --- Cover flip: Learn More & Back buttons ---
+    lists.forEach(list => {
+      const sectionId = list.getAttribute('data-id-list');
+      const container = document.querySelector(`[data-id-detail-container="${sectionId}"]`);
+      if (!container) return;
+
+      container.addEventListener('click', e => {
+        // Learn More → flip to back (text) face
+        const learnBtn = e.target.closest('.id-panel-learn-more');
+        if (learnBtn) {
+          const inner = learnBtn.closest('.id-panel-inner');
+          if (inner) inner.classList.add('id-panel-flipped');
+          if (window.lucide) window.lucide.createIcons();
+          return;
+        }
+        // Back button → flip back to cover face
+        const backBtn = e.target.closest('.id-panel-back-btn');
+        if (backBtn) {
+          const inner = backBtn.closest('.id-panel-inner');
+          if (inner) inner.classList.remove('id-panel-flipped');
+          return;
+        }
       });
     });
   }

@@ -27,7 +27,7 @@ window.EditorSystem = (function() {
     enableSectionToolbars();
     enableImageEditing();
     enableFlipToggles();
-    enableInteractiveDetailsAnimationSelector();
+    // enableInteractiveDetailsAnimationSelector(); // removed: cover flip mode is fixed, no animation type selection needed
     // Run immediately (controls may already exist) and again after 150ms so all details
     // (tabbed, card-grid, text-image, accordion) get toggle in bar after position controls mount
     enableDetailBannerToggles();
@@ -65,7 +65,7 @@ window.EditorSystem = (function() {
     disableSectionToolbars();
     disableImageEditing();
     disableFlipToggles();
-    disableInteractiveDetailsAnimationSelector();
+    // disableInteractiveDetailsAnimationSelector();
     disableDetailBannerToggles();
     disableCollectionEditors();
     disableReferenceEditing();
@@ -1088,6 +1088,7 @@ window.EditorSystem = (function() {
     if (template === 'interactive-details') {
       return {
         title: `Topic ${nextIndex}`,
+        coverImage: '',
         description: 'A brief overview of this topic. Click to see full details on the right.',
         detail: 'Full detailed content goes here.\n\nYou can write **Markdown** content with multiple paragraphs, lists, and more.'
       };
