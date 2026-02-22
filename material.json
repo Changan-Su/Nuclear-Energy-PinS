@@ -565,8 +565,24 @@
     },
     "aiChat": {
       "title": "Nuclear Energy GPT",
-      "placeholder": "Ask a question...",
-      "welcomeMessage": "Hello! I'm your nuclear energy assistant. Ask me anything about reactor safety, fuel cycles, or the physics of fission."
+      "placeholder": "Ask about fission, fusion, MSRs, or renewables…",
+      "welcomeMessage": "Hello! I'm your nuclear energy expert. Ask me anything about reactor physics, fission, fusion, molten salt reactors, or renewable energy.",
+      "provider": "openai",
+      "baseURL": "https://envidia.dreamwithchangan.workers.dev",
+      "endpointPath": "/api/chat",
+      "model": "openai/gpt-oss-120b",
+      "apiKey": "",
+      "allowNoApiKey": true,
+      "sendAuthorizationHeader": false,
+      "temperature": 0.3,
+      "maxTokens": 8000,
+      "stream": true,
+      "showReasoningFold": true,
+      "retrieval": {
+        "topK": 4,
+        "useEmbeddings": false,
+        "minKeywordScore": 0.05
+      }
     },
     "footer": {
       "brandName": "Digital Project of Physics in Society",

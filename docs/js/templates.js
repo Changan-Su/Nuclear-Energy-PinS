@@ -137,7 +137,37 @@ window.TemplateRegistry = (function() {
     };
   }
 
-  function renderCardReferences(references, referencesPath = '') {
+  function resolveFooterReferenceId(ref, material) {
+    if (!ref || typeof ref !== 'object') return null;
+    const directId = Number(ref.id ?? ref.refId);
+    if (Number.isFinite(directId) && directId > 0) return directId;
+
+    const footerItems = material?.index?.footer?.reference?.items;
+    if (!Array.isArray(footerItems) || !footerItems.length) return null;
+
+    const text = String(ref.text || '').trim();
+    const url = String(ref.url || '').trim();
+
+    // Prefer URL match because it is typically unique.
+    if (url) {
+      const byUrl = footerItems.find((item) => String(item?.text || '').includes(url));
+      const byUrlId = Number(byUrl?.id);
+      if (Number.isFinite(byUrlId) && byUrlId > 0) return byUrlId;
+    }
+
+    if (text) {
+      const byText = footerItems.find((item) => {
+        const t = String(item?.text || '').trim();
+        return t === text || t.includes(text) || text.includes(t);
+      });
+      const byTextId = Number(byText?.id);
+      if (Number.isFinite(byTextId) && byTextId > 0) return byTextId;
+    }
+
+    return null;
+  }
+
+  function renderCardReferences(references, referencesPath = '', material = null) {
     if (!Array.isArray(references) || !references.length) return '';
 
     const listHtml = references.map((entry, index) => {
@@ -146,13 +176,17 @@ window.TemplateRegistry = (function() {
       const url = String(ref.url || '').trim();
       const hasUrl = /^https?:\/\//.test(url);
       const textPath = referencesPath ? `${referencesPath}.${index}.text` : '';
-      const urlHtml = hasUrl
-        ? ` <a href="${url}" target="_blank" rel="noopener noreferrer" class="detail-reference-link">${url}</a>`
-        : '';
+      const label = text || url;
+      const footerRefId = resolveFooterReferenceId(ref, material);
+      const contentHtml = footerRefId
+        ? `<a href="#ref-${footerRefId}" class="detail-reference-link ref-cite" data-ref-id="${footerRefId}"><span ${textPath ? `data-material="${textPath}"` : ''}>${label}</span></a>`
+        : (hasUrl
+          ? `<a href="${url}" target="_blank" rel="noopener noreferrer" class="detail-reference-link"><span ${textPath ? `data-material="${textPath}"` : ''}>${label}</span></a>`
+          : `<span ${textPath ? `data-material="${textPath}"` : ''}>${label}</span>`);
 
       return `
         <li class="detail-reference-item">
-          <span ${textPath ? `data-material="${textPath}"` : ''}>${text}</span>${urlHtml}
+          ${contentHtml}
         </li>
       `;
     }).join('');
@@ -265,13 +299,13 @@ window.TemplateRegistry = (function() {
     return /detail-reference-block|detail-reference-list/i.test(html);
   }
 
-  function formatCardGridDetail(detail, references, referencesPath) {
+  function formatCardGridDetail(detail, references, referencesPath, material) {
     const raw = normalizeLegacyComparisonTable(String(detail || '')).trim();
     if (!raw) return 'Detail content goes here. Click to edit in edit mode.';
 
     if (/<(p|ul|ol|li|table|div|h\d|blockquote|pre|code)\b/i.test(raw)) {
       if (hasExistingReferenceBlock(raw)) return raw;
-      return `${raw}${renderCardReferences(references, referencesPath)}`;
+      return `${raw}${renderCardReferences(references, referencesPath, material)}`;
     }
 
     const lines = raw.split('\n');
@@ -330,7 +364,7 @@ window.TemplateRegistry = (function() {
     flushParagraph();
     flushList();
 
-    return `${blocks.join('')}${renderCardReferences(references, referencesPath)}`;
+    return `${blocks.join('')}${renderCardReferences(references, referencesPath, material)}`;
   }
 
   function renderDetailContent(options) {
@@ -808,7 +842,7 @@ window.TemplateRegistry = (function() {
           ${renderDetailContent({
             title: card.title || '',
             titlePath: `features.cards.${i}.title`,
-            detail: formatCardGridDetail(card.detail || '', card.references, `features.cards.${i}.references`),
+            detail: formatCardGridDetail(card.detail || '', card.references, `features.cards.${i}.references`, material),
             detailPath: `features.cards.${i}.detail`,
             showBanner: showDetailBanner,
             detailBannerPath: `features.cards.${i}.showDetailBanner`,
@@ -1397,14 +1431,14 @@ window.TemplateRegistry = (function() {
   function aiChatTemplate(sectionId, data, material) {
     return `
       <section id="ai-chat" class="w-full bg-black py-[120px] flex justify-center">
-        <div class="w-full max-w-[1000px] h-[700px] bg-surface-dark/80 backdrop-blur-md border border-white/10 rounded-[32px] shadow-2xl shadow-accent-cyan/20 overflow-hidden flex flex-col relative fade-in-up">
+        <div class="w-full max-w-[1000px] h-[700px] bg-surface-dark/80 backdrop-blur-md border border-white/10 rounded-[32px] shadow-2xl shadow-accent-cyan/20 overflow-hidden flex flex-col relative fade-in-up" style="transition: height 0.5s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.5s ease;">
           <div class="h-20 border-b border-white/10 flex items-center justify-between px-8 bg-white/5">
             <div class="flex items-center gap-3">
               <span class="text-xl font-semibold text-white" data-material="aiChat.title">${data.title || 'AI Assistant'}</span>
               <span class="w-2 h-2 rounded-full bg-accent-cyan shadow-[0_0_10px_#22D3EE]"></span>
             </div>
-            <button class="text-white/60 hover:text-white transition-colors">
-              <i data-lucide="minimize-2" class="w-5 h-5"></i>
+            <button aria-label="Toggle chat size" class="text-white/60 hover:text-white transition-colors">
+              <i data-lucide="maximize-2" class="w-5 h-5"></i>
             </button>
           </div>
 
@@ -1425,7 +1459,7 @@ window.TemplateRegistry = (function() {
             <div class="flex-1 h-[52px] bg-surface-dark rounded-full border border-white/10 flex items-center px-6 focus-within:border-accent-cyan/50 transition-colors">
               <input type="text" data-material="aiChat.placeholder" placeholder="${data.placeholder || 'Ask a question...'}" class="bg-transparent w-full text-white placeholder-white/40 outline-none text-base">
             </div>
-            <button class="w-[52px] h-[52px] rounded-full bg-accent-cyan hover:bg-cyan-400 transition-colors flex items-center justify-center shadow-[0_0_15px_rgba(34,211,238,0.3)]">
+            <button aria-label="Send message" class="w-[52px] h-[52px] rounded-full bg-accent-cyan hover:bg-cyan-400 transition-colors flex items-center justify-center shadow-[0_0_15px_rgba(34,211,238,0.3)]">
               <i data-lucide="arrow-up" class="w-6 h-6 text-black"></i>
             </button>
           </div>

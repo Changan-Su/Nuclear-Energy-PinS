@@ -46,18 +46,33 @@
         "name": "Renewable Energy"
       },
       {
+        "id": "Renewable",
+        "template": "quiz",
+        "enabled": true,
+        "showInNav": true,
+        "order": 6
+      },
+      {
         "id": "sustainability",
         "template": "text-image-right",
         "enabled": true,
-        "order": 6,
+        "order": 7,
         "name": "Fossil Fuels"
+      },
+      {
+        "id": "Fuel",
+        "template": "quiz",
+        "enabled": true,
+        "showInNav": true,
+        "order": 8
       },
       {
         "id": "aiChat",
         "template": "ai-chat",
         "enabled": true,
-        "order": 7,
-        "name": "Ask AI"
+        "order": 9,
+        "name": "Ask AI",
+        "showInNav": false
       }
     ]
   },
@@ -564,8 +579,24 @@
     },
     "aiChat": {
       "title": "Nuclear Energy GPT",
-      "placeholder": "Ask a question...",
-      "welcomeMessage": "Hello! I'm your nuclear energy assistant. Ask me anything about reactor safety, fuel cycles, or the physics of fission."
+      "placeholder": "Ask about fission, fusion, MSRs, or renewables…",
+      "welcomeMessage": "Hello! I'm your nuclear energy expert. Ask me anything about reactor physics, fission, fusion, molten salt reactors, or renewable energy.",
+      "provider": "openai",
+      "baseURL": "https://envidia.dreamwithchangan.workers.dev",
+      "endpointPath": "/api/chat",
+      "model": "openai/gpt-oss-120b",
+      "apiKey": "",
+      "allowNoApiKey": true,
+      "sendAuthorizationHeader": false,
+      "temperature": 0.3,
+      "maxTokens": 8000,
+      "stream": true,
+      "showReasoningFold": true,
+      "retrieval": {
+        "topK": 4,
+        "useEmbeddings": false,
+        "minKeywordScore": 0.05
+      }
     },
     "footer": {
       "brandName": "Digital Project of Physics in Society",
@@ -827,6 +858,141 @@
           "coverImage": "",
           "description": "Nuclear fusion has many advantages over fission, such as increased energy density, and additional safety considerations.",
           "detail": "As many people are aware, the famous Chernobyl and Fukushima nuclear disasters, combined with the notoriety of the Manhattan project means that many people are afraid of nuclear energy. Nuclear fusion has many advantages to fission.<sup class=\"ref-cite\" data-ref-id=\"38\">[38]</sup> Fission involved moderating and controlling a violent chain reaction. However, if at any point confinement fails in magnetic fusion, the plasma cools and the reaction stops. Also, fusion facilities are operated remotely to reduce radiation exposure risk.<sup class=\"ref-cite\" data-ref-id=\"39\">[39]</sup> While the reactant, tritium, is radioactive (half life 12.3 years), the amount used in a fusion reactor is minuscule, and the product is helium, which is not radioactive. Neutron radiation would be harmful to human life, but while fusion reactors are active, they are operated and maintained remotely.\n\nThe binding-energy-per-nucleon graph shows the energy changes during fission and fusion. The difference in binding energy between the reactants and products is the energy released during a nuclear reaction. As you can see, the difference between a U235 fission and DT fusion is immense; the deuterium from one glass of seawater releases energy comparable to burning a barrel of oil.<sup class=\"ref-cite\" data-ref-id=\"40\">[40]</sup>"
+        }
+      ]
+    },
+    "Fuel": {
+      "title": "New Section",
+      "description": "Edit this content",
+      "collapsedLabel": "Quick Quiz-Fossil Fuels",
+      "questions": [
+        {
+          "question": "Carnot efficiency is $\\eta_{\\text{Carnot}} = 1 - \\frac{T_C}{T_H}$. If a nuclear plant operates at a lower hot-reservoir temperature $T_H$ than a fossil-fuel plant (same $T_C$), what happens?",
+          "options": [
+            "It produces more power",
+            "Its maximum theoretical efficiency is lower",
+            "It violates energy conservation",
+            "Efficiency becomes temperature-independent"
+          ],
+          "answer": 1,
+          "explanation": "Lower $T_H$ increases $\\frac{T_C}{T_H}$, so $\\eta_{\\text{Carnot}}$ decreases. Efficiency depends on temperature difference."
+        },
+        {
+          "question": "Why can coal power sometimes cause higher environmental radiation exposure than nuclear power during normal operation?",
+          "options": [
+            "Coal creates radioactive elements",
+            "Radioactivity is destroyed during burning",
+            "Radioactive elements concentrate in coal ash and may be less regulated",
+            "Coal only emits radiation at high temperature"
+          ],
+          "answer": 2,
+          "explanation": "Uranium and thorium in coal remain after combustion and can become concentrated in ash."
+        },
+        {
+          "question": "Gas power stations are described as \"cheap to build but expensive to run.\" Why?",
+          "options": [
+            "High gravitational energy of the building",
+            "Continuous fuel (chemical energy) costs",
+            "Strong electric fields",
+            "Large magnetic flux in generators"
+          ],
+          "answer": 1,
+          "explanation": "Fuel must be continuously burned, so operating cost depends strongly on fuel energy and price."
+        }
+      ]
+    },
+    "Renewable": {
+      "title": "New Section",
+      "description": "Edit this content",
+      "collapsedLabel": "Quick Quiz-Renewable Energy",
+      "questions": [
+        {
+          "question": "What is a significant drawback of biological solar energy conversion (e.g., growing crops for fuel)?",
+          "options": [
+            "It has a very low efficiency of only 1% to 2%.",
+            "It produces a DC current that cannot be inverted.",
+            "It requires a vacuum to operate effectively.",
+            "It can only be performed in spacecraft systems."
+          ],
+          "answer": 0,
+          "explanation": "Most incoming solar energy is lost as heat or reflection during photosynthesis rather than being stored as biomass. Consequently, this method requires significantly more land compared to more efficient technologies like solar panels."
+        },
+        {
+          "question": "If the wind speed doubles, by what factor does the total available power increase?",
+          "options": [
+            "2 times",
+            "4 times",
+            "8 times",
+            "16 times"
+          ],
+          "answer": 2,
+          "explanation": "The power available from the wind is proportional to the cube of the wind speed (v^3). The formula for wind power is: P_wind=E_kin/Detal t = DeltaV p v^2/2Delta t = rho A v^3 / 2"
+        },
+        {
+          "question": "What is the \"Betz limit\"?",
+          "options": [
+            "The maximum height a turbine tower can reach (100m).",
+            "The maximum theoretical efficiency of power extraction (59.3%).",
+            "The rotational speed required by the generator (1500 rpm).",
+            "The minimum wind speed required to start the rotor."
+          ],
+          "answer": 1,
+          "explanation": "Formulated by German physicist Albert Betz in 1919, this law proves that no turbine can capture more than 59.3% of the kinetic energy in wind. If a turbine were 100% efficient, it would stop the air entirely, meaning no more air could move through the blades to keep the turbine spinning."
+        },
+        {
+          "question": "What is the name of the narrow pipe through which water is released to convert potential energy into kinetic energy?",
+          "options": [
+            "Nacelle",
+            "Turbine",
+            "Penstock",
+            "P-n junction"
+          ],
+          "answer": 2,
+          "explanation": "The penstock is the heavy-duty, pressurized pipe that carries water from the reservoir down to the turbine. It's designed to handle high pressure, allowing the gravitational potential energy of the water to convert into high-velocity kinetic energy to spin the turbine."
+        },
+        {
+          "question": "Which country was identified as the largest producer of hydroelectricity in 2010?",
+          "options": [
+            "Greece",
+            "USA",
+            "China",
+            "Australia"
+          ],
+          "answer": 2,
+          "explanation": "China has established itself as the global leader in hydroelectric power, largely due to massive infrastructure projects like the Three Gorges Dam"
+        },
+        {
+          "question": "What component must be used if a generator needs to produce Direct Current (DC) instead of Alternating Current (AC)?",
+          "options": [
+            "An iron core",
+            "A split ring commutator",
+            "A transformer",
+            "A penstock"
+          ],
+          "answer": 1,
+          "explanation": "To get Direct Current (DC), a split ring commutator is used. It acts as a mechanical switch that reverses the connection to the external circuit every half-turn, ensuring the current always flows in the same direction."
+        },
+        {
+          "question": "At what point is the induced emf at its maximum (peak)?",
+          "options": [
+            "When the magnetic field is perpendicular to the coil.",
+            "When the coil is stationary.",
+            "When the angle of the magnetic field varies at its most acute point.",
+            "When the number of turns is reduced to zero."
+          ],
+          "answer": 0,
+          "explanation": "According to Faraday's Law, the induced electromotive force (emf) depends on the rate of change of magnetic flux."
+        },
+        {
+          "question": "What is the primary source of the continuous heat produced in the magma layer below the Earth's crust?",
+          "options": [
+            "Solar radiation absorbed by the crust.",
+            "Friction between tectonic plates in the \"Ring of Fire.\"",
+            "The decay of naturally radioactive materials such as potassium and uranium.",
+            "The compression of hot water wells into steam."
+          ],
+          "answer": 2,
+          "explanation": "The Earth's magma layer stays hot mainly due to the decay of naturally radioactive materials such as potassium and uranium. This process, known as radiogenic heating, releases thermal energy as unstable isotopes break down into more stable forms."
         }
       ]
     }
