@@ -1,6 +1,14 @@
 # The Power of Nuclear Energy — PinS Digital Project
 
-![Project cover — Homepage](Screentshots/Homepage.png)
+![Project cover — Homepage](Screenshots/Homepage.png)
+
+## Website and Source Code
+
+The website has been uploaded and deployed on GitHub.  
+You can view the website at: [Website — Nuclear Energy](https://changan-su.github.io/Nuclear-Energy-PinS/)  
+You can find the repository (source code) at: [Nuclear Energy — PinS](https://github.com/Changan-Su/Nuclear-Energy-PinS)
+
+
 
 ## Team Members
 
