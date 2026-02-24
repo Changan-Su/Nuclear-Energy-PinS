@@ -30,16 +30,11 @@ Core learning modules include:
 Here is a visual overview of the digital object. Click to expand the sections below:
 
 <details>
-<summary><b>Fission & Fusion Modules</b></summary>
+<summary><b>Content Modules</b></summary>
 
 ![Fission Introduction](Screentshots/FissionIntro.png)
 <br>
 ![Fusion Module](Screentshots/Fussion.png)
-
-</details>
-
-<details>
-<summary><b>Energy Systems (MSR, Renewable, Fossil Fuels)</b></summary>
 
 ![Molten Salt Reactors](Screentshots/MSR.png)
 <br>
@@ -47,10 +42,13 @@ Here is a visual overview of the digital object. Click to expand the sections be
 <br>
 ![Fossil Fuels](Screentshots/FossilFuels.png)
 
+
 </details>
 
+
+
 <details>
-<summary><b>Interactive Features (Quiz & AI Chat)</b></summary>
+<summary><b>Interactive Features</b></summary>
 
 ![Interactive Quiz](Screentshots/Quiz.png)
 <br>
@@ -93,11 +91,6 @@ Here is a visual overview of the digital object. Click to expand the sections be
    - Open `index.html` directly in a modern browser, or
    - Start a local static server (recommended):
      - `npx serve .`
-
-## Notes
-
-- This `docs` folder is the deliverable-facing static site package.
-- Media references and content should be finalized before your final submission zip is produced.
 
 ## WYSIWYG Editor (Separate Project)
 
