@@ -96,7 +96,7 @@ Here is a visual overview of the digital object. Click to expand the sections be
 
 To support producing this project, we also developed a separate WYSIWYG content editor:
 
-- [Apple Style Website Engine — CMS Editor](<REPO_URL>)
+- [Apple Style Website Engine — CMS Editor](<https://github.com/Changan-Su/Apple-Style-Website-Editor>)
   - For content authoring and layout iteration
   - For maintaining `material.json` and media configuration
   - Can export/generate the viewer-only static site for deployment (this `docs/` package)
