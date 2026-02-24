@@ -40,15 +40,15 @@ Here is a visual overview of the digital object. Click to expand the sections be
 <details>
 <summary><b>Content Modules</b></summary>
 
-![Fission Introduction](Screentshots/FissionIntro.png)
+![Fission Introduction](Screenshots/FissionIntro.png)
 <br>
-![Fusion Module](Screentshots/Fussion.png)
+![Fusion Module](Screenshots/Fussion.png)
 
-![Molten Salt Reactors](Screentshots/MSR.png)
+![Molten Salt Reactors](Screenshots/MSR.png)
 <br>
-![Renewable Energy](Screentshots/Renewable.png)
+![Renewable Energy](Screenshots/Renewable.png)
 <br>
-![Fossil Fuels](Screentshots/FossilFuels.png)
+![Fossil Fuels](Screenshots/FossilFuels.png)
 
 
 </details>
@@ -58,9 +58,9 @@ Here is a visual overview of the digital object. Click to expand the sections be
 <details>
 <summary><b>Interactive Features</b></summary>
 
-![Interactive Quiz](Screentshots/Quiz.png)
+![Interactive Quiz](Screenshots/Quiz.png)
 <br>
-![AI Chat Module](Screentshots/Aichat.png)
+![AI Chat Module](Screenshots/Aichat.png)
 
 </details>
 
