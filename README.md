@@ -1,5 +1,7 @@
 # The Power of Nuclear Energy — PinS Digital Project
 
+![Project cover — Homepage](Screentshots/Homepage.png)
+
 ## Team Members
 
 - **James Bradley** — `james.r.bradley@durham.ac.uk`
@@ -22,6 +24,39 @@ Core learning modules include:
 - Fossil fuel comparison (efficiency, environmental impact, safety, economic cost)
 - **Interactive quizzes and visual learning blocks embedded across sections**
 - **An AI-assisted Q&A module for guided, domain-focused exploration**
+
+## Project Gallery
+
+Here is a visual overview of the digital object. Click to expand the sections below:
+
+<details>
+<summary><b>Fission & Fusion Modules</b></summary>
+
+![Fission Introduction](Screentshots/FissionIntro.png)
+<br>
+![Fusion Module](Screentshots/Fussion.png)
+
+</details>
+
+<details>
+<summary><b>Energy Systems (MSR, Renewable, Fossil Fuels)</b></summary>
+
+![Molten Salt Reactors](Screentshots/MSR.png)
+<br>
+![Renewable Energy](Screentshots/Renewable.png)
+<br>
+![Fossil Fuels](Screentshots/FossilFuels.png)
+
+</details>
+
+<details>
+<summary><b>Interactive Features (Quiz & AI Chat)</b></summary>
+
+![Interactive Quiz](Screentshots/Quiz.png)
+<br>
+![AI Chat Module](Screentshots/Aichat.png)
+
+</details>
 
 ## Tech Stack and Implementation
 
