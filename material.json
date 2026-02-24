@@ -7,62 +7,82 @@
         "template": "hero",
         "enabled": true,
         "order": 0,
-        "name": "Overview"
+        "name": "Homepage"
       },
       {
         "id": "highlights",
         "template": "tabbed-content",
         "enabled": true,
         "order": 1,
-        "name": "Science"
+        "name": "Fission"
       },
       {
         "id": "Quiz",
         "template": "quiz",
         "enabled": true,
-        "order": 2
+        "order": 2,
+        "showInNav": false
+      },
+      {
+        "id": "Fusion2",
+        "template": "interactive-details",
+        "interactiveDetailsDefaultFace": "cover",
+        "enabled": true,
+        "showInNav": true,
+        "order": 3,
+        "name": "Fusion"
       },
       {
         "id": "safety",
         "template": "text-image-left",
         "enabled": true,
-        "order": 3,
-        "name": "Safety"
+        "order": 4,
+        "name": "MSR"
+      },
+      {
+        "id": "MSRQuiz",
+        "template": "quiz",
+        "enabled": true,
+        "showInNav": false,
+        "order": 5,
+        "name": "MSR quiz"
       },
       {
         "id": "features",
         "template": "card-grid",
         "enabled": true,
-        "order": 4,
-        "name": "Benefits"
+        "order": 6,
+        "name": "Renewable"
+      },
+      {
+        "id": "Renewable",
+        "template": "quiz",
+        "enabled": true,
+        "showInNav": false,
+        "order": 7,
+        "name": "Renewable quiz"
       },
       {
         "id": "sustainability",
         "template": "text-image-right",
         "enabled": true,
-        "order": 5,
-        "name": "Sustainability"
+        "order": 8,
+        "name": "Fossil Fuels"
       },
       {
-        "id": "innovation",
-        "template": "text-image-left",
+        "id": "Fuel",
+        "template": "quiz",
         "enabled": true,
-        "order": 6,
-        "name": "Innovation"
-      },
-      {
-        "id": "closerLook",
-        "template": "accordion",
-        "enabled": true,
-        "order": 7,
-        "name": "Closer Look"
+        "showInNav": false,
+        "order": 9
       },
       {
         "id": "aiChat",
         "template": "ai-chat",
         "enabled": true,
-        "order": 8,
-        "name": "Ask AI"
+        "order": 10,
+        "name": "Ask AI",
+        "showInNav": false
       }
     ]
   },
@@ -83,7 +103,7 @@
     "hero": {
       "badge": "Physics in Society Digital Project",
       "title": "The Power of\nNuclear Energy",
-      "subtitle": "Z. Zhu, D. Huish, M. Muir, J. Bradlay, L. Desmulliez",
+      "subtitle": "Z. Zhu, D. Huish, M. Muir, J. Bradley, L. Desmulliez",
       "ctaPrimary": "Explore the Nuclear Energy",
       "ctaSecondary": "Watch the Film",
       "videoLabel": "Video Background Placeholder",
@@ -94,7 +114,7 @@
     },
     "highlights": {
       "label": "",
-      "headline": "Fission Section Introduction",
+      "headline": "Fission Introduction",
       "tabs": [
         "Physics of Fission",
         "Chain Reaction",
@@ -220,7 +240,7 @@
       ]
     },
     "features": {
-      "headline": "Renewables – Lucy",
+      "headline": "Renewables Energy",
       "subheadline": "What is a renewable energy source? United Nations defines it as ‘energy derived from natural sources that are replenished at a higher rate than they are consumed’",
       "cards": [
         {
@@ -247,11 +267,15 @@
           "detailEndImage": "",
           "image": "uploads/media-k8uxap-7.png",
           "position": {
-            "scale": 62,
+            "scale": 93,
             "y": 0
           },
           "imagePosition": {
-            "scale": 62
+            "scale": 93
+          },
+          "detailBannerRatio": 46,
+          "detailImagePosition": {
+            "scale": 50
           }
         },
         {
@@ -356,7 +380,7 @@
       ]
     },
     "safety": {
-      "headline": "Alternative Fission Design - Molten Salt Reactors (MSRs)",
+      "headline": "Molten Salt Reactors (MSRs)",
       "subheadline": "Fission based reactors have a massive range of different designs, each having their own advantages and disadvantages over the others. One of the most interesting and potentially advantageous of these designs is molten salt reactors. These types of reactors use molten salt within the core for a variety of purposes such as carrying the fuel or acting as a coolant or moderator, or some combination of these, and it is the molten salt that allows for significant advantages over standard reactors, while also providing major engineering challenges.",
       "items": [
         {
@@ -411,7 +435,7 @@
           "title": "Recycling&Cleaning",
           "description": "One of the primary potential advantages of MSRs is they have the theoretical capability to use spent fuel from other reactors (or themselves) as new fuel, reducing the final amount of waste. They also can massively increase their efficiency by cleaning their fuel during usage, significantly increasing potential efficiency.",
           "cta": "Learn more",
-          "detail": "The majority of designs incorporate built-in chemical processing of the molten salts, removing fission products that would absorb thermal neutrons instead of fuel nuclei,\n\nmeaning the reactor can work longer without needing refuelling to maintain sufficient power output and will be more efficient as fewer neutrons are wasted by being absorbed by other nuclei aside from the fuel.&nbsp;<div><br></div><div>Alternative Fuel Sources –\n\nWhile MSRs still require fissile fuel, the same as LWRs, some designs include built-in breeder circuits, where non-fissile material is converted into fissile material, which is then dissolved into the salt and used as fuel. Some designs place these circuits surrounding the core, using neutrons from the fission reactions to produce more fuel for the reactions. One example is thorium-232, which upon absorbing a neutron goes through decay to uranium-233, which is fissile and used as fuel inside the core itself.\n\nUranium-233 produces an average of <span><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mn>2.50</mn><mo>±</mo><mn>0.03</mn></mrow><annotation encoding=\"application/x-tex\">2.50 \\pm 0.03</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height: 0.7278em; vertical-align: -0.0833em;\"></span><span class=\"mord\">2.50</span><span class=\"mspace\" style=\"margin-right: 0.2222em;\"></span><span class=\"mbin\">±</span><span class=\"mspace\" style=\"margin-right: 0.2222em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height: 0.6444em;\"></span><span class=\"mord\">0.03</span></span></span></span></span> thermal neutrons per fission<sup class=\"ref-cite\" data-ref-id=\"21\">[21]</sup>. These neutrons are used either to continue fission or, in designs with fertile material surrounding the core, to start this decay chain again to produce more uranium.\n\nOther designs use a similar method to recycle spent fuel from other reactors and from itself, as all actinides (elements usually found in spent nuclear fuel) can be used by an MSR, either within a breeder or the core itself<sup class=\"ref-cite\" data-ref-id=\"20\">[20]</sup> pg. 17.\n\nIncreased Passive Safety –\n\nMSRs have various intrinsic safety features that LWRs cannot meet due to differences in design. For example, MSRs work at near-atmospheric pressures, meaning that if components become damaged, nuclear material is significantly less likely to be dispersed over a wide area. Also, these lower pressures mean the components are under less mechanical stress and so are less likely to catastrophically fail in the first place.\n\nAnother example is the properties of the salt: as it heats, it reduces the reactivity of the core, regardless of what task(s) it is performing. For example, as the salt expands with heating, the fissile nuclei are separated so fewer neutrons reach other nuclei at thermal speeds, and reactivity decreases. This gives MSRs a strong negative reactivity–temperature coefficient, providing higher core stability and allowing for passive reactor shutdown if the temperature rises too high.\n\nReduced / Less Dangerous Waste and Byproducts –\n\nAs mentioned, MSRs are able to make use of all actinide elements in some way or another, which are commonly found in spent nuclear fuel. This ability to use spent fuel means that the eventual waste/byproducts of MSRs are significantly less radioactive than those of other types of reactors. A consequence is that the byproducts of MSRs cannot be used as nuclear weapons at the same scale or effectiveness as LWRs or other reactors. The UK National Nuclear Laboratory produced a graphic demonstrating the closed fuel cycle that MSRs allow (MSR part in green).\n\nChallenges surrounding MSRs –\n\nWhile the base physics behind MSRs is understood and proven, their design complexity brings various engineering and technical challenges that have prevented the technology from being used on a larger scale. These challenges include –\n\n- Reactor Longevity: Due to the corrosivity of molten salts, the pipes and other reactor parts are estimated to require replacement approximately every 5–7 years.\n- Fuel Cleaning: Effective removal of byproducts is a major difficulty in MSR designs. For gaseous waste, the mixture of various byproducts causes standard filters to become clogged; more effective designs must be developed to prevent build-up and the resulting decrease in efficiency over time. For solid/liquid waste, the options are either to replace the salt as a whole, massively increasing the overall waste of the reactor (open fuel cycles), or to reprocess the fuel salt either in small batches frequently or in its entirety every few years, both with technical challenges for optimising fuel use and power generation (closed fuel cycles).</div>",
+          "detail": "The majority of designs incorporate built-in chemical processing of the molten salts, removing fission products that would absorb thermal neutrons instead of fuel nuclei,\n\nmeaning the reactor can work longer without needing refuelling to maintain sufficient power output and will be more efficient as fewer neutrons are wasted by being absorbed by other nuclei aside from the fuel.&nbsp;<div><br></div><div>Alternative Fuel Sources –&nbsp;</div><div>While MSRs still require fissile fuel, the same as LWRs, some designs include built-in breeder circuits, where non-fissile material is converted into fissile material, which is then dissolved into the salt and used as fuel. Some designs place these circuits surrounding the core, using neutrons from the fission reactions to produce more fuel for the reactions. One example is thorium-232, which upon absorbing a neutron goes through decay to uranium-233, which is fissile and used as fuel inside the core itself.\n\nUranium-233 produces an average of <span><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mn>2.50</mn><mo>±</mo><mn>0.03</mn></mrow><annotation encoding=\"application/x-tex\">2.50 \\pm 0.03</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height: 0.7278em; vertical-align: -0.0833em;\"></span><span class=\"mord\">2.50</span><span class=\"mspace\" style=\"margin-right: 0.2222em;\"></span><span class=\"mbin\">±</span><span class=\"mspace\" style=\"margin-right: 0.2222em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height: 0.6444em;\"></span><span class=\"mord\">0.03</span></span></span></span></span> thermal neutrons per fission<sup class=\"ref-cite\" data-ref-id=\"21\">[21]</sup>. These neutrons are used either to continue fission or, in designs with fertile material surrounding the core, to start this decay chain again to produce more uranium.\n\nOther designs use a similar method to recycle spent fuel from other reactors and from itself, as all actinides (elements usually found in spent nuclear fuel) can be used by an MSR, either within a breeder or the core itself<sup class=\"ref-cite\" data-ref-id=\"20\">[20]</sup> pg. 17.&nbsp;</div><div><br></div><div>&nbsp;Increased Passive Safety –&nbsp;</div><div>&nbsp;MSRs have various intrinsic safety features that LWRs cannot meet due to differences in design. For example, MSRs work at near-atmospheric pressures, meaning that if components become damaged, nuclear material is significantly less likely to be dispersed over a wide area. Also, these lower pressures mean the components are under less mechanical stress and so are less likely to catastrophically fail in the first place.\n\nAnother example is the properties of the salt: as it heats, it reduces the reactivity of the core, regardless of what task(s) it is performing. For example, as the salt expands with heating, the fissile nuclei are separated so fewer neutrons reach other nuclei at thermal speeds, and reactivity decreases. This gives MSRs a strong negative reactivity–temperature coefficient, providing higher core stability and allowing for passive reactor shutdown if the temperature rises too high.&nbsp;</div><div><br></div><div>&nbsp;Reduced / Less Dangerous Waste and Byproducts –&nbsp;</div><div>&nbsp;As mentioned, MSRs are able to make use of all actinide elements in some way or another, which are commonly found in spent nuclear fuel. This ability to use spent fuel means that the eventual waste/byproducts of MSRs are significantly less radioactive than those of other types of reactors. A consequence is that the byproducts of MSRs cannot be used as nuclear weapons at the same scale or effectiveness as LWRs or other reactors. The UK National Nuclear Laboratory produced a graphic demonstrating the closed fuel cycle that MSRs allow (MSR part in green).&nbsp;</div><div><br></div><div>&nbsp;Challenges surrounding MSRs –&nbsp;</div><div>&nbsp;While the base physics behind MSRs is understood and proven, their design complexity brings various engineering and technical challenges that have prevented the technology from being used on a larger scale. These challenges include –&nbsp;</div><div>&nbsp;- Reactor Longevity: Due to the corrosivity of molten salts, the pipes and other reactor parts are estimated to require replacement approximately every 5–7 years.&nbsp;</div><div>- Fuel Cleaning: Effective removal of byproducts is a major difficulty in MSR designs. For gaseous waste, the mixture of various byproducts causes standard filters to become clogged; more effective designs must be developed to prevent build-up and the resulting decrease in efficiency over time. For solid/liquid waste, the options are either to replace the salt as a whole, massively increasing the overall waste of the reactor (open fuel cycles), or to reprocess the fuel salt either in small batches frequently or in its entirety every few years, both with technical challenges for optimising fuel use and power generation (closed fuel cycles).</div>",
           "imageLabel": "",
           "detailImageShrinkRatio": 43,
           "images": {
@@ -512,7 +536,7 @@
           "isVideo": false
         }
       ],
-      "headline": "Fossil fuels",
+      "headline": "Fossil Fuels",
       "subheadline": "Comparison of fuel-based energy sources (e.g. coal, gas) and nuclear energy"
     },
     "innovation": {
@@ -585,8 +609,8 @@
       }
     },
     "footer": {
-      "brandName": "Digital Project of Physics in Society",
-      "brandTagline": "I don't know what I can fill here...",
+      "brandName": "",
+      "brandTagline": "",
       "reference": {
         "title": "Reference",
         "items": [
@@ -713,6 +737,42 @@
           {
             "id": 31,
             "text": "UK Department for Energy Security and Net Zero (2025). Digest of UK Energy Statistics (DUKES) 2025 Chapters 1-7. Available at: https://assets.publishing.service.gov.uk/media/68dbe477ef1c2f72bc1e4c4d/DUKES_2025_Chapters_1-7.pdf (Accessed: 15 February 2026)."
+          },
+          {
+            "id": 32,
+            "text": "Magaud, P., Marbach, G. and Cook, I. (2004). Nuclear fusion reactors. Encyclopedia of Energy, 4, pp.365-381."
+          },
+          {
+            "id": 33,
+            "text": "Hansen, J.F., Glendinning, S.G., Heeter, R.F. and Brockington, S.J.E. (2008). Dynamic Hohlraums as x-ray sources in high-energy density science. Review of Scientific Instruments, 79(1)."
+          },
+          {
+            "id": 34,
+            "text": "Ongena, J., Koch, R., Wolf, R. and Zohm, H. (2016). Magnetic-confinement fusion. Nature Physics, 12(5), pp.398-410."
+          },
+          {
+            "id": 35,
+            "text": "Fisher, H.O. (1989). A nuclear cross section data handbook (No. LA-11711-M). Los Alamos National Laboratory."
+          },
+          {
+            "id": 36,
+            "text": "Wurzel, S.E. and Hsu, S.C. (2022). Progress toward fusion energy breakeven and gain as measured against the Lawson criterion. Physics of Plasmas, 29(6)."
+          },
+          {
+            "id": 37,
+            "text": "Stacey, W.M. (2012). Fusion plasma physics. John Wiley & Sons."
+          },
+          {
+            "id": 38,
+            "text": "Conn, R.W., Holdren, J.P., Sharafat, S., Steiner, D., Ehst, D.A., Hogan, W.J., Krakowski, R.A., Miller, R.L., Najmabadi, F. and Schultz, K.R. (1990). Economic, safety and environmental prospects of fusion reactors. Nuclear Fusion, 30(9), pp.1919-1934."
+          },
+          {
+            "id": 39,
+            "text": "Tada, E., Maisonnier, D. and Herndon, J. (1995). Remote handling technology development for fusion experimental reactors. Fusion Engineering and Design, 29, pp.249-261."
+          },
+          {
+            "id": 40,
+            "text": "JET Team (1992). Fusion energy production from a deuterium-tritium plasma in the JET tokamak. Nuclear Fusion, 32(2), pp.187-203."
           }
         ]
       },
@@ -779,6 +839,225 @@
           ],
           "answer": 1,
           "explanation": "The graphite tips initially increased local moderation (slowing neutrons), which temporarily increased reactivity before neutron absorption took effect, contributing to the uncontrolled rise in reaction rate."
+        }
+      ]
+    },
+    "MSRQuiz": {
+      "title": "Test Your Knowledge About MSRs",
+      "description": "",
+      "collapsed": true,
+      "collapsedLabel": "Quick Quiz - 4 Questions",
+      "questions": [
+        {
+          "question": "What is the class of an MSR that uses fluoride salts, thermal spectrum neutrons and has structural materials within the core?",
+          "options": [
+            "Graphite",
+            "Homogeneous",
+            "Heterogeneous",
+            "Fast-spectrum"
+          ],
+          "answer": 2
+        },
+        {
+          "question": "What is the primary fertile material used in breeder circuits to produce fissile Uranium 233?",
+          "options": [
+            "Protactinium 233",
+            "Thorium 232",
+            "Uranium 238",
+            "Plutonium 239"
+          ],
+          "answer": 1
+        },
+        {
+          "question": "What is the primary benefit MSRs have over other reactor types?",
+          "options": [
+            "They have a much simpler design",
+            "Reactor lifespan",
+            "Capability to recycle spent fuel",
+            "Higher operating pressure"
+          ],
+          "answer": 2
+        },
+        {
+          "question": "What isn’t safety benefit of MSRs?",
+          "options": [
+            "Reactivity decreases with temperature increase",
+            "Passive draining through salt plugs if temperature gets too high",
+            "Lower working pressures",
+            "Lower working temperatures"
+          ],
+          "answer": 3
+        }
+      ]
+    },
+    "Fusion": {
+      "title": "New Section",
+      "description": "Edit this content",
+      "imageLabel": ""
+    },
+    "Fusion2": {
+      "headline": "What Is Fusion?",
+      "subheadline": "Fusion is the opposite of nuclear fission, using extreme heat and pressure to fuse smaller nuclei into larger atoms.<sup class=\"ref-cite\" data-ref-id=\"32\">[32]</sup> This is the process that occurs within stars, hence the nickname \"Star in a Jar\". In order for elements to fuse, they must be superheated until all of the electrons are stripped away, and form a plasma. The nuclei then collide at such incredible speeds, the Coulomb barrier (electrostatic repulsion) is overcome, and the strong nuclear force causes the nuclei to become stable.<sup class=\"ref-cite\" data-ref-id=\"34\">[34]</sup> The energy from this reaction is then released as high energy neutron flux.",
+      "items": [
+        {
+          "title": "Confinement Types",
+          "coverImage": "uploads/media-mibpjs-19.jpg",
+          "description": "The main properties of Inertially and Magnetically confined fusion reactors. One using Newton's Laws and extreme explosive force. The other using powerful magnets to sculpt plasma into a ring.",
+          "detail": "There are 2 main types of confinement, inertial and magnetic. Inertial confinement uses high power lasers to generate X-rays, these X-rays ignite a fuel capsule's outer surface, generating a massive inward force.<sup class=\"ref-cite\" data-ref-id=\"33\">[33]</sup> Magnetic confinement generates a ring of low density plasma using magnetic fields, shaping the plasma into a torus.<sup class=\"ref-cite\" data-ref-id=\"34\">[34]</sup> Magnetic confinement can sustain fusion for longer amounts of time, while inertial confinement is more rapid. Common types of magnetic-confinement fusion devices include tokamaks, such as the ST40 and STOR-M. The most important inertial fusion reactor is the NIF."
+        },
+        {
+          "title": "Quantifying fusion",
+          "coverImage": "uploads/media-c256vb-20.jpg",
+          "description": "The mathematics behind how fusion is achieved. The nuclear cross section, a model for the probability of reactants fusing, and the Fusion Triple Product, a model for how effective a fusion plant is.",
+          "detail": "The way we quantify the effectiveness of a nuclear fusion reaction is with several values. Firstly, the nuclear cross section is a measure of the probability of 2 nuclei being able to fuse, $\\sigma = R/(\\Phi N)$.<sup class=\"ref-cite\" data-ref-id=\"35\">[35]</sup> Where $R$ is the reaction rate per unit volume, $\\Phi$ is the incident particle flux and $N$ is the target density. Maximising this number (by careful choice of reactant isotopes) is necessary for achieving nuclear fusion. We also use the fusion triple product to quantify a reactor's ability to fuse. The product of temperature $T$ (MeV), plasma density $n$ (m$^{-3}$) and confinement time $\\tau$ (s) is the standard value for measuring a fusion pulse.<sup class=\"ref-cite\" data-ref-id=\"37\">[37]</sup>\n\nIn order for fusion to be obtained at effective levels, the Lawson Criterion must be fulfilled:\n\n$$nT\\tau = 3 \\times 10^{21} \\text{ m}^{-3}\\text{ keV}\\cdot\\text{s}$$\n\n(For Deuterium–Tritium fusion).<sup class=\"ref-cite\" data-ref-id=\"36\">[36]</sup> Magnetic confinement uses long pulses (theoretically hours or days) at low density to achieve this, whereas inertial confinement uses extremely high plasma density, confined for short bursts."
+        },
+        {
+          "title": "Fusion v Fission",
+          "coverImage": "uploads/media-kvh971-21.jpg",
+          "description": "Nuclear fusion has many advantages over fission, such as increased energy density, and additional safety considerations.",
+          "detail": "As many people are aware, the famous Chernobyl and Fukushima nuclear disasters, combined with the notoriety of the Manhattan project means that many people are afraid of nuclear energy. Nuclear fusion has many advantages to fission.<sup class=\"ref-cite\" data-ref-id=\"38\">[38]</sup> Fission involved moderating and controlling a violent chain reaction. However, if at any point confinement fails in magnetic fusion, the plasma cools and the reaction stops. Also, fusion facilities are operated remotely to reduce radiation exposure risk.<sup class=\"ref-cite\" data-ref-id=\"39\">[39]</sup> While the reactant, tritium, is radioactive (half life 12.3 years), the amount used in a fusion reactor is minuscule, and the product is helium, which is not radioactive. Neutron radiation would be harmful to human life, but while fusion reactors are active, they are operated and maintained remotely.\n\nThe binding-energy-per-nucleon graph shows the energy changes during fission and fusion. The difference in binding energy between the reactants and products is the energy released during a nuclear reaction. As you can see, the difference between a U235 fission and DT fusion is immense; the deuterium from one glass of seawater releases energy comparable to burning a barrel of oil.<sup class=\"ref-cite\" data-ref-id=\"40\">[40]</sup>"
+        },
+        {
+          "title": "Fusion Visualization",
+          "coverImage": "uploads/media-uw6gs0-22.png",
+          "description": "Open an interactive visualization of fusion process and confinement behavior.",
+          "detail": "Click Learn More to open the standalone fusion visualization page in a new tab.",
+          "learnMoreUrl": "dylan.html"
+        }
+      ]
+    },
+    "Fuel": {
+      "title": "New Section",
+      "description": "Edit this content",
+      "collapsedLabel": "Quick Quiz-Fossil Fuels",
+      "questions": [
+        {
+          "question": "Carnot efficiency is $\\eta_{\\text{Carnot}} = 1 - \\frac{T_C}{T_H}$. If a nuclear plant operates at a lower hot-reservoir temperature $T_H$ than a fossil-fuel plant (same $T_C$), what happens?",
+          "options": [
+            "It produces more power",
+            "Its maximum theoretical efficiency is lower",
+            "It violates energy conservation",
+            "Efficiency becomes temperature-independent"
+          ],
+          "answer": 1,
+          "explanation": "Lower $T_H$ increases $\\frac{T_C}{T_H}$, so $\\eta_{\\text{Carnot}}$ decreases. Efficiency depends on temperature difference."
+        },
+        {
+          "question": "Why can coal power sometimes cause higher environmental radiation exposure than nuclear power during normal operation?",
+          "options": [
+            "Coal creates radioactive elements",
+            "Radioactivity is destroyed during burning",
+            "Radioactive elements concentrate in coal ash and may be less regulated",
+            "Coal only emits radiation at high temperature"
+          ],
+          "answer": 2,
+          "explanation": "Uranium and thorium in coal remain after combustion and can become concentrated in ash."
+        },
+        {
+          "question": "Gas power stations are described as \"cheap to build but expensive to run.\" Why?",
+          "options": [
+            "High gravitational energy of the building",
+            "Continuous fuel (chemical energy) costs",
+            "Strong electric fields",
+            "Large magnetic flux in generators"
+          ],
+          "answer": 1,
+          "explanation": "Fuel must be continuously burned, so operating cost depends strongly on fuel energy and price."
+        }
+      ]
+    },
+    "Renewable": {
+      "title": "New Section",
+      "description": "Edit this content",
+      "collapsedLabel": "Quick Quiz-Renewable Energy",
+      "questions": [
+        {
+          "question": "What is a significant drawback of biological solar energy conversion (e.g., growing crops for fuel)?",
+          "options": [
+            "It has a very low efficiency of only 1% to 2%.",
+            "It produces a DC current that cannot be inverted.",
+            "It requires a vacuum to operate effectively.",
+            "It can only be performed in spacecraft systems."
+          ],
+          "answer": 0,
+          "explanation": "Most incoming solar energy is lost as heat or reflection during photosynthesis rather than being stored as biomass. Consequently, this method requires significantly more land compared to more efficient technologies like solar panels."
+        },
+        {
+          "question": "If the wind speed doubles, by what factor does the total available power increase?",
+          "options": [
+            "2 times",
+            "4 times",
+            "8 times",
+            "16 times"
+          ],
+          "answer": 2,
+          "explanation": "The power available from the wind is proportional to the cube of the wind speed (v^3). The formula for wind power is: P_wind=E_kin/Detal t = DeltaV p v^2/2Delta t = rho A v^3 / 2"
+        },
+        {
+          "question": "What is the \"Betz limit\"?",
+          "options": [
+            "The maximum height a turbine tower can reach (100m).",
+            "The maximum theoretical efficiency of power extraction (59.3%).",
+            "The rotational speed required by the generator (1500 rpm).",
+            "The minimum wind speed required to start the rotor."
+          ],
+          "answer": 1,
+          "explanation": "Formulated by German physicist Albert Betz in 1919, this law proves that no turbine can capture more than 59.3% of the kinetic energy in wind. If a turbine were 100% efficient, it would stop the air entirely, meaning no more air could move through the blades to keep the turbine spinning."
+        },
+        {
+          "question": "What is the name of the narrow pipe through which water is released to convert potential energy into kinetic energy?",
+          "options": [
+            "Nacelle",
+            "Turbine",
+            "Penstock",
+            "P-n junction"
+          ],
+          "answer": 2,
+          "explanation": "The penstock is the heavy-duty, pressurized pipe that carries water from the reservoir down to the turbine. It's designed to handle high pressure, allowing the gravitational potential energy of the water to convert into high-velocity kinetic energy to spin the turbine."
+        },
+        {
+          "question": "Which country was identified as the largest producer of hydroelectricity in 2010?",
+          "options": [
+            "Greece",
+            "USA",
+            "China",
+            "Australia"
+          ],
+          "answer": 2,
+          "explanation": "China has established itself as the global leader in hydroelectric power, largely due to massive infrastructure projects like the Three Gorges Dam"
+        },
+        {
+          "question": "What component must be used if a generator needs to produce Direct Current (DC) instead of Alternating Current (AC)?",
+          "options": [
+            "An iron core",
+            "A split ring commutator",
+            "A transformer",
+            "A penstock"
+          ],
+          "answer": 1,
+          "explanation": "To get Direct Current (DC), a split ring commutator is used. It acts as a mechanical switch that reverses the connection to the external circuit every half-turn, ensuring the current always flows in the same direction."
+        },
+        {
+          "question": "At what point is the induced emf at its maximum (peak)?",
+          "options": [
+            "When the magnetic field is perpendicular to the coil.",
+            "When the coil is stationary.",
+            "When the angle of the magnetic field varies at its most acute point.",
+            "When the number of turns is reduced to zero."
+          ],
+          "answer": 0,
+          "explanation": "According to Faraday's Law, the induced electromotive force (emf) depends on the rate of change of magnetic flux."
+        },
+        {
+          "question": "What is the primary source of the continuous heat produced in the magma layer below the Earth's crust?",
+          "options": [
+            "Solar radiation absorbed by the crust.",
+            "Friction between tectonic plates in the \"Ring of Fire.\"",
+            "The decay of naturally radioactive materials such as potassium and uranium.",
+            "The compression of hot water wells into steam."
+          ],
+          "answer": 2,
+          "explanation": "The Earth's magma layer stays hot mainly due to the decay of naturally radioactive materials such as potassium and uranium. This process, known as radiogenic heating, releases thermal energy as unstable isotopes break down into more stable forms."
         }
       ]
     }

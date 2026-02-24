@@ -1644,7 +1644,7 @@ window.TemplateRegistry = (function() {
       const itemId = Number(item?.id) || (index + 1);
       const itemText = typeof item?.text === 'string' ? item.text : String(item?.text || '');
       return `
-        <div id="ref-${itemId}" class="ref-item flex gap-3 items-start group" data-ref-id="${itemId}">
+        <div id="ref-${itemId}" class="ref-item flex gap-2 items-start group" data-ref-id="${itemId}">
           <span class="text-sm text-text-muted flex-shrink-0">[${itemId}]</span>
           <p class="text-sm text-text-muted leading-relaxed flex-1" 
              data-material="footer.reference.items.${index}.text"
@@ -1670,12 +1670,12 @@ window.TemplateRegistry = (function() {
             </div>
 
             <div class="flex-1 flex justify-center min-w-0">
-              <div class="flex flex-col gap-4 max-w-[560px] w-full">
+              <div class="flex flex-col gap-4 max-w-[920px] w-full">
                 <h4 class="text-sm font-semibold text-white" data-material="footer.reference.title">${data.reference?.title || 'Reference'}</h4>
-                <div class="flex flex-col gap-3" id="reference-list">
+                <div class="grid gap-2" id="reference-list" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
                   ${referenceItemsHtml}
                   <button id="add-reference-btn" 
-                          class="edit-mode-only flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-white/20 text-text-muted hover:text-white hover:border-white/40 transition-colors text-sm">
+                          class="edit-mode-only col-span-full justify-self-start flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-white/20 text-text-muted hover:text-white hover:border-white/40 transition-colors text-sm">
                     <i data-lucide="plus" class="w-4 h-4"></i>
                     Add Reference
                   </button>

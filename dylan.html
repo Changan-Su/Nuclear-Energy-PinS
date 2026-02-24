@@ -185,7 +185,7 @@
     <div class="card side">
       <h1>Nuclear Fusion Visualiser</h1>
       <p class="subtitle">
-        Adjust plasma parameters and watch a simplified D–T plasma. The animation is illustrative (not a reactor simulator),
+        Adjust plasma parameters and watch a simplified D-T plasma. The animation is illustrative (not a reactor simulator),
         but the <b>triple product</b> is calculated exactly as <span style="font-family:var(--mono)">n·T·τ</span>.
       </p>
 
@@ -195,16 +195,16 @@
           <div class="value"><span id="tOut"></span> keV</div>
         </div>
         <input id="t" type="range" min="1" max="50" step="0.5" value="15" />
-        <div class="hint">Higher T → faster ions + higher fusion reactivity (peaks broadly around tens of keV for D–T).</div>
+        <div class="hint">Higher T -> faster ions + higher fusion reactivity (peaks broadly around tens of keV for D-T).</div>
       </div>
 
       <div class="group">
         <div class="row">
           <div class="label">Density, n</div>
-          <div class="value"><span id="nOut"></span> m⁻³</div>
+          <div class="value"><span id="nOut"></span> m^-3</div>
         </div>
         <input id="n" type="range" min="0.1" max="5" step="0.1" value="1.0" />
-        <div class="hint">Visual particle count scales with n. Fusion rate scales ~ n² (more collisions).</div>
+        <div class="hint">Visual particle count scales with n. Fusion rate scales ~ n^2 (more collisions).</div>
       </div>
 
       <div class="group">
@@ -213,17 +213,17 @@
           <div class="value"><span id="tauOut"></span> s</div>
         </div>
         <input id="tau" type="range" min="0.01" max="10" step="0.01" value="1.0" />
-        <div class="hint">Longer τ → energy stays in the plasma longer; visually fewer “loss” events.</div>
+        <div class="hint">Longer τ -> energy stays in the plasma longer; visually fewer "loss" events.</div>
       </div>
 
       <div class="kpis">
         <div class="kpi">
           <div class="klabel">Fusion triple product (n·T·τ)</div>
-          <div class="kvalue"><span id="tpOut"></span> keV·s·m⁻³</div>
+          <div class="kvalue"><span id="tpOut"></span> keV·s·m^-3</div>
         </div>
         <div class="kpi">
-          <div class="klabel">Toy D–T reactivity ⟨σv⟩ (for visuals)</div>
-          <div class="kvalue"><span id="svOut"></span> m³/s</div>
+          <div class="klabel">Toy D-T reactivity (for visuals)</div>
+          <div class="kvalue"><span id="svOut"></span> m^3/s</div>
         </div>
         <div class="kpi">
           <div class="klabel">Relative fusion power (visual scale)</div>
@@ -238,7 +238,7 @@
 
       <div class="footer">
         Tip: put this file in a GitHub repo as <span style="font-family:var(--mono)">index.html</span>, then enable
-        <b>Settings → Pages → Deploy from branch</b>.
+        <b>Settings -> Pages -> Deploy from branch</b>.
       </div>
     </div>
 
@@ -274,7 +274,7 @@
   const statusDot = document.getElementById('statusDot');
   const statusText = document.getElementById('statusText');
 
-  // Density slider is in units of (×10^20 m^-3) to keep the UI friendly:
+  // Density slider is in units of (x10^20 m^-3) to keep the UI friendly:
   // n = nSlider * 1e20 m^-3
   function getParams(){
     const T_keV = Number(elT.value);
@@ -284,9 +284,9 @@
     return { T_keV, n_1e20, n, tau };
   }
 
-  // Toy D–T reactivity curve (m^3/s) shaped to respond to temperature:
-  // - This is NOT a precise Bosch–Hale fit.
-  // - It’s a smooth curve that rises with T and broadly peaks in the tens of keV.
+  // Toy D-T reactivity curve (m^3/s) shaped to respond to temperature:
+  // - This is NOT a precise Bosch-Hale fit.
+  // - It's a smooth curve that rises with T and broadly peaks in the tens of keV.
   function sigmaV_DT_toy(T_keV){
     // A log-normal-ish bump, with a mild high-T falloff:
     const x = Math.log(Math.max(T_keV, 0.2));
@@ -307,8 +307,8 @@
     return n * T_keV * tau;
   }
 
-  // A soft “status” indicator based on triple product relative to a typical Lawson-ish scale.
-  // For D–T ignition, often-quoted order ~ 3e21 keV·s·m^-3 (varies with assumptions).
+  // A soft "status" indicator based on triple product relative to a typical Lawson-ish scale.
+  // For D-T ignition, often-quoted order ~ 3e21 keV·s·m^-3 (varies with assumptions).
   const LAWSON_REF = 3e21;
 
   function formatSI(x, digits=3){
@@ -414,7 +414,7 @@
     const h = canvas.getBoundingClientRect().height;
 
     // Ion count maps density to something reasonable for the screen.
-    // n range: 0.1..5 × 1e20 → map to ~120..520 ions.
+    // n range: 0.1..5 x 1e20 -> map to ~120..520 ions.
     const targetCount = Math.round(90 + params.n_1e20 * 85);
     ensureIonCount(targetCount);
 
@@ -555,7 +555,7 @@
       ctx.restore();
     }
 
-    // Add a soft “heat haze” overlay depending on T
+    // Add a soft "heat haze" overlay depending on T
     ctx.save();
     const haze = clamp((params.T_keV - 1) / 49, 0, 1) * 0.18;
     ctx.globalAlpha = haze;
@@ -572,7 +572,7 @@
   // -----------------------------
   function updateUI(params){
     tOut.textContent = params.T_keV.toFixed(1);
-    nOut.textContent = `${params.n_1e20.toFixed(1)}×10²⁰`;
+    nOut.textContent = `${params.n_1e20.toFixed(1)}x10^20`;
     tauOut.textContent = params.tau.toFixed(2);
 
     const tp = tripleProduct(params.n, params.T_keV, params.tau); // keV s m^-3
@@ -584,7 +584,7 @@
     // Relative fusion power ~ n^2 * <σv> * (some tau influence for "stored energy")
     const rel = (params.n_1e20**2) * (sv / 1e-22) * (0.35 + 0.65*clamp(params.tau/3, 0, 1));
     const relClamped = Math.max(0, rel);
-    pOut.textContent = `${relClamped.toFixed(2)} × (arb.)`;
+    pOut.textContent = `${relClamped.toFixed(2)} x (arb.)`;
 
     // Status based on triple product fraction of a reference
     const frac = tp / LAWSON_REF;
@@ -600,8 +600,8 @@
 
     // Badges
     const T_K = params.T_keV * 1.16045e7; // 1 keV ~ 1.16045e7 K
-    badgeLeft.textContent = `T ≈ ${formatSI(T_K, 2)} K  |  n ≈ ${formatSI(params.n, 2)} m⁻³`;
-    badgeRight.textContent = `τ = ${params.tau.toFixed(2)} s  |  nTτ ≈ ${formatSI(tp, 2)} keV·s·m⁻³`;
+    badgeLeft.textContent = `T ≈ ${formatSI(T_K, 2)} K  |  n ≈ ${formatSI(params.n, 2)} m^-3`;
+    badgeRight.textContent = `τ = ${params.tau.toFixed(2)} s  |  nTτ ≈ ${formatSI(tp, 2)} keV·s·m^-3`;
   }
 
   function tick(now){
