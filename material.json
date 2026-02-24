@@ -927,8 +927,8 @@
       ]
     },
     "Fuel": {
-      "title": "New Section",
-      "description": "Edit this content",
+      "title": "Quick Quiz-Fossil Fuels",
+      "description": "Test Your Knowledge About Fossil Fuels",
       "collapsedLabel": "Quick Quiz-Fossil Fuels",
       "questions": [
         {
@@ -967,8 +967,8 @@
       ]
     },
     "Renewable": {
-      "title": "New Section",
-      "description": "Edit this content",
+      "title": "Quick Quiz-Renewable Energy",
+      "description": "Test Your Knowledge About Renewable Energy",
       "collapsedLabel": "Quick Quiz-Renewable Energy",
       "questions": [
         {
